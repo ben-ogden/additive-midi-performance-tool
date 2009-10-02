@@ -16,6 +16,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
 import javax.sound.midi.MidiDevice.Info;
+import javax.sound.midi.Synthesizer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -65,6 +66,11 @@ public class MIDILoopBack extends JFrame implements ActionListener {
             try {
             
                 MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
+
+                if(device instanceof Synthesizer) {
+
+                    System.out.println(device.getDeviceInfo().getName() + " = " + ((Synthesizer)device).getLatency());
+                }
 
                 try {
                     device.getTransmitter();
@@ -143,6 +149,12 @@ public class MIDILoopBack extends JFrame implements ActionListener {
      */
     private void connectDevices(MidiDevice device, MidiDevice device2)
             throws MidiUnavailableException {
+
+        // is there a cleaner way to reset the connections?
+        device.close();
+        device2.close();
+        device.open();
+        device2.open();
 
         Receiver receiver = device.getReceiver();
         Transmitter transmitter = device2.getTransmitter();
