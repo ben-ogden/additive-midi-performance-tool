@@ -1,1 +1,0 @@
-This is SVN repository for the AMPT project.
