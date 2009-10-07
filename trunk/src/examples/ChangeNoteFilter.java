@@ -17,8 +17,8 @@ import javax.sound.midi.InvalidMidiDataException;
 /*
  * This class intercepts MIDI messages between a transmitter
  * and a receiver. It will check the content of those messages
- * and for those whose status command is a NOTE_ON, it will add
- * 20 to the note's tone value.
+ * and for those whose status command is a NOTE_ON or NOTE_OFF,
+ * it will change the tone value of the note by the offset.
  *
  * To use the class, create an instance, giving the contructor
  * the destination receiver - then pass the ChangeNoteFilter to
@@ -31,6 +31,7 @@ public class ChangeNoteFilter implements Receiver, Transmitter {
 
     private Receiver destination;
     private PrintStream out;
+    private int offset;
     
     /*
      * Creates an instance with both a destination receiver and a
@@ -39,22 +40,27 @@ public class ChangeNoteFilter implements Receiver, Transmitter {
      * @param destination the receiver where the modified messages
      * will be sent
      *
+     * @param offset how much to change the note
+     
      * @param out the PrintStream that will print out the message
      * contents
      */
-    public ChangeNoteFilter(Receiver destination, PrintStream out) {
+    public ChangeNoteFilter(Receiver destination, int offset, PrintStream out) {
         this.destination = destination;
         this.out = out;
+        this.offset = offset;
     }
     
     /*
      * Creates an instance with just the destination receiver.
      *
+     * @ param offset how much to change the note
      * @param destination the receiver where the modified messages
      * will be sent
      */
-    public ChangeNoteFilter(Receiver destination) {
+    public ChangeNoteFilter(Receiver destination, int offset) {
         this.destination = destination;
+        this.offset = offset;
     }
     
     /*
@@ -80,6 +86,24 @@ public class ChangeNoteFilter implements Receiver, Transmitter {
     }
     
     /*
+     * Setter method for the offset
+     *
+     * @param the amount by which notes are to be changed
+     */
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+    
+    /*
+     * Getter method for the offset
+     *
+     * @return the amount by which notes are changed
+     */
+    public int getOffset() {
+        return offset;
+    }
+    
+    /*
      * Method to handle the incoming MIDI messages
      *
      * @param message a MidiMessage object to be received from an
@@ -94,10 +118,11 @@ public class ChangeNoteFilter implements Receiver, Transmitter {
                 out.println("Type: Short Message; Command : " + sMsg.getCommand()
                     + "; Channel: " + sMsg.getChannel() + "; data1: " + sMsg.getData1()
                     + "; data2: " + sMsg.getData2());
-            if(sMsg.getCommand() == ShortMessage.NOTE_ON) {
+            if((sMsg.getCommand() == ShortMessage.NOTE_ON) ||
+                (sMsg.getCommand() == ShortMessage.NOTE_OFF)) {
                 try {
                     sMsg.setMessage(sMsg.getCommand(), sMsg.getChannel(),
-                        sMsg.getData1() + 20, sMsg.getData2());
+                        sMsg.getData1() + offset, sMsg.getData2());
                 } catch (InvalidMidiDataException mde) {
                     mde.printStackTrace();
                 }
@@ -117,7 +142,8 @@ public class ChangeNoteFilter implements Receiver, Transmitter {
     }
     
     /*
-     * Demonstrates usage of the ChangeNoteFilter
+     * Demonstrates usage of the ChangeNoteFilter - plays Back in
+     * the USSR transposed up an octave
      */
     public static void main(String args[]) {
     
@@ -129,7 +155,7 @@ public class ChangeNoteFilter implements Receiver, Transmitter {
             sqncr = MidiSystem.getSequencer();
             synth = MidiSystem.getSynthesizer();
             rcvr = synth.getReceiver();
-            ChangeNoteFilter filter = new ChangeNoteFilter(rcvr, System.out);
+            ChangeNoteFilter filter = new ChangeNoteFilter(rcvr, 12, System.out);
             trans = sqncr.getTransmitter();
             trans.setReceiver(filter);
             sqncr.open();
