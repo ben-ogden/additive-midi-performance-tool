@@ -1,4 +1,4 @@
-package examples;
+package ampt.examples;
 
 import java.awt.*;
 import java.awt.event.*;

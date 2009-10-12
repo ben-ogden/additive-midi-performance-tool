@@ -1,4 +1,4 @@
-package ui.keyboard;
+package ampt.ui.keyboard;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +17,7 @@ public class WhiteKey extends KeyboardKey {
 	 * Enum which represents the key type, left, center, or right, in refrence
 	 * to how many black keys are adjacent to this key.
 	 */
-	public enum KeyType {
+	public static enum KeyType {
 		Left, Center, Right
 	};
 

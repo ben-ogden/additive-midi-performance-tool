@@ -1,4 +1,4 @@
-package ui.keyboard;
+package ampt.ui.keyboard;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,7 +12,7 @@ import javax.sound.midi.Transmitter;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import ui.keyboard.WhiteKey.KeyType;
+import static ampt.ui.keyboard.WhiteKey.KeyType;
 
 /**
  * This is a JPanel that contains the keyboard. The keyboard has it's own

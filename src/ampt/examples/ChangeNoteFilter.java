@@ -1,4 +1,4 @@
-package examples;
+package ampt.examples;
 
 import java.io.File;
 import java.io.PrintStream;
