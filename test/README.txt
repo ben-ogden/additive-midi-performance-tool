@@ -1,1 +1,1 @@
-This directory contains unit tests for AMPT.
+This directory contains unit tests for AMPT. Tests should be placed in packages corresponding to the code being tested.
