@@ -1,4 +1,4 @@
-package examples;
+package ampt.examples;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

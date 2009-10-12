@@ -1,11 +1,11 @@
-package examples;
+package ampt.examples;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 
-import ui.keyboard.KeyboardPanel;
+import ampt.ui.keyboard.KeyboardPanel;
 
 /**
  * Class that tests the ui.keyboard package. Uses the default synthesizer to

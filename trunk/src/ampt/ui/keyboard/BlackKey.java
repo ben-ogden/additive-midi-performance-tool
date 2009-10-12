@@ -1,4 +1,4 @@
-package ui.keyboard;
+package ampt.ui.keyboard;
 
 import java.awt.Color;
 import java.awt.Dimension;
