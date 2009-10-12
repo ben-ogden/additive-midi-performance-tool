@@ -1,0 +1,1 @@
+This directory contains a Netbeans project for AMPT development.
