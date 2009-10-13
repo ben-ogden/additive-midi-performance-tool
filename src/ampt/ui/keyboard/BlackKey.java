@@ -2,6 +2,8 @@ package ampt.ui.keyboard;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 /**
@@ -24,9 +26,28 @@ public class BlackKey extends KeyboardKey {
 	 * 
 	 * @param note
 	 *            The note that this key represents
+	 * @param channel
+	 *            The channel to send MIDI messages on
 	 */
-	public BlackKey(final int note) {
-		super(note);
+	public BlackKey(int note, int channel) {
+		super(note, channel);
+
+		this.setPreferredSize(new Dimension(KEY_WIDTH, KEY_HEIGHT));
+	}
+
+	/**
+	 * Constructor which sets the note of the key, and the preferred size of the
+	 * key.
+	 * 
+	 * @param note
+	 *            The note that this key represents
+	 * @param keyBinding
+	 *            The key to bind this button to
+	 * @param channel
+	 *            The channel to send MIDI messages on
+	 */
+	public BlackKey(int note, char keyBinding, int channel) {
+		super(note, keyBinding, channel);
 
 		this.setPreferredSize(new Dimension(KEY_WIDTH, KEY_HEIGHT));
 	}
@@ -55,6 +76,24 @@ public class BlackKey extends KeyboardKey {
 			g.setColor(Color.BLACK);
 		}
 		g.fillRect(0, 0, KEY_WIDTH, KEY_HEIGHT);
+
+		
+		
+		g.setColor(Color.WHITE);
+
+		Font font = g.getFont();
+
+		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
+
+		FontMetrics fontMetrics = g.getFontMetrics();
+
+		int xPos = KEY_WIDTH;
+		xPos -= fontMetrics.charWidth(keyBinding);
+		xPos /= 2;
+
+		g.drawString(Character.toString(keyBinding), xPos, 3 * KEY_HEIGHT / 4);
+
+		g.setFont(font);
 		g.setColor(color);
 	}
 
