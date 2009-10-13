@@ -2,6 +2,8 @@ package ampt.ui.keyboard;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 /**
@@ -37,11 +39,37 @@ public class WhiteKey extends KeyboardKey {
 	 *            Right
 	 * @param note
 	 *            The note that this key represents
+	 * @param channel
+	 *            The channel to send MIDI messages on
 	 */
-	public WhiteKey(KeyType keyType, int note) {
-		super(note);
+	public WhiteKey(KeyType keyType, int note, int channel) {
+		super(note, channel);
 
 		this.keyType = keyType;
+		this.setPreferredSize(new Dimension(KEY_WIDTH, KEY_HEIGHT));
+	}
+
+	/**
+	 * Constructor which sets the note the key represents, the key type, and the
+	 * preferred size of the key
+	 * 
+	 * @param keyType
+	 *            The KeyType that this key is for. Options are Left, Center, or
+	 *            Right
+	 * @param note
+	 *            The note that this key represents
+	 * @param keyBinding
+	 *            The key to associate with this button
+	 * @param channel
+	 *            The channel to send MIDI messages on
+	 */
+	public WhiteKey(KeyType keyType, int note, char keyBinding, int channel) {
+		super(note, keyBinding, channel);
+
+		System.out.println(String.valueOf(keyBinding));
+
+		this.keyType = keyType;
+		// this.keyBinding = keyBinding
 		this.setPreferredSize(new Dimension(KEY_WIDTH, KEY_HEIGHT));
 	}
 
@@ -113,6 +141,25 @@ public class WhiteKey extends KeyboardKey {
 			break;
 		}
 
+		if (pressed) {
+			g.setColor(Color.WHITE);
+		} else {
+			g.setColor(Color.BLACK);
+		}
+
+		Font font = g.getFont();
+
+		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
+
+		FontMetrics fontMetrics = g.getFontMetrics();
+
+		int xPos = KEY_WIDTH;
+		xPos -= fontMetrics.charWidth(keyBinding);
+		xPos /= 2;
+
+		g.drawString(Character.toString(keyBinding), xPos, 3 * KEY_HEIGHT / 4);
+
+		g.setFont(font);
 		g.setColor(color);
 	}
 

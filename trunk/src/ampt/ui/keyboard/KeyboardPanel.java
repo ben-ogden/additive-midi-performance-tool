@@ -2,17 +2,14 @@ package ampt.ui.keyboard;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.util.Vector;
 
-import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Receiver;
-import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Transmitter;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import static ampt.ui.keyboard.WhiteKey.KeyType;
+import ampt.ui.keyboard.WhiteKey.KeyType;
 
 /**
  * This is a JPanel that contains the keyboard. The keyboard has it's own
@@ -20,21 +17,20 @@ import static ampt.ui.keyboard.WhiteKey.KeyType;
  * implementing Transmitter, this keyboard can be used in conjunction with any
  * MIDI device containing a receiver.
  * 
- * @author Christopher S. Redding
+ * ********Revisions********
+ * 10-13-09 [Chris] Removed the mouse listener from this class and added it 
+ * into the KeyboardKey class.
  * 
- * TODO: Key Bindings
+ * @author Christopher S. Redding
  */
-public class KeyboardPanel extends JPanel implements Transmitter, MouseListener {
+public class KeyboardPanel extends JPanel implements Transmitter {
 
 	private static final long serialVersionUID = 1L;
 
 	private JLayeredPane keyboard;
-	private WhiteKey cKey, dKey, eKey, fKey, gKey, aKey, bKey;
-	private BlackKey cSharpKey, dSharpKey, fSharpKey, gSharpKey, aSharpKey;
+	private Vector<KeyboardKey> keys;
 
 	private Receiver receiver = null;
-
-	private int channel;
 
 	/**
 	 * Constructs the keyboard, adding each key. Sets the channel to send the
@@ -46,41 +42,40 @@ public class KeyboardPanel extends JPanel implements Transmitter, MouseListener 
 	public KeyboardPanel(int channel) {
 		super();
 
-		this.channel = channel;
-
 		// Use a JLayeredPane to enable overlapping components
 		keyboard = new JLayeredPane();
 		// Set the layout to null so I can manually place the keys where they
 		// belong.
 		keyboard.setLayout(null);
+		
+		// Setup Vector to hold keys
+		keys = new Vector<KeyboardKey>();
 
 		// instantiate each key
-		cKey = new WhiteKey(KeyType.Left, 60);
-		cSharpKey = new BlackKey(61);
-		dKey = new WhiteKey(KeyType.Center, 62);
-		dSharpKey = new BlackKey(63);
-		eKey = new WhiteKey(KeyType.Right, 64);
-		fKey = new WhiteKey(KeyType.Left, 65);
-		fSharpKey = new BlackKey(66);
-		gKey = new WhiteKey(KeyType.Center, 67);
-		gSharpKey = new BlackKey(68);
-		aKey = new WhiteKey(KeyType.Center, 69);
-		aSharpKey = new BlackKey(70);
-		bKey = new WhiteKey(KeyType.Right, 71);
-
-		// add the mouse listener to produce the notes
-		cKey.addMouseListener(this);
-		cSharpKey.addMouseListener(this);
-		dKey.addMouseListener(this);
-		dSharpKey.addMouseListener(this);
-		eKey.addMouseListener(this);
-		fKey.addMouseListener(this);
-		gKey.addMouseListener(this);
-		aKey.addMouseListener(this);
-		bKey.addMouseListener(this);
-		fSharpKey.addMouseListener(this);
-		gSharpKey.addMouseListener(this);
-		aSharpKey.addMouseListener(this);
+		WhiteKey cKey = new WhiteKey(KeyType.Left, 60, 'a', channel);
+		keys.add(cKey);
+		BlackKey cSharpKey = new BlackKey(61, 'w', channel);
+		keys.add(cSharpKey);
+		WhiteKey dKey = new WhiteKey(KeyType.Center, 62, 's', channel);
+		keys.add(dKey);
+		BlackKey dSharpKey = new BlackKey(63, 'e', channel);
+		keys.add(dSharpKey);
+		WhiteKey eKey = new WhiteKey(KeyType.Right, 64, 'd', channel);
+		keys.add(eKey);
+		WhiteKey fKey = new WhiteKey(KeyType.Left, 65, 'f', channel);
+		keys.add(fKey);
+		BlackKey fSharpKey = new BlackKey(66, 't', channel);
+		keys.add(fSharpKey);
+		WhiteKey gKey = new WhiteKey(KeyType.Center, 67, 'g', channel);
+		keys.add(gKey);
+		BlackKey gSharpKey = new BlackKey(68, 'y', channel);
+		keys.add(gSharpKey);
+		WhiteKey aKey = new WhiteKey(KeyType.Center, 69, 'h', channel);
+		keys.add(aKey);
+		BlackKey aSharpKey = new BlackKey(70, 'u', channel);
+		keys.add(aSharpKey);
+		WhiteKey bKey = new WhiteKey(KeyType.Right, 71, 'j', channel);
+		keys.add(bKey);
 		
 		// set the location of each key
 		int xPos = 0;
@@ -161,79 +156,14 @@ public class KeyboardPanel extends JPanel implements Transmitter, MouseListener 
 	@Override
 	public void setReceiver(Receiver receiver) {
 		this.receiver = receiver;
-	}
-
-	/**
-	 * Required method for implementing a MouseListener. Does nothing.
-	 */
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-	}
-
-	/**
-	 * Required method for implementing a MouseListener. Does nothing.
-	 */
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-	}
-
-	/**
-	 * Required method for implementing a MouseListener. Does nothing.
-	 */
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-	}
-
-	/**
-	 * Required method for implementing a MouseListener.
-	 * 
-	 * Produces the MIDI NOTE_ON message for the key pressed, and sends it to
-	 * the receiver
-	 */
-	@Override
-	public void mousePressed(MouseEvent event) {
-		if (event.getSource() instanceof KeyboardKey) {
-			KeyboardKey key = (KeyboardKey) event.getSource();
-			setNoteOn(key);
-		}
-
-	}
-	
-	public void setNoteOn(KeyboardKey key){
-		if (receiver != null) {
-			ShortMessage msgNote = new ShortMessage();
-			try {
-				msgNote.setMessage(ShortMessage.NOTE_ON, channel, key
-						.getNote(), 93);
-				receiver.send(msgNote, -1);
-			} catch (InvalidMidiDataException e) {
-			}
-		}
-	}
-
-	/**
-	 * Required method for implementing a MouseListener.
-	 * 
-	 * Produces the MIDI NOTE_OFF message for the key pressed, and sends it to
-	 * the receiver
-	 */
-	@Override
-	public void mouseReleased(MouseEvent event) {
-		if (event.getSource() instanceof KeyboardKey) {
-			KeyboardKey key = (KeyboardKey) event.getSource();
-			setNoteOff(key);
+		for(KeyboardKey key: keys){
+			key.setReceiver(receiver);
 		}
 	}
 	
-	public void setNoteOff(KeyboardKey key){
-		if (receiver != null) {
-			ShortMessage msgNote = new ShortMessage();
-			try {
-				msgNote.setMessage(ShortMessage.NOTE_OFF, channel, key
-						.getNote(), 93);
-				receiver.send(msgNote, -1);
-			} catch (InvalidMidiDataException e) {
-			}
+	public void setChannel(int channel){
+		for(KeyboardKey key: keys){
+			key.setChannel(channel);
 		}
 	}
 
