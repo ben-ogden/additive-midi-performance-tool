@@ -30,8 +30,8 @@ public class ThreadedTimingTest {
         msg1.setMessage(ShortMessage.NOTE_ON, 0, 60, 93);
         msg2.setMessage(ShortMessage.NOTE_ON, 0, 65, 93);
                 
-        t1 = makeThread(msg1, 2000);
-        t2 = makeThread(msg2, 2000);
+        t1 = makeThread(msg1, 1000);
+        t2 = makeThread(msg2, 1000);
         
         t1.start();
         t2.start();
@@ -45,8 +45,8 @@ public class ThreadedTimingTest {
         t1.interrupt();
         t2.interrupt();
         
-        msg1.setMessage(ShortMessage.NOTE_OFF, 0, 65, 93);
-        msg2.setMessage(ShortMessage.NOTE_OFF, 1, 60, 93);
+        msg1.setMessage(ShortMessage.NOTE_OFF, 0, 60, 93);
+        msg2.setMessage(ShortMessage.NOTE_OFF, 0, 65, 93);
         
         rcvr.send(msg1, -1);
         rcvr.send(msg2, -1);
