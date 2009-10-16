@@ -16,6 +16,7 @@ public class NotationTest implements JMC {
 
     public static void main(String[] args) {
 
+        // generate some notes
         Phrase phr = new Phrase();
         for(int i = 0; i < 16; i++) {
             Note n = new Note(C4+i, JMC.EIGHTH_NOTE);
