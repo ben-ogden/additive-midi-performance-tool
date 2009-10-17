@@ -32,15 +32,21 @@ public class TimerTest {
         // execute every 20 ms
         TimerTest test = new TimerTest(20);
 
-        long base=System.currentTimeMillis();
-        for (int r=0; r<20000; ++r)  {
-          System.out.print(System.currentTimeMillis()-base);
-          System.out.print(' ');
-        }
+        long base = System.currentTimeMillis();
+        long lastTick = base;
+        long currentTick;
         
-        test.task.cancel();
+        while(true) {
 
-        System.out.println("Finished.");
+          currentTick = System.currentTimeMillis();
+          
+          if(lastTick != currentTick) {
+              System.out.print(currentTick-base);
+              System.out.print(' ');
+              lastTick = currentTick;
+          }
+
+        }
     }
 
 
