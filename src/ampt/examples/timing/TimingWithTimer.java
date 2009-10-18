@@ -28,8 +28,8 @@ public class TimingWithTimer {
         onMsg.setMessage(ShortMessage.NOTE_ON, 3, 60, 93);
         offMsg.setMessage(ShortMessage.NOTE_OFF, 3, 60, 93);
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(getCommand(rcvr, onMsg), 1000L, 200L);
-        timer.scheduleAtFixedRate(getCommand(rcvr, offMsg), 1050L, 200L);
+        timer.scheduleAtFixedRate(getCommand(rcvr, onMsg), 1000L, 80L);
+        timer.scheduleAtFixedRate(getCommand(rcvr, offMsg), 1020L, 80L);
         
         while(true) {
         }

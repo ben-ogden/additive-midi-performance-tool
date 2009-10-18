@@ -44,7 +44,7 @@ public class TimingWithThreads {
                 try {
                     while (true) {
                         r.send(m, -1);
-                        Thread.sleep(200);
+                        Thread.sleep(80);
                     }
                 } catch (InterruptedException e) {
                 }
