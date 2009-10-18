@@ -18,13 +18,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimerWithSound {
-    TimerTask task;
-    
-    public TimerWithSound(long period, long start, TimerTask task) {
-        this.task = task;
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(task, start, period);
-    }
     
     public static void main(String args[]) throws MidiUnavailableException, InvalidMidiDataException {
         Synthesizer synth = MidiSystem.getSynthesizer();
@@ -32,11 +25,11 @@ public class TimerWithSound {
         Receiver rcvr = synth.getReceiver();
         ShortMessage onMsg = new ShortMessage();
         ShortMessage offMsg = new ShortMessage();
-        onMsg.setMessage(ShortMessage.NOTE_ON, 8, 60, 93);
-        offMsg.setMessage(ShortMessage.NOTE_OFF, 8, 60, 93);
-        
-        new TimerWithSound(100L, 20L, getAnonTask(rcvr, onMsg));
-        new TimerWithSound(100L, 25L, getAnonTask(rcvr, offMsg));
+        onMsg.setMessage(ShortMessage.NOTE_ON, 0, 60, 93);
+        offMsg.setMessage(ShortMessage.NOTE_OFF, 0, 60, 93);
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(getAnonTask(rcvr, onMsg), 50L, 200L);
+        timer.scheduleAtFixedRate(getAnonTask(rcvr, offMsg), 100L, 200L);
         
         while(true) {
         }
