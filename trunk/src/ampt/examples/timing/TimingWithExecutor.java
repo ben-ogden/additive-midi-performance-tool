@@ -29,8 +29,8 @@ public class TimingWithExecutor {
         on.setMessage(ShortMessage.NOTE_ON, 0, 60, 93);
         off.setMessage(ShortMessage.NOTE_OFF, 0, 60, 93);
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50);
-        executor.scheduleAtFixedRate(getCommand(on, rcvr), 1000L, 200L, TimeUnit.MILLISECONDS);
-        executor.scheduleAtFixedRate(getCommand(off, rcvr), 1050L, 200L, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(getCommand(on, rcvr), 1000L, 80L, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(getCommand(off, rcvr), 1050L, 80L, TimeUnit.MILLISECONDS);
         
         while (true) {}
     }
