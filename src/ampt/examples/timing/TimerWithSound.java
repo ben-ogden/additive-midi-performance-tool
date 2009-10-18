@@ -1,8 +1,7 @@
 package ampt.examples.timing;
 
 /**
- * A version of Ben's timer test with sound. This really demonstrates the problem
- * of trying to do timing related functions in a single thread.
+ * A version of Ben's timer test with sound.
  *
  * @author Rob Szewczyk
  */
