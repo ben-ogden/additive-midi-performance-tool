@@ -26,18 +26,22 @@ public class ThreadedTimingTest {
         rcvr = synth.getReceiver();
         ShortMessage msg1 = new ShortMessage();
         ShortMessage msg2 = new ShortMessage();
+        ShortMessage msg3 = new ShortMessage();
+        ShortMessage msg4 = new ShortMessage();
         
         msg1.setMessage(ShortMessage.NOTE_ON, 0, 60, 93);
         msg2.setMessage(ShortMessage.NOTE_ON, 0, 65, 93);
+        msg3.setMessage(ShortMessage.NOTE_OFF, 0, 60, 93);
+        msg4.setMessage(ShortMessage.NOTE_OFF, 0, 65, 93);
                 
-        t1 = makeThread(msg1, 1000);
-        t2 = makeThread(msg2, 1000);
+        t1 = makeThread(msg1, msg3, 300000);
+        t2 = makeThread(msg2, msg4, 300000);
         
         t1.start();
         t2.start();
         
         try {
-            Thread.sleep(300000);
+            Thread.sleep(1200000);
         } catch (InterruptedException e) {
             return;
         }
@@ -52,12 +56,15 @@ public class ThreadedTimingTest {
         rcvr.send(msg2, -1);
     }
     
-    protected static Thread makeThread(final ShortMessage m, final long length) {
+    protected static Thread makeThread(final ShortMessage m1,
+            final ShortMessage m2, final long length) {
         Runnable runLoop = new Runnable() {
             public void run() {
                 try {
                     while(true) {
-                        send(m);
+                        send(m1);
+                        Thread.sleep(500);
+                        send(m2);
                         Thread.sleep(length);
                     }
                 } catch (InterruptedException e) {
@@ -69,7 +76,7 @@ public class ThreadedTimingTest {
         return new Thread(runLoop);
     }
     
-    protected synchronized static void send(ShortMessage m) {
+    protected static void send(ShortMessage m) {
         rcvr.send(m, -1);
     }
 }
