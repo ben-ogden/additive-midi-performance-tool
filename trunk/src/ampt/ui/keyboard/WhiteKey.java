@@ -66,8 +66,6 @@ public class WhiteKey extends KeyboardKey {
 	public WhiteKey(KeyType keyType, int note, char keyBinding, int channel) {
 		super(note, keyBinding, channel);
 
-		System.out.println(String.valueOf(keyBinding));
-
 		this.keyType = keyType;
 		// this.keyBinding = keyBinding
 		this.setPreferredSize(new Dimension(KEY_WIDTH, KEY_HEIGHT));
