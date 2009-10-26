@@ -20,7 +20,7 @@ public class JavaNanoTimerTest {
         int counter = 0;
         int secondsCounter = 1;
 
-        Clock clock = Clock.getInstance(Clock.NANO);
+        Clock clock = Clock.getInstance(Clock.CLOCK_TYPE_NANO);
         clock.stampTime();
 
         while (secondsCounter < 11) // run for 10 seconds

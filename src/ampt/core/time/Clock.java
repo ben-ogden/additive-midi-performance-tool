@@ -21,8 +21,8 @@ public abstract class Clock {
     public static final int UNIT_MICROS = 1000000;   // 10^6
     public static final int UNIT_NANOS = 1000000000; // 10^9
 
-    public static final int STANDARD = 1;
-    public static final int NANO = 2;
+    public static final int CLOCK_TYPE_STANDARD = 1;
+    public static final int CLOCK_TYPE_NANO = 2;
 
     /**
      * Get an instance of a clock. getInstance will attempt to load a high
@@ -53,9 +53,9 @@ public abstract class Clock {
      */
     public static Clock getInstance(int type) {
         Clock clock;
-        if (type == NANO) {
+        if (type == CLOCK_TYPE_NANO) {
             clock = new JavaNanoClock();
-        } else if (type == STANDARD) {
+        } else if (type == CLOCK_TYPE_STANDARD) {
             clock = new StandardClock();
         } else {
             clock = getInstance();
