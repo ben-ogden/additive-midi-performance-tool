@@ -7,6 +7,9 @@ package ampt.core.time;
  * <p>Note:Currently the high resolution clock is only available for Windows
  * users. Users on other platforms will get the standard clock.
  *
+ * <p>Note (by Rob): added an overloaded getInstance() that takes an int
+ * parameter in order to select the nanoTime timer.
+ *
  * TODO add native clocks for OSX and Linux.
  *
  * @author Ben
@@ -17,6 +20,9 @@ public abstract class Clock {
     public static final int UNIT_MILLIS = 1000;      // 10^3
     public static final int UNIT_MICROS = 1000000;   // 10^6
     public static final int UNIT_NANOS = 1000000000; // 10^9
+
+    public static final int STANDARD = 1;
+    public static final int NANO = 2;
 
     /**
      * Get an instance of a clock. getInstance will attempt to load a high
@@ -33,6 +39,26 @@ public abstract class Clock {
         } else {
             System.out.println("Using standard clock");
             clock = new StandardClock();
+        }
+        return clock;
+    }
+
+    /**
+     * Get an instance of a clock of the type specified in the
+     * parameter. This method gives you the option of selecting
+     * JRE dependent implementations only.
+     *
+     * @param type the type of clock desired
+     * @return a new Clock of the requested type
+     */
+    public static Clock getInstance(int type) {
+        Clock clock;
+        if (type == NANO) {
+            clock = new JavaNanoClock();
+        } else if (type == STANDARD) {
+            clock = new StandardClock();
+        } else {
+            clock = getInstance();
         }
         return clock;
     }
