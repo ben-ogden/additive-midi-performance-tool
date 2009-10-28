@@ -54,8 +54,10 @@ public abstract class Clock {
     public static Clock getInstance(int type) {
         Clock clock;
         if (type == CLOCK_TYPE_NANO) {
+            System.out.println("Using nanoTime() clock");
             clock = new JavaNanoClock();
         } else if (type == CLOCK_TYPE_STANDARD) {
+            System.out.println("Using standard clock");
             clock = new StandardClock();
         } else {
             clock = getInstance();
