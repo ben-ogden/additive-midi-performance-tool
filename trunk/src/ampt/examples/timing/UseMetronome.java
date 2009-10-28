@@ -39,7 +39,7 @@ public class UseMetronome {
 
         met.start();
 
-        int tickCount = met.play(-1);
+        int tickCount = met.getTickCount();
         for(int i = 0; i < 80; i++) {
             {
                 final int t = tickCount;

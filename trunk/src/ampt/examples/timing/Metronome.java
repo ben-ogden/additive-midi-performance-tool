@@ -1,5 +1,7 @@
 package ampt.examples.timing;
 
+import ampt.core.time.Clock;
+
 /**
  * This class implements a metronome. It is designed to work with threads,
  * like a monitor. The internal ticker thread advances the tickCounter value
@@ -21,24 +23,27 @@ package ampt.examples.timing;
  * methods like wait and sleep to time notes is that at best they can only
  * specify the soonest an action will occur.
  *
- * <p> for some reason the stop() method is broken.
  *
  * @author robert
  */
 public class Metronome {
+    //since only one thread ever modifies tickCount, volatile will work
+    private int tickCount = 1;
+
     protected long nextTickTime;
     protected long tickLength;
-    protected int tickCount;
     protected Thread ticker;
     protected boolean STOP = false;
+    protected Clock clock;
 
     public Metronome(int tempo) {
         float f = (60f/tempo)/32;
-        tickLength = (long)(f * 1000000000);
+        tickLength = (long)(f * 1000);
+        nextTickTime = 1;
+        clock = Clock.getInstance(Clock.CLOCK_TYPE_STANDARD);
     }
 
     public void start() {
-        tickCount = 1;
         ticker = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -46,16 +51,12 @@ public class Metronome {
                     if (STOP)
                         return;
                     tick();
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        return;
-                    }
+                    Thread.yield();
                 }
             }
         });
 
-        nextTickTime = System.nanoTime() + tickLength;
+        nextTickTime = clock.getTime() + tickLength;
         ticker.start();
     }
 
@@ -63,26 +64,25 @@ public class Metronome {
         STOP = true;
     }
 
-    public synchronized long getTickCount() {
+    public synchronized int getTickCount() {
         return tickCount;
     }
 
-    protected synchronized void tick() {
-        long currentTime;
-        if ((currentTime = System.nanoTime()) >= nextTickTime) {
+    private synchronized void tick() {
+        long currentTime = clock.getTime();
+        if (currentTime >= nextTickTime) {
             nextTickTime = currentTime + tickLength;
             tickCount++;
             notifyAll();
         }
     }
 
-    public synchronized int play(int timeStamp) {
+    public synchronized void play(int timeStamp) {
         while (!(tickCount >= timeStamp)) {
             try {
                 wait();
             } catch (InterruptedException e) {
             }
         }
-        return tickCount;
     }
 }
