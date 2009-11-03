@@ -40,13 +40,17 @@ public class TestClockWithNotes {
         timeStamp = clock.getTime();
         //calculate the first tick
         nextTick = timeStamp + tickLength;
-        while (tickCount <= 30) {
+        while (tickCount <= 90) {
             //get current time
             timeStamp = clock.getTime();
             //is it time to tick?
             if (timeStamp >= nextTick) {
                 rcvr.send(msg1, -1);
                 rcvr.send(msg2, -1);
+                msg1.setMessage(ShortMessage.NOTE_ON,
+                        0, 60 + (tickCount % 12), 93);
+                msg2.setMessage(ShortMessage.NOTE_OFF,
+                        0, 60 + (tickCount % 12), 93);
                 //calculate next tick
                 nextTick = timeStamp + tickLength;
                 tickCount++;
@@ -55,19 +59,25 @@ public class TestClockWithNotes {
 
         Thread.sleep(2000);
 
+        msg1.setMessage(ShortMessage.NOTE_ON, 0, 60, 93);
+        msg2.setMessage(ShortMessage.NOTE_OFF, 0, 60, 93);
         clock = Clock.getInstance(Clock.CLOCK_TYPE_NANO);
         tickLength = 125000000; //nano clock is in nanos
         //reset ticker
         tickCount = 0;
         timeStamp = clock.getTime();
         nextTick = timeStamp + tickLength;
-        while (tickCount <= 30) {
+        while (tickCount <= 90) {
             //get current time
             timeStamp = clock.getTime();
             //is it time to tick?
             if (timeStamp >= nextTick) {
                 rcvr.send(msg1, -1);
                 rcvr.send(msg2, -1);
+                msg1.setMessage(ShortMessage.NOTE_ON,
+                        0, 60 + (tickCount % 12), 93);
+                msg2.setMessage(ShortMessage.NOTE_OFF,
+                        0, 60 + (tickCount % 12), 93);
                 //calculate next tick
                 nextTick = timeStamp + tickLength;
                 tickCount++;
@@ -77,19 +87,25 @@ public class TestClockWithNotes {
 
         Thread.sleep(2000);
 
+        msg1.setMessage(ShortMessage.NOTE_ON, 0, 60, 93);
+        msg2.setMessage(ShortMessage.NOTE_OFF, 0, 60, 93);
         clock = Clock.getInstance();
         tickLength = 125000; //native clock is in micros
         //reset ticker
         tickCount = 0;
         timeStamp = clock.getTime();
         nextTick = timeStamp + tickLength;
-        while (tickCount <= 30) {
+        while (tickCount <= 90) {
             //get current time
             timeStamp = clock.getTime();
             //is it time to tick?
             if (timeStamp >= nextTick) {
                 rcvr.send(msg1, -1);
                 rcvr.send(msg2, -1);
+                msg1.setMessage(ShortMessage.NOTE_ON,
+                        0, 60 + (tickCount % 12), 93);
+                msg2.setMessage(ShortMessage.NOTE_OFF,
+                        0, 60 + (tickCount % 12), 93);
                 //calculate next tick
                 nextTick = timeStamp + tickLength;
                 tickCount++;
