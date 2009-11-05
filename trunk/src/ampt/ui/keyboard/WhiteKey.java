@@ -42,8 +42,8 @@ public class WhiteKey extends KeyboardKey {
 	 * @param channel
 	 *            The channel to send MIDI messages on
 	 */
-	public WhiteKey(KeyType keyType, int note, int channel) {
-		super(note, channel);
+	public WhiteKey(KeyType keyType, int note, KeyboardDevice keyboardDevice) {
+		super(note, keyboardDevice);
 
 		this.keyType = keyType;
 		this.setPreferredSize(new Dimension(KEY_WIDTH, KEY_HEIGHT));
@@ -63,8 +63,8 @@ public class WhiteKey extends KeyboardKey {
 	 * @param channel
 	 *            The channel to send MIDI messages on
 	 */
-	public WhiteKey(KeyType keyType, int note, char keyBinding, int channel) {
-		super(note, keyBinding, channel);
+	public WhiteKey(KeyType keyType, int note, char keyBinding, KeyboardDevice keyboardDevice) {
+		super(note, keyBinding, keyboardDevice);
 
 		this.keyType = keyType;
 		// this.keyBinding = keyBinding

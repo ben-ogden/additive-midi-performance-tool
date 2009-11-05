@@ -23,14 +23,12 @@ import ampt.ui.keyboard.WhiteKey.KeyType;
  * 
  * @author Christopher S. Redding
  */
-public class KeyboardPanel extends JPanel implements Transmitter {
+public class KeyboardPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
 	private JLayeredPane keyboard;
 	private Vector<KeyboardKey> keys;
-
-	private Receiver receiver = null;
 
 	/**
 	 * Constructs the keyboard, adding each key. Sets the channel to send the
@@ -39,7 +37,7 @@ public class KeyboardPanel extends JPanel implements Transmitter {
 	 * @param channel
 	 *            The channel to send the MIDI messages on
 	 */
-	public KeyboardPanel(int channel) {
+	public KeyboardPanel(KeyboardDevice keyboardDevice) {
 		super();
 
 		// Use a JLayeredPane to enable overlapping components
@@ -52,29 +50,29 @@ public class KeyboardPanel extends JPanel implements Transmitter {
 		keys = new Vector<KeyboardKey>();
 
 		// instantiate each key
-		WhiteKey cKey = new WhiteKey(KeyType.Left, 60, 'a', channel);
+		WhiteKey cKey = new WhiteKey(KeyType.Left, 60, 'a', keyboardDevice);
 		keys.add(cKey);
-		BlackKey cSharpKey = new BlackKey(61, 'w', channel);
+		BlackKey cSharpKey = new BlackKey(61, 'w', keyboardDevice);
 		keys.add(cSharpKey);
-		WhiteKey dKey = new WhiteKey(KeyType.Center, 62, 's', channel);
+		WhiteKey dKey = new WhiteKey(KeyType.Center, 62, 's', keyboardDevice);
 		keys.add(dKey);
-		BlackKey dSharpKey = new BlackKey(63, 'e', channel);
+		BlackKey dSharpKey = new BlackKey(63, 'e', keyboardDevice);
 		keys.add(dSharpKey);
-		WhiteKey eKey = new WhiteKey(KeyType.Right, 64, 'd', channel);
+		WhiteKey eKey = new WhiteKey(KeyType.Right, 64, 'd', keyboardDevice);
 		keys.add(eKey);
-		WhiteKey fKey = new WhiteKey(KeyType.Left, 65, 'f', channel);
+		WhiteKey fKey = new WhiteKey(KeyType.Left, 65, 'f', keyboardDevice);
 		keys.add(fKey);
-		BlackKey fSharpKey = new BlackKey(66, 't', channel);
+		BlackKey fSharpKey = new BlackKey(66, 't', keyboardDevice);
 		keys.add(fSharpKey);
-		WhiteKey gKey = new WhiteKey(KeyType.Center, 67, 'g', channel);
+		WhiteKey gKey = new WhiteKey(KeyType.Center, 67, 'g', keyboardDevice);
 		keys.add(gKey);
-		BlackKey gSharpKey = new BlackKey(68, 'y', channel);
+		BlackKey gSharpKey = new BlackKey(68, 'y', keyboardDevice);
 		keys.add(gSharpKey);
-		WhiteKey aKey = new WhiteKey(KeyType.Center, 69, 'h', channel);
+		WhiteKey aKey = new WhiteKey(KeyType.Center, 69, 'h', keyboardDevice);
 		keys.add(aKey);
-		BlackKey aSharpKey = new BlackKey(70, 'u', channel);
+		BlackKey aSharpKey = new BlackKey(70, 'u', keyboardDevice);
 		keys.add(aSharpKey);
-		WhiteKey bKey = new WhiteKey(KeyType.Right, 71, 'j', channel);
+		WhiteKey bKey = new WhiteKey(KeyType.Right, 71, 'j', keyboardDevice);
 		keys.add(bKey);
 		
 		// set the location of each key
@@ -126,45 +124,6 @@ public class KeyboardPanel extends JPanel implements Transmitter {
 		// add the keyboard to this panel
 		this.add(keyboard, BorderLayout.CENTER);
 
-	}
-
-	/**
-	 * Required method for implementing a transiever.
-	 * 
-	 * Does nothing. This may be implemented in the future
-	 */
-	@Override
-	public void close() {
-		// TODO Implement this if desired
-	}
-
-	/**
-	 * Required method for implementing a transiever.
-	 * 
-	 * Returns the receiver currently set for the keyboard.
-	 */
-	@Override
-	public Receiver getReceiver() {
-		return this.receiver;
-	}
-
-	/**
-	 * Required method for implementing a transiever.
-	 * 
-	 * Sets the receiver to send the MIDI messages to.
-	 */
-	@Override
-	public void setReceiver(Receiver receiver) {
-		this.receiver = receiver;
-		for(KeyboardKey key: keys){
-			key.setReceiver(receiver);
-		}
-	}
-	
-	public void setChannel(int channel){
-		for(KeyboardKey key: keys){
-			key.setChannel(channel);
-		}
 	}
 
 }
