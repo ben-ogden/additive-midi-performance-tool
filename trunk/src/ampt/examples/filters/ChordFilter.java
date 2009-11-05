@@ -1,5 +1,6 @@
 package ampt.examples.filters;
 
+import java.util.Vector;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
@@ -22,7 +23,8 @@ import javax.sound.midi.Transmitter;
  */
 public class ChordFilter implements Receiver, Transmitter{
 
-    private Receiver receiver;
+//    private Receiver receiver;
+    private Vector<Receiver> receivers;
     private static final int thirdInterval = 4;
     private static final int fifthInterval = 7;
 
@@ -30,7 +32,7 @@ public class ChordFilter implements Receiver, Transmitter{
      * Instantiates the class.
      */
     public ChordFilter(){
-
+        receivers = new Vector<Receiver>();
     }
 
     /**
@@ -43,7 +45,7 @@ public class ChordFilter implements Receiver, Transmitter{
     @Override
     public void send(MidiMessage message, long timeStamp) {
 
-        if(receiver == null){
+        if(receivers.isEmpty()){
             return;
         }
 
@@ -55,9 +57,11 @@ public class ChordFilter implements Receiver, Transmitter{
                     third.setMessage(root.getCommand(), root.getChannel(), root.getData1() + thirdInterval, root.getData2());
                     ShortMessage fifth = new ShortMessage();
                     fifth.setMessage(root.getCommand(), root.getChannel(), root.getData1() + fifthInterval, root.getData2());
-                    receiver.send(root, timeStamp);
-                    receiver.send(third, timeStamp);
-                    receiver.send(fifth, timeStamp);
+                    for(Receiver receiver: receivers){
+                        receiver.send(root, timeStamp);
+                        receiver.send(third, timeStamp);
+                        receiver.send(fifth, timeStamp);
+                    }
                     return;
                 } catch (InvalidMidiDataException ex){
                     // Do Nothing
@@ -65,7 +69,9 @@ public class ChordFilter implements Receiver, Transmitter{
             }
         }
 
-        receiver.send(message, timeStamp);
+        for(Receiver receiver: receivers){
+            receiver.send(message, timeStamp);
+        }
 
 
 
@@ -88,7 +94,7 @@ public class ChordFilter implements Receiver, Transmitter{
      */
     @Override
     public void setReceiver(Receiver receiver) {
-        this.receiver = receiver;
+        this.receivers.add(receiver);
     }
 
     /**
@@ -96,7 +102,7 @@ public class ChordFilter implements Receiver, Transmitter{
      */
     @Override
     public Receiver getReceiver() {
-        return this.receiver;
+        return this.receivers.firstElement();
     }
 
 
