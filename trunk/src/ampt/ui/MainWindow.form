@@ -26,6 +26,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="Additive MIDI Performance Tool"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
@@ -70,7 +71,7 @@
           <Border info="null"/>
         </Property>
         <Property name="orientation" type="int" value="0"/>
-        <Property name="resizeWeight" type="double" value="0.6"/>
+        <Property name="resizeWeight" type="double" value="0.5"/>
       </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
@@ -97,8 +98,8 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="canvasToolbar2" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="canvasToolbar2" min="-2" pref="179" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="jPanel2" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="filterPropertiesPanel1" min="-2" max="-2" attributes="0"/>
@@ -108,7 +109,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="canvasToolbar2" alignment="0" pref="329" max="32767" attributes="0"/>
+                      <Component id="canvasToolbar2" alignment="0" pref="216" max="32767" attributes="0"/>
                       <Component id="filterPropertiesPanel1" alignment="0" max="32767" attributes="0"/>
                       <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
                   </Group>
@@ -126,38 +127,11 @@
                     <Property name="orientation" type="int" value="1"/>
                     <Property name="rollover" type="boolean" value="true"/>
                   </Properties>
-                  <AccessibilityProperties>
-                    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Canvas Toolbar"/>
-                  </AccessibilityProperties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();&#xa;for(Info deviceInfo: deviceInfos){&#xa;    MidiDeviceButton button = new MidiDeviceButton(deviceInfo);&#xa;    canvasToolbar2.add(button);&#xa;        button.addActionListener(new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                ButtonHandler(evt);&#xa;            }&#xa;        });&#xa;}&#xa;&#xa;//ChordFilterButton chordButton = new ChordFilterButton();&#xa;//canvasToolbar2.add(chordButton);&#xa;//chordButton.addActionListener(new java.awt.event.ActionListener() {&#xa;//            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;//                ButtonHandler(evt);&#xa;//            }&#xa;//        });"/>
+                  </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
-                  <SubComponents>
-                    <Component class="javax.swing.JButton" name="keyboardButton">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Keyboard"/>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="horizontalTextPosition" type="int" value="0"/>
-                        <Property name="verticalTextPosition" type="int" value="3"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonHandler"/>
-                      </Events>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="18"/>
-                      </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="jButton2">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Java Synth"/>
-                        <Property name="focusable" type="boolean" value="false"/>
-                        <Property name="horizontalTextPosition" type="int" value="0"/>
-                        <Property name="verticalTextPosition" type="int" value="3"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonHandler"/>
-                      </Events>
-                    </Component>
-                  </SubComponents>
                 </Container>
                 <Container class="ampt.ui.canvas.FilterPropertiesPanel" name="filterPropertiesPanel1">
                   <Properties>
@@ -171,12 +145,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="158" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="102" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="299" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="186" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -202,7 +176,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <Component id="canvasPanel1" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -220,12 +194,12 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="326" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="307" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="288" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="175" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
@@ -237,6 +211,11 @@
           </SubComponents>
         </Container>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+          <Properties>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[24, 200]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>
