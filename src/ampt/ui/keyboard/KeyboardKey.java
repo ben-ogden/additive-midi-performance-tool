@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -30,9 +28,8 @@ public abstract class KeyboardKey extends JButton implements MouseListener {
 	private static final long serialVersionUID = 1L;
 
 	private final int note;
-	private Receiver receiver;
-	private int channel;
 	protected char keyBinding = ' ';
+        private KeyboardDevice keyboardDevice;
 
 	protected boolean pressed = false;
 
@@ -45,10 +42,10 @@ public abstract class KeyboardKey extends JButton implements MouseListener {
 	 * @param channel
 	 *            The channel to send MIDI messages on.
 	 */
-	public KeyboardKey(final int note, int channel) {
+	public KeyboardKey(final int note, KeyboardDevice keyboardDevice) {
 		super();
 		this.note = note;
-		this.channel = channel;
+                this.keyboardDevice = keyboardDevice;
 		this.addMouseListener(this);
 	}
 
@@ -63,8 +60,8 @@ public abstract class KeyboardKey extends JButton implements MouseListener {
 	 * @param channel
 	 *            The channel to send MIDI messages on
 	 */
-	public KeyboardKey(final int note, char keyBinding, int channel) {
-		this(note, channel);
+	public KeyboardKey(final int note, char keyBinding, KeyboardDevice keyboardDevice) {
+		this(note, keyboardDevice);
 
 		this.keyBinding = keyBinding;
 
@@ -142,47 +139,17 @@ public abstract class KeyboardKey extends JButton implements MouseListener {
 	}
 
 	/**
-	 * Sets the receiver to send the MIDI messages to
-	 * @param receiver
-	 */
-	public void setReceiver(Receiver receiver) {
-		this.receiver = receiver;
-	}
-
-	/**
-	 * Sets the channel to send the MIDI messages on
-	 * @param channel
-	 */
-	public void setChannel(int channel) {
-		this.channel = channel;
-	}
-
-	/**
 	 * Sends a Note On message to the set receiver on the set channel.
 	 */
 	public void setNoteOn() {
-		if (receiver != null) {
-			ShortMessage msgNote = new ShortMessage();
-			try {
-				msgNote.setMessage(ShortMessage.NOTE_ON, channel, note, 93);
-				receiver.send(msgNote, -1);
-			} catch (InvalidMidiDataException e) {
-			}
-		}
+		keyboardDevice.sendMessage(ShortMessage.NOTE_ON, note);
 	}
 
 	/**
 	 * Sends a Note Off message to the set receiver on the set channel.
 	 */
 	public void setNoteOff() {
-		if (receiver != null) {
-			ShortMessage msgNote = new ShortMessage();
-			try {
-				msgNote.setMessage(ShortMessage.NOTE_OFF, channel, note, 93);
-				receiver.send(msgNote, -1);
-			} catch (InvalidMidiDataException e) {
-			}
-		}
+		keyboardDevice.sendMessage(ShortMessage.NOTE_OFF, note);
 	}
 
 }

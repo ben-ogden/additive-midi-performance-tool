@@ -29,8 +29,8 @@ public class BlackKey extends KeyboardKey {
 	 * @param channel
 	 *            The channel to send MIDI messages on
 	 */
-	public BlackKey(int note, int channel) {
-		super(note, channel);
+	public BlackKey(int note, KeyboardDevice keyboardDevice) {
+		super(note, keyboardDevice);
 
 		this.setPreferredSize(new Dimension(KEY_WIDTH, KEY_HEIGHT));
 	}
@@ -46,8 +46,8 @@ public class BlackKey extends KeyboardKey {
 	 * @param channel
 	 *            The channel to send MIDI messages on
 	 */
-	public BlackKey(int note, char keyBinding, int channel) {
-		super(note, keyBinding, channel);
+	public BlackKey(int note, char keyBinding, KeyboardDevice keyboardDevice) {
+		super(note, keyBinding, keyboardDevice);
 
 		this.setPreferredSize(new Dimension(KEY_WIDTH, KEY_HEIGHT));
 	}
