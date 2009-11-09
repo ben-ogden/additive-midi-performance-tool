@@ -7,12 +7,15 @@ package ampt.examples;
 
 import ampt.examples.filters.ChordFilter;
 import ampt.examples.filters.FlutterFilterVariation;
+import ampt.ui.keyboard.KeyboardDevice;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
@@ -39,7 +42,8 @@ import javax.swing.JPanel;
 public class FilterTest extends JFrame{
 
     private Receiver currentReceiver;
-    private KeyboardPanel keyboard;
+//    private KeyboardPanel keyboard;
+    private KeyboardDevice keyboardDevice;
     private final JComboBox receiverCombo, filterCombo;
 
     public FilterTest(){
@@ -69,7 +73,15 @@ public class FilterTest extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Receiver filterReceiver = (Receiver)filterCombo.getSelectedItem();
-                keyboard.setReceiver(filterReceiver);
+                for(Transmitter transmitter : keyboardDevice.getTransmitters()){
+                    transmitter.close();
+                }
+                try {
+                    keyboardDevice.getTransmitter().setReceiver(filterReceiver);
+                } catch (MidiUnavailableException ex) {
+                    Logger.getLogger(FilterTest.class.getName()).log(Level.SEVERE, null, ex);
+                }
+//                keyboard.setReceiver(filterReceiver);
                 Transmitter filterTransmitter = (Transmitter) filterCombo.getSelectedItem();
 
                 filterTransmitter.setReceiver(currentReceiver);
@@ -117,16 +129,19 @@ public class FilterTest extends JFrame{
          * Create Keyboard Panel
          */
 
-        keyboard = new KeyboardPanel(1);
+        keyboardDevice = new KeyboardDevice();
+        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice);
         mainPanel.add(keyboard, BorderLayout.SOUTH);
         
         this.add(mainPanel);
-
-        Receiver filterReceiver = (Receiver)filterCombo.getSelectedItem();
-        keyboard.setReceiver(filterReceiver);
-        Transmitter filterTransmitter = (Transmitter)filterCombo.getSelectedItem();
-        Info deviceInfo= (Info) receiverCombo.getSelectedItem();
         try {
+
+            Receiver filterReceiver = (Receiver)filterCombo.getSelectedItem();
+            keyboardDevice.open();
+            keyboardDevice.getTransmitter().setReceiver(filterReceiver);
+//            keyboard.setReceiver(filterReceiver);
+            Transmitter filterTransmitter = (Transmitter)filterCombo.getSelectedItem();
+            Info deviceInfo= (Info) receiverCombo.getSelectedItem();
             MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
             device.open();
             currentReceiver = device.getReceiver();
