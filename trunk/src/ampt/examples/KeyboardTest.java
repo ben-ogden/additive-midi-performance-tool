@@ -1,5 +1,6 @@
 package ampt.examples;
 
+import ampt.ui.keyboard.KeyboardDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
@@ -16,26 +17,29 @@ import ampt.ui.keyboard.KeyboardPanel;
  */
 public class KeyboardTest extends JFrame {
 
-	public KeyboardTest() {
-		this.setTitle("Keyboard Test");
-		
-		KeyboardPanel keyboard = new KeyboardPanel(0);
-		this.add(keyboard);
-		try {
-			Synthesizer synth = MidiSystem.getSynthesizer();
-			synth.open();
-			keyboard.setReceiver(synth.getReceiver());
-		} catch (MidiUnavailableException ex) {
-			ex.printStackTrace();
-		}
+    public KeyboardTest() {
+        this.setTitle("Keyboard Test");
+        KeyboardDevice keyboardDevice = new KeyboardDevice();
+        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice);
+        this.add(keyboard);
+        try {
+            Synthesizer synth = MidiSystem.getSynthesizer();
+            synth.open();
+            keyboardDevice.open();
 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.pack();
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
-	}
+            keyboardDevice.getTransmitter().setReceiver(synth.getReceiver());
+//			keyboard.setReceiver(synth.getReceiver());
+        } catch (MidiUnavailableException ex) {
+            ex.printStackTrace();
+        }
 
-	public static void main(String[] args) {
-		new KeyboardTest();
-	}
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new KeyboardTest();
+    }
 }

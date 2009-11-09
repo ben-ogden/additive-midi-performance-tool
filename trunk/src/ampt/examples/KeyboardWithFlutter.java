@@ -1,5 +1,6 @@
 package ampt.examples;
 
+import ampt.ui.keyboard.KeyboardDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
@@ -10,14 +11,16 @@ public class KeyboardWithFlutter extends JFrame {
  
     public KeyboardWithFlutter() {
         this.setTitle("Keyboard with Filters Test");
-        KeyboardPanel keyboard = new KeyboardPanel(0);
+        KeyboardDevice keyboardDevice = new KeyboardDevice();
+        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice);
         FlutterFilter filter = new FlutterFilter();
         this.add(keyboard);
         try {
             Synthesizer synth = MidiSystem.getSynthesizer();
             synth.open();
+            keyboardDevice.open();
             filter.setReceiver(synth.getReceiver());
-            keyboard.setReceiver(filter);
+            keyboardDevice.getTransmitter().setReceiver(filter);
         } catch (MidiUnavailableException mue) {
             mue.printStackTrace();
         }
