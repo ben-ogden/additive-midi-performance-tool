@@ -27,16 +27,79 @@ import javax.sound.midi.Transmitter;
  */
 public class ChordFilterDevice implements MidiDevice {
 
+    public enum ChordType {
+        MAJOR(4, 7),
+        MINOR(3, 7),
+        AUGMENTED(3, 6),
+        DIMINISHED(4, 8);
+
+        private final int thirdInterval;
+        private final int fifthInterval;
+
+        ChordType(int third, int fifth){
+            this.thirdInterval = third;
+            this.fifthInterval = fifth;
+        }
+
+        public int getThirdInterval(){
+            return thirdInterval;
+        }
+
+        public int getFifthInterval(){
+            return fifthInterval;
+        }
+
+    };
+
+    public enum ChordInversion {
+        ROOT_POSITION(0, 0, 0),
+        FIRST_INVERSION(12, 0, 0),
+        SECOND_INVERSION(12, 12, 0);
+
+        private int rootInterval;
+        private int thirdInterval;
+        private int fifthInterval;
+
+        ChordInversion(int rootInterval, int thirdInterval, int fifthInterval){
+        this.rootInterval = rootInterval;
+        this.thirdInterval = thirdInterval;
+        this.fifthInterval = fifthInterval;
+        }
+
+        public int getRootInterval(){
+            return rootInterval;
+        }
+
+        public int getThirdInterval(){
+            return thirdInterval;
+        }
+
+        public int getFifthInterval(){
+            return fifthInterval;
+        }
+    }
+
     private Vector<Receiver> receivers;
     private Vector<Transmitter> transmitters;
     private boolean isOpen;
-    private static final int thirdInterval = 4;
-    private static final int fifthInterval = 7;
+    private ChordType chordType;
+    private ChordInversion chordInversion;
+
 
     public ChordFilterDevice() {
         this.receivers = new Vector<Receiver>();
         this.transmitters = new Vector<Transmitter>();
         isOpen = false;
+        chordType = ChordType.MAJOR;
+        chordInversion = ChordInversion.ROOT_POSITION;
+    }
+
+    public void setChordType(ChordType chordType){
+        this.chordType = chordType;
+    }
+
+    public void setChordInversion(ChordInversion chordInversion){
+        this.chordInversion = chordInversion;
     }
 
     @Override
@@ -155,13 +218,19 @@ public class ChordFilterDevice implements MidiDevice {
                 ShortMessage root = (ShortMessage) message;
                 // We only care about note on and note off messages.
                 if (root.getCommand() == ShortMessage.NOTE_ON || root.getCommand() == ShortMessage.NOTE_OFF) {
-                    
+
+                    try {
+                        root.setMessage(root.getCommand(), root.getChannel(), root.getData1() + chordInversion.getRootInterval(), root.getData2());
+                    } catch (InvalidMidiDataException ex){
+                        // Do Nothing
+                    }
+
                     // Create the note that makes the third of the chord.
                     third = new ShortMessage();
                     // Tor to make the message, if it fails, then the note for
                     // the third is probably not supported.
                     try {
-                        third.setMessage(root.getCommand(), root.getChannel(), root.getData1() + thirdInterval, root.getData2());
+                        third.setMessage(root.getCommand(), root.getChannel(), root.getData1() + chordType.getThirdInterval() + chordInversion.getThirdInterval(), root.getData2());
                     } catch (InvalidMidiDataException ex) {
                         third = null;
                     }
@@ -169,7 +238,7 @@ public class ChordFilterDevice implements MidiDevice {
                     // the fifth is probably not supported.
                     fifth = new ShortMessage();
                     try {
-                        fifth.setMessage(root.getCommand(), root.getChannel(), root.getData1() + fifthInterval, root.getData2());
+                        fifth.setMessage(root.getCommand(), root.getChannel(), root.getData1() + chordType.getFifthInterval() + chordInversion.getFifthInterval(), root.getData2());
                     } catch (InvalidMidiDataException ex) {
                         fifth = null;
                     }
