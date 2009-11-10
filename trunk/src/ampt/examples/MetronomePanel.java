@@ -17,8 +17,6 @@ package ampt.examples;
  */
 public class MetronomePanel extends javax.swing.JPanel {
 
-    private boolean metronomeStarted;
-
     /** Creates new form MetronomePanel */
     public MetronomePanel() {
         initComponents();
@@ -81,14 +79,12 @@ public class MetronomePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void toggleMetronomeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleMetronomeBtnActionPerformed
-        if (metronomeStarted) {
+        if (!toggleMetronomeBtn.isSelected()) {
             animatedMetronome1.stop();
             toggleMetronomeBtn.setText("Start");
-            metronomeStarted = false;
         } else {
             animatedMetronome1.start();
             toggleMetronomeBtn.setText("Stop");
-            metronomeStarted = true;
         }
     }//GEN-LAST:event_toggleMetronomeBtnActionPerformed
 
