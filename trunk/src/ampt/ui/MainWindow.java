@@ -5,6 +5,8 @@
  */
 package ampt.ui;
 
+import ampt.examples.filters.ChordFilterDevice;
+import ampt.ui.canvas.ChordFilterBox;
 import ampt.ui.canvas.KeyboardBox;
 import ampt.ui.canvas.MidiDeviceBox;
 import ampt.ui.canvas.MidiDeviceButton;
@@ -243,6 +245,9 @@ public class MainWindow extends JFrame {
                         if(device instanceof KeyboardDevice){
                             KeyboardDevice keyboard = (KeyboardDevice) device;
                             box = new KeyboardBox(keyboard);
+                        } else if (device instanceof ChordFilterDevice){
+                            ChordFilterDevice chordDevice = (ChordFilterDevice) device;
+                            box = new ChordFilterBox(chordDevice);
                         } else {
                             box = new MidiDeviceBox(device);
                         }
