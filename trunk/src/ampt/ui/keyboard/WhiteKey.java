@@ -25,8 +25,8 @@ public class WhiteKey extends KeyboardKey {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int KEY_WIDTH = 30;
-	public static final int KEY_HEIGHT = 150;
+	public static final int KEY_WIDTH = 20;
+	public static final int KEY_HEIGHT = 100;
 
 	private KeyType keyType;
 
@@ -147,7 +147,7 @@ public class WhiteKey extends KeyboardKey {
 
 		Font font = g.getFont();
 
-		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
+		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 8));
 
 		FontMetrics fontMetrics = g.getFontMetrics();
 

@@ -17,8 +17,8 @@ public class BlackKey extends KeyboardKey {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int KEY_WIDTH = 15;
-	public static final int KEY_HEIGHT = 75;
+	public static final int KEY_WIDTH = 10;
+	public static final int KEY_HEIGHT = 50;
 
 	/**
 	 * Constructor which sets the note of the key, and the preferred size of the
@@ -83,7 +83,7 @@ public class BlackKey extends KeyboardKey {
 
 		Font font = g.getFont();
 
-		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
+		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 8));
 
 		FontMetrics fontMetrics = g.getFontMetrics();
 
