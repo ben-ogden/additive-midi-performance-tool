@@ -99,13 +99,4 @@ public class AnimatedMetronome extends JPanel implements Runnable {
         }
     }
 
-    public static void main(String args[]) {
-        JFrame frame = new JFrame("Metronome Animation");
-        frame.setSize(100, 100);
-        AnimatedMetronome am = new AnimatedMetronome();
-        frame.setContentPane(am);
-        frame.setVisible(true);
-        am.start();
-    }
-
 }
