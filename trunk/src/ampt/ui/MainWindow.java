@@ -5,15 +5,17 @@
  */
 package ampt.ui;
 
+import ampt.ui.canvas.KeyboardBox;
 import ampt.ui.canvas.MidiDeviceBox;
 import ampt.ui.canvas.MidiDeviceButton;
 import ampt.ui.keyboard.KeyboardDevice;
-import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JFrame;
 
 /**
@@ -235,13 +237,25 @@ public class MainWindow extends JFrame {
                 Point point = e.getPoint();
                 if (source instanceof MidiDeviceButton) {
                     MidiDeviceButton deviceButton = (MidiDeviceButton) source;
-                    MidiDeviceBox box = new MidiDeviceBox(deviceButton.getDeviceInfo());
-                    canvasPanel1.add(box);
-                    box.setLocation(point);
-                    box.setSize(box.getPreferredSize());
-                    if (box.getMidiDevice() instanceof KeyboardDevice) {
-                        KeyboardPanel keyboard = new KeyboardPanel((KeyboardDevice) box.getMidiDevice());
-                        jTabbedPane1.addTab("Keyboard", keyboard);
+                    try{
+                        MidiDevice device = MidiSystem.getMidiDevice(deviceButton.getDeviceInfo());
+                        MidiDeviceBox box = null;
+                        if(device instanceof KeyboardDevice){
+                            KeyboardDevice keyboard = (KeyboardDevice) device;
+                            box = new KeyboardBox(keyboard);
+                        } else {
+                            box = new MidiDeviceBox(device);
+                        }
+                        canvasPanel1.add(box);
+                        box.setLocation(point);
+                        box.setSize(box.getPreferredSize());
+                        box.validate();
+//                        if (box.getMidiDevice() instanceof KeyboardDevice) {
+//                            KeyboardPanel keyboard = new KeyboardPanel((KeyboardDevice) box.getMidiDevice());
+//                            jTabbedPane1.addTab("Keyboard", keyboard);
+//                        }
+                    } catch (MidiUnavailableException ex){
+                        ex.printStackTrace();
                     }
                     canvasPanel1.repaint();
                 }
