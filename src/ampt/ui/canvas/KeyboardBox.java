@@ -4,7 +4,6 @@ import ampt.ui.keyboard.KeyboardDevice;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
@@ -50,6 +49,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         // Make the center panel contain the keyboard
         JPanel centerPanel = new JPanel();
         KeyboardPanel keyboardPanel = new KeyboardPanel(device);
+        keyboardPanel.setBackground(Color.CYAN);
         centerPanel.add(keyboardPanel);
         centerPanel.setBackground(Color.CYAN);
         this.add(centerPanel, BorderLayout.CENTER);
@@ -60,6 +60,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         JPanel southPanel = new JPanel();
         southPanel.setBackground(Color.CYAN);
         velocitySlider = new JSlider(VELOCITY_MIN, VELOCITY_MAX, STARTING_VELOCITY);
+        velocitySlider.setBackground(Color.CYAN);
         device.setVelocity(STARTING_VELOCITY);
         velocitySlider.addChangeListener(this);
         velocitySlider.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Velocity"));
@@ -72,6 +73,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
         Integer[] channels = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         channelComboBox = new JComboBox(channels);
+        channelComboBox.setBackground(Color.CYAN);
         channelComboBox.setSelectedIndex(0);
         device.setChannel(channels[0]);
         channelComboBox.addActionListener(this);
@@ -80,6 +82,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
 
         Integer[] octaves = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         octaveComboBox = new JComboBox(octaves);
+        octaveComboBox.setBackground(Color.CYAN);
         octaveComboBox.setSelectedIndex(5);
         device.setOctave(octaves[5]);
         octaveComboBox.addActionListener(this);
