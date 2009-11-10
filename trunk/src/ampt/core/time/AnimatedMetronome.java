@@ -1,5 +1,7 @@
 package ampt.core.time;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -10,20 +12,16 @@ import java.awt.geom.*;
  * @author robert
  */
 public class AnimatedMetronome extends JPanel implements Runnable {
-    //modified by only one thread - does not need synchronization. Volatile
-    //guarantees visibility.
-    private volatile int position = 1;
 
-    //the next three variable are guarded by "this"
-    private long nextTick;
-    private int tempo = 60;
-    private boolean started = false;
+    private final AtomicBoolean started = new AtomicBoolean(false);
+    private final AtomicInteger tempo = new AtomicInteger(60);
+    private final AtomicInteger position = new AtomicInteger(1);
 
     /*
      * @param tempo the desired tempo
      */
-    public synchronized void setTempo(int tempo) {
-        this.tempo = tempo;
+    public void setTempo(int tempo) {
+        (this.tempo).set(tempo);
     }
 
     /*
@@ -44,48 +42,56 @@ public class AnimatedMetronome extends JPanel implements Runnable {
         g2d.drawLine(51, 20, 51, 23);
 
         g2d.setPaint(Color.GREEN);
-        for(int i = 0; i < position; i++) {
+        for(int i = 0; i < position.get(); i++) {
             g2d.fill((new Rectangle2D.Float(20 + (2 * i), (40 - i), 2, 5 + i)));
         }
 
         g2d.setPaint(Color.RED);
-        if (position == 20) {
+        if (position.get() == 20) {
             g2d.fill((new Ellipse2D.Float(70, 15, 30, 30)));
         }
     }
 
-
-    public synchronized void start() {
-        if (started)
+    /*
+     *
+     */
+    public void start() {
+        if (started.get())
             ;//throw exception
         else {
-            nextTick = System.nanoTime() + (1000000000 / (tempo / 3));
             (new Thread(this)).start();
-            started = true;
+            started.set(true);
         }
     }
 
-    public synchronized void stop() {
-        if (!started)
+    /*
+     *
+     */
+    public void stop() {
+        if (!started.get())
             ; //throw exception
         else
-            started = false;
+            started.set(false);
     }
 
+    /*
+     *
+     */
     @Override
-    public synchronized void run() {
-        while (started) {
+    public void run() {
+        long nextTick = System.nanoTime() + (1000000000 / (tempo.get() / 3));
+        while (started.get()) {
             try {
                 Thread.sleep(0, 1);
             } catch (InterruptedException ie) {
             }
             if(System.nanoTime() >= nextTick) {
-                if(position == 20)
-                    position = 1;
+                if(position.get() == 20)
+                    position.set(1);
                 else
-                    position++;
+                    position.incrementAndGet();
                 repaint();
-                nextTick += (1000000000 / (tempo / 3));
+                nextTick += (1000000000 / (tempo.get() / 3));
             }
         }
     }
