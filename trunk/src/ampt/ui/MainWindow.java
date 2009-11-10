@@ -5,6 +5,7 @@
  */
 package ampt.ui;
 
+import ampt.examples.AnimatedMetronome;
 import ampt.examples.filters.ChordFilterDevice;
 import ampt.ui.canvas.ChordFilterBox;
 import ampt.ui.canvas.KeyboardBox;
@@ -61,9 +62,10 @@ public class MainWindow extends JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         canvasToolbar2 = new ampt.ui.canvas.CanvasToolbar();
-        filterPropertiesPanel1 = new ampt.ui.canvas.FilterPropertiesPanel();
         jPanel2 = new javax.swing.JPanel();
         canvasPanel1 = new ampt.ui.canvas.CanvasPanel();
+        jPanel3 = new javax.swing.JPanel();
+        filterPropertiesPanel1 = new ampt.ui.canvas.FilterPropertiesPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -103,19 +105,6 @@ public class MainWindow extends JFrame {
                 //            }
             //        });
 
-    filterPropertiesPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
-
-    javax.swing.GroupLayout filterPropertiesPanel1Layout = new javax.swing.GroupLayout(filterPropertiesPanel1);
-    filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
-    filterPropertiesPanel1Layout.setHorizontalGroup(
-        filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 102, Short.MAX_VALUE)
-    );
-    filterPropertiesPanel1Layout.setVerticalGroup(
-        filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 186, Short.MAX_VALUE)
-    );
-
     jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas"));
 
     canvasPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -124,7 +113,7 @@ public class MainWindow extends JFrame {
     canvasPanel1.setLayout(canvasPanel1Layout);
     canvasPanel1Layout.setHorizontalGroup(
         canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 307, Short.MAX_VALUE)
+        .addGap(0, 279, Short.MAX_VALUE)
     );
     canvasPanel1Layout.setVerticalGroup(
         canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,6 +136,29 @@ public class MainWindow extends JFrame {
             .addContainerGap())
     );
 
+    jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
+    AnimatedMetronome box = new AnimatedMetronome();
+    box.setSize(box.getPreferredSize());
+    box.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
+    jPanel3.add(box);
+    box.validate();
+    box.start();
+
+    filterPropertiesPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
+
+    javax.swing.GroupLayout filterPropertiesPanel1Layout = new javax.swing.GroupLayout(filterPropertiesPanel1);
+    filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
+    filterPropertiesPanel1Layout.setHorizontalGroup(
+        filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 140, Short.MAX_VALUE)
+    );
+    filterPropertiesPanel1Layout.setVerticalGroup(
+        filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 186, Short.MAX_VALUE)
+    );
+
+    jPanel3.add(filterPropertiesPanel1);
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -156,14 +168,13 @@ public class MainWindow extends JFrame {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap())
+            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addComponent(canvasToolbar2, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-        .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
 
     jTabbedPane1.addTab("Canvas", jPanel1);
@@ -279,6 +290,7 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
