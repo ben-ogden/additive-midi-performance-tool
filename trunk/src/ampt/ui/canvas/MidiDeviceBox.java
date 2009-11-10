@@ -6,7 +6,6 @@ package ampt.ui.canvas;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -17,7 +16,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 /**
  * This class is a box that is drawn on the canvas panel.  The box represents
@@ -25,24 +24,22 @@ import javax.swing.JComponent;
  *
  * @author Christopher Redding
  */
-public class MidiDeviceBox extends JComponent {
+public class MidiDeviceBox extends JPanel {
 
-    private MidiDevice midiDevice;
+    protected MidiDevice midiDevice;
     protected boolean hasTransmitter = false;
     protected boolean hasReceiver = false;
     protected String text;
+    protected boolean overridePaintComponent = true;
 
     /**
      * Create the Box, and associate it with the correct MidiDevice.
      * @param deviceInfo
      */
-    public MidiDeviceBox(Info deviceInfo) {
-        try {
-            this.midiDevice = MidiSystem.getMidiDevice(deviceInfo);
-        } catch (MidiUnavailableException ex) {
-            midiDevice = null;
-        }
-//        this.deviceInfo = deviceInfo;
+    public MidiDeviceBox(MidiDevice device) {
+        this.midiDevice = device;
+        
+        Info deviceInfo = device.getDeviceInfo();
         this.setPreferredSize(new Dimension(71, 71));
         try {
             this.text = deviceInfo.getName();
@@ -85,6 +82,11 @@ public class MidiDeviceBox extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {
+        if(!overridePaintComponent){
+            super.paintComponent(g);
+            return;
+        }
+
         Color color = g.getColor();
         g.setColor(Color.BLACK);
 
