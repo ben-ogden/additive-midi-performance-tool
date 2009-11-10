@@ -22,19 +22,44 @@ import javax.sound.midi.Transmitter;
  */
 public class KeyboardDevice implements MidiDevice{
 
+    private static final int OCTAVE_INTERVAL = 12;
+
     private Vector<Transmitter> transmitters;
     private boolean isOpen = false;
     private int channel;
     private int velocity;
+    private int octave;
 
     public KeyboardDevice(){
-        this(1, 93);
+        this(1, 93, 5);
     }
 
-    public KeyboardDevice(int channel, int velocity){
+    public KeyboardDevice(int channel, int velocity, int octave){
         transmitters = new Vector<Transmitter>();
         this.channel = channel;
         this.velocity = velocity;
+        this.octave = octave;
+    }
+
+    public void setVelocity(int velocity){
+        if(velocity < 0 || velocity > 127){
+            throw new IllegalArgumentException("Invalid Velocity Value");
+        }
+        this.velocity = velocity;
+    }
+
+    public void setChannel(int channel){
+        if(channel < 0 || channel > 15){
+            throw new IllegalArgumentException("Invalid Channel Number");
+        }
+        this.channel = channel;
+    }
+
+    public void setOctave(int octave){
+        if(octave < 0 || octave > 9){
+            throw new IllegalArgumentException("Invalid Octave Number");
+        }
+        this.octave = octave;
     }
 
     @Override
@@ -101,6 +126,7 @@ public class KeyboardDevice implements MidiDevice{
 
         final ShortMessage msgNote = new ShortMessage();
         try {
+            note = octave * OCTAVE_INTERVAL + note;
             msgNote.setMessage(messageType, channel, note, velocity);
             for(Transmitter transmitter: transmitters){
                 final Receiver receiver = transmitter.getReceiver();

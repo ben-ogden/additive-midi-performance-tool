@@ -50,29 +50,29 @@ public class KeyboardPanel extends JPanel {
 		keys = new Vector<KeyboardKey>();
 
 		// instantiate each key
-		WhiteKey cKey = new WhiteKey(KeyType.Left, 60, 'a', keyboardDevice);
+		WhiteKey cKey = new WhiteKey(KeyType.Left, 0, 'a', keyboardDevice);
 		keys.add(cKey);
-		BlackKey cSharpKey = new BlackKey(61, 'w', keyboardDevice);
+		BlackKey cSharpKey = new BlackKey(1, 'w', keyboardDevice);
 		keys.add(cSharpKey);
-		WhiteKey dKey = new WhiteKey(KeyType.Center, 62, 's', keyboardDevice);
+		WhiteKey dKey = new WhiteKey(KeyType.Center, 2, 's', keyboardDevice);
 		keys.add(dKey);
-		BlackKey dSharpKey = new BlackKey(63, 'e', keyboardDevice);
+		BlackKey dSharpKey = new BlackKey(3, 'e', keyboardDevice);
 		keys.add(dSharpKey);
-		WhiteKey eKey = new WhiteKey(KeyType.Right, 64, 'd', keyboardDevice);
+		WhiteKey eKey = new WhiteKey(KeyType.Right, 4, 'd', keyboardDevice);
 		keys.add(eKey);
-		WhiteKey fKey = new WhiteKey(KeyType.Left, 65, 'f', keyboardDevice);
+		WhiteKey fKey = new WhiteKey(KeyType.Left, 5, 'f', keyboardDevice);
 		keys.add(fKey);
-		BlackKey fSharpKey = new BlackKey(66, 't', keyboardDevice);
+		BlackKey fSharpKey = new BlackKey(6, 't', keyboardDevice);
 		keys.add(fSharpKey);
-		WhiteKey gKey = new WhiteKey(KeyType.Center, 67, 'g', keyboardDevice);
+		WhiteKey gKey = new WhiteKey(KeyType.Center, 7, 'g', keyboardDevice);
 		keys.add(gKey);
-		BlackKey gSharpKey = new BlackKey(68, 'y', keyboardDevice);
+		BlackKey gSharpKey = new BlackKey(8, 'y', keyboardDevice);
 		keys.add(gSharpKey);
-		WhiteKey aKey = new WhiteKey(KeyType.Center, 69, 'h', keyboardDevice);
+		WhiteKey aKey = new WhiteKey(KeyType.Center, 9, 'h', keyboardDevice);
 		keys.add(aKey);
-		BlackKey aSharpKey = new BlackKey(70, 'u', keyboardDevice);
+		BlackKey aSharpKey = new BlackKey(10, 'u', keyboardDevice);
 		keys.add(aSharpKey);
-		WhiteKey bKey = new WhiteKey(KeyType.Right, 71, 'j', keyboardDevice);
+		WhiteKey bKey = new WhiteKey(KeyType.Right, 11, 'j', keyboardDevice);
 		keys.add(bKey);
 		
 		// set the location of each key
@@ -116,6 +116,9 @@ public class KeyboardPanel extends JPanel {
 		keyboard.add(aKey, 1);
 		keyboard.add(aSharpKey, 0);
 		keyboard.add(bKey, 1);
+
+//                System.out.println(cKey.getBounds());
+//                System.out.println(dKey.getBounds());
 
 		// set the preferred size of the keyboard
 		keyboard.setPreferredSize(new Dimension(WhiteKey.KEY_WIDTH * 7,
