@@ -2,7 +2,6 @@ package ampt.examples.canvas;
 
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.MenuItem;
@@ -16,7 +15,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 /**
  * This class represents a sample filter.  It is used for drawing the filter
@@ -93,7 +91,6 @@ public class SampleFilter extends JComponent implements MouseMotionListener, Act
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 

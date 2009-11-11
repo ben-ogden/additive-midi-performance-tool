@@ -1,6 +1,7 @@
 package ampt.examples;
 
 import ampt.ui.keyboard.KeyboardDevice;
+import ampt.ui.keyboard.KeyboardDevice.KeyboardReceiver;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
@@ -17,7 +18,7 @@ import ampt.ui.keyboard.KeyboardPanel;
  */
 public class KeyboardTest extends JFrame {
 
-    public KeyboardTest() {
+    public KeyboardTest() throws MidiUnavailableException {
         this.setTitle("Keyboard Test");
         KeyboardDevice keyboardDevice = new KeyboardDevice();
         KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice);
@@ -39,7 +40,7 @@ public class KeyboardTest extends JFrame {
         this.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MidiUnavailableException {
         new KeyboardTest();
     }
 }

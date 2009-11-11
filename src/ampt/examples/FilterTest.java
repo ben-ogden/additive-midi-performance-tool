@@ -8,6 +8,7 @@ package ampt.examples;
 import ampt.examples.filters.ChordFilter;
 import ampt.examples.filters.FlutterFilterVariation;
 import ampt.ui.keyboard.KeyboardDevice;
+import ampt.ui.keyboard.KeyboardDevice.KeyboardReceiver;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -42,11 +43,10 @@ import javax.swing.JPanel;
 public class FilterTest extends JFrame{
 
     private Receiver currentReceiver;
-//    private KeyboardPanel keyboard;
     private KeyboardDevice keyboardDevice;
     private final JComboBox receiverCombo, filterCombo;
 
-    public FilterTest(){
+    public FilterTest() throws MidiUnavailableException {
         super("Filter Test");
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -81,7 +81,6 @@ public class FilterTest extends JFrame{
                 } catch (MidiUnavailableException ex) {
                     Logger.getLogger(FilterTest.class.getName()).log(Level.SEVERE, null, ex);
                 }
-//                keyboard.setReceiver(filterReceiver);
                 Transmitter filterTransmitter = (Transmitter) filterCombo.getSelectedItem();
 
                 filterTransmitter.setReceiver(currentReceiver);
@@ -154,7 +153,7 @@ public class FilterTest extends JFrame{
     /**
      * Starts the application
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws MidiUnavailableException{
         FilterTest test = new FilterTest();
         test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         test.pack();
