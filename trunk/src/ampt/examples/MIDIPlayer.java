@@ -205,8 +205,6 @@ public class MIDIPlayer extends JFrame implements ActionListener{
          ***************/
         if (event.getSource().equals(exitButton)) {
 
-            //TODO close midi resources
-
             System.exit(0);
         }
 	}
