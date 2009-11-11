@@ -10,7 +10,6 @@ import javax.sound.midi.spi.MidiDeviceProvider;
  * This is the MidiDeviceProvider for AMPT. All devices supported by AMPT should
  * be registered here.
  *
- * @author Christopher
  */
 public class AmptMidiDeviceProvider extends MidiDeviceProvider{
 
@@ -43,25 +42,21 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
     /**
      * Get the MidiDevice that is represented by info.
      *
-     * @param info - the info for the desired MidiDevice.
+     * @param info the info describing the desired MidiDevice.
      * @return a MidiDevice matching the provided Info
      */
     @Override
     public MidiDevice getDevice(Info info) {
 
-        //TODO
-
-        MidiDevice device = new ChordFilterDevice();
-        if(device.getDeviceInfo().getName().equals(info.getName())){
-            return device;
+        if(ChordFilterDevice.DEVICE_NAME.equals(info.getName())) {
+            return new ChordFilterDevice();
         }
 
-        device = new KeyboardDevice();
-        if(device.getDeviceInfo().getName().equals(info.getName())){
-            return device;
+        if(KeyboardDevice.DEVICE_NAME.equals(info.getName())){
+            return new KeyboardDevice();
         }
-        
-        throw new IllegalArgumentException("The info object specified does not match the info object for a device supported by this MidiDeviceProvider.");
+
+        throw new IllegalArgumentException("Device not supported by this MidiDeviceProvider.");
     }
 
 }
