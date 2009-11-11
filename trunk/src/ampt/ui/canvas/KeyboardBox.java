@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.sound.midi.MidiUnavailableException;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -34,8 +35,10 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
      * Constructor to create the box.
      * @param device
      */
-    public KeyboardBox(KeyboardDevice device){
+    public KeyboardBox(KeyboardDevice device) throws MidiUnavailableException{
+
         super(device);
+        
         // We need to change the preferred size to null since it was changed in
         // MidiDeviceBox.  This way, the components will determine the size of 
         // this panel.
