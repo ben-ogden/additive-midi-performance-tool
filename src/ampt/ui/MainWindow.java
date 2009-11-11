@@ -66,7 +66,7 @@ public class MainWindow extends JFrame {
         jPanel2 = new javax.swing.JPanel();
         canvasPanel1 = new ampt.ui.canvas.CanvasPanel();
         jPanel3 = new javax.swing.JPanel();
-        metronomePanel = new javax.swing.JPanel();
+        metronomePanel1 = new ampt.examples.MetronomePanel();
         filterPropertiesPanel1 = new ampt.ui.canvas.FilterPropertiesPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
@@ -115,7 +115,7 @@ public class MainWindow extends JFrame {
     canvasPanel1.setLayout(canvasPanel1Layout);
     canvasPanel1Layout.setHorizontalGroup(
         canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 263, Short.MAX_VALUE)
+        .addGap(0, 244, Short.MAX_VALUE)
     );
     canvasPanel1Layout.setVerticalGroup(
         canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,18 +140,8 @@ public class MainWindow extends JFrame {
 
     jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
 
-    metronomePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
-    metronomePanel.setLayout(new javax.swing.BoxLayout(metronomePanel, javax.swing.BoxLayout.X_AXIS));
-    metronomePanel.add(Box.createHorizontalGlue());
-    AnimatedMetronome box = new AnimatedMetronome();
-    box.setSize(box.getPreferredSize());
-    box.setMaximumSize(box.getPreferredSize());
-    box.setMinimumSize(box.getPreferredSize());
-    metronomePanel.add(box);
-    box.validate();
-    box.start();
-    metronomePanel.add(Box.createHorizontalGlue());
-    jPanel3.add(metronomePanel);
+    metronomePanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
+    jPanel3.add(metronomePanel1);
 
     filterPropertiesPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
 
@@ -159,11 +149,11 @@ public class MainWindow extends JFrame {
     filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
     filterPropertiesPanel1Layout.setHorizontalGroup(
         filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 156, Short.MAX_VALUE)
+        .addGap(0, 175, Short.MAX_VALUE)
     );
     filterPropertiesPanel1Layout.setVerticalGroup(
         filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 166, Short.MAX_VALUE)
+        .addGap(0, 146, Short.MAX_VALUE)
     );
 
     jPanel3.add(filterPropertiesPanel1);
@@ -304,6 +294,6 @@ public class MainWindow extends JFrame {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JPanel metronomePanel;
+    private ampt.examples.MetronomePanel metronomePanel1;
     // End of variables declaration//GEN-END:variables
 }
