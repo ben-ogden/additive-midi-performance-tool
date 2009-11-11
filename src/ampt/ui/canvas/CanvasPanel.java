@@ -15,6 +15,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.midi.MidiUnavailableException;
+import javax.swing.JOptionPane;
 
 /**
  * This is the canvas that the ampt system is visually represented on.
@@ -143,11 +147,24 @@ public class CanvasPanel extends javax.swing.JPanel {
 
             if (e.getSource() instanceof MidiDeviceBox) {
                 MidiDeviceBox destBox = (MidiDeviceBox) e.getSource();
+
+                // don't connect a box to itself
                 if (destBox.equals(sourceBox)) {
                     return;
                 }
-                panel.add(new MidiDeviceConnection(sourceBox, destBox));
-                panel.repaint();
+
+                // add a new connection between boxes
+                try {
+                    panel.add(new MidiDeviceConnection(sourceBox, destBox));
+                    panel.repaint();
+                } catch (MidiUnavailableException ex) {
+                    
+                    JOptionPane.showMessageDialog(null,
+                            "Unable to connect these devices. "
+                            + ex.getLocalizedMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
             }
 
         }
