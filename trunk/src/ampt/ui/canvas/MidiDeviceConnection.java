@@ -2,8 +2,6 @@ package ampt.ui.canvas;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JComponent;
 
@@ -17,36 +15,32 @@ import javax.swing.JComponent;
  */
 public class MidiDeviceConnection extends JComponent {
 
-    MidiDeviceBox from, to;
+    MidiDeviceBox _from, _to;
 
-    public MidiDeviceConnection(MidiDeviceBox from, MidiDeviceBox to) {
-        this.from = from;
-        this.to = to;
-        try {
-            from.getTransmitter().setReceiver(to.getReceiver());
-        } catch (MidiUnavailableException ex) {
-            ex.printStackTrace();
-        }
+    public MidiDeviceConnection(MidiDeviceBox from, MidiDeviceBox to) throws MidiUnavailableException {
+        _from = from;
+        _to = to;
+        from.connectTo(to);
     }
 
     public void paintOnCanvas(Graphics g) {
-        int fromTopX = from.getX() + from.getWidth() / 2;
-        int fromTopY = from.getY();
-        int fromBottomX = from.getX() + from.getWidth() / 2;
-        int fromBottomY = from.getY() + from.getHeight();
-        int fromLeftX = from.getX();
-        int fromLeftY = from.getY() + from.getHeight() / 2;
-        int fromRightX = from.getX() + from.getWidth();
-        int fromRightY = from.getY() + from.getHeight() / 2;
+        int fromTopX = _from.getX() + _from.getWidth() / 2;
+        int fromTopY = _from.getY();
+        int fromBottomX = _from.getX() + _from.getWidth() / 2;
+        int fromBottomY = _from.getY() + _from.getHeight();
+        int fromLeftX = _from.getX();
+        int fromLeftY = _from.getY() + _from.getHeight() / 2;
+        int fromRightX = _from.getX() + _from.getWidth();
+        int fromRightY = _from.getY() + _from.getHeight() / 2;
 
-        int toTopX = to.getX() + to.getWidth() / 2;
-        int toTopY = to.getY();
-        int toBottomX = to.getX() + to.getWidth() / 2;
-        int toBottomY = to.getY() + to.getHeight();
-        int toLeftX = to.getX();
-        int toLeftY = to.getY() + to.getHeight() / 2;
-        int toRightX = to.getX() + to.getWidth();
-        int toRightY = to.getY() + to.getHeight() / 2;
+        int toTopX = _to.getX() + _to.getWidth() / 2;
+        int toTopY = _to.getY();
+        int toBottomX = _to.getX() + _to.getWidth() / 2;
+        int toBottomY = _to.getY() + _to.getHeight();
+        int toLeftX = _to.getX();
+        int toLeftY = _to.getY() + _to.getHeight() / 2;
+        int toRightX = _to.getX() + _to.getWidth();
+        int toRightY = _to.getY() + _to.getHeight() / 2;
 
         double fromTopToBottom = Math.sqrt(Math.pow((fromTopX - toBottomX), 2) + Math.pow((fromTopY - toBottomY), 2));
         double fromBottomToTop = Math.sqrt(Math.pow((fromBottomX - toTopX), 2) + Math.pow((fromBottomY - toTopY), 2));
@@ -84,7 +78,7 @@ public class MidiDeviceConnection extends JComponent {
         }
 
         Color color = g.getColor();
-        g.setColor(Color.CYAN.BLACK);
+        g.setColor(Color.BLACK);
 
         g.drawLine(fromX, fromY, toX, toY);
 //        g.drawLine(arrowFromX1, arrowFromY1, toX, toY);
