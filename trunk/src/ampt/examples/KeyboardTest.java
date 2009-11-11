@@ -1,7 +1,6 @@
 package ampt.examples;
 
-import ampt.ui.keyboard.KeyboardDevice;
-import ampt.ui.keyboard.KeyboardDevice.KeyboardReceiver;
+import ampt.core.devices.KeyboardDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;

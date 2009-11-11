@@ -1,4 +1,4 @@
-package ampt.ui.canvas;
+package ampt.ui.filters;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,8 +28,8 @@ public class MidiDeviceBox extends JPanel {
     //       if have any... also, this could change during runtime so perhaps
     //       code should call midiDevice to see how many if want to support
     //       drawing multiple arrows on the box
-    protected boolean hasTransmitter = false;
-    protected boolean hasReceiver = false;
+    private boolean hasTransmitter = false;
+    private boolean hasReceiver = false;
     
     protected String text;
     protected boolean overridePaintComponent = true;
@@ -78,7 +78,17 @@ public class MidiDeviceBox extends JPanel {
      * @throws MidiUnavailableException
      */
     public void connectTo(MidiDeviceBox anotherDevice) throws MidiUnavailableException {
+        //TODO - i would prefer if we could call AmptDevice.connectTo, but not all
+        //       devices are AmptDevices.
         midiDevice.getTransmitter().setReceiver(anotherDevice.midiDevice.getReceiver());
+    }
+
+    public boolean hasTransmitter() {
+        return hasTransmitter;
+    }
+
+    public boolean hasReceiver() {
+        return hasReceiver;
     }
 
     @Override
@@ -117,10 +127,6 @@ public class MidiDeviceBox extends JPanel {
         }
 
         g.setColor(color);
-    }
-
-    public MidiDevice getMidiDevice() {
-        return this.midiDevice;
     }
 
     /**

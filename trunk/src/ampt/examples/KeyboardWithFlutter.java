@@ -1,6 +1,7 @@
 package ampt.examples;
 
-import ampt.ui.keyboard.KeyboardDevice;
+import ampt.core.devices.KeyboardDevice;
+import ampt.examples.filters.FlutterFilter;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;

@@ -1,11 +1,10 @@
-package ampt.examples;
+package ampt.examples.filters;
 
 import java.util.HashMap;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
-import javax.sound.midi.InvalidMidiDataException;
 
 public class FlutterFilter implements Receiver, Transmitter {
     private Receiver receiverOut;

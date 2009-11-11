@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ampt.examples;
 
 import ampt.examples.filters.ChordFilter;
 import ampt.examples.filters.FlutterFilterVariation;
-import ampt.ui.keyboard.KeyboardDevice;
-import ampt.ui.keyboard.KeyboardDevice.KeyboardReceiver;
+import ampt.core.devices.KeyboardDevice;
+import ampt.examples.filters.ChangeNoteFilter;
+import ampt.examples.filters.FlutterFilter;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

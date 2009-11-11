@@ -1,6 +1,6 @@
 package ampt.ui.keyboard;
 
-import ampt.ui.keyboard.KeyboardDevice.KeyboardReceiver;
+import ampt.core.devices.KeyboardDevice;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.Vector;

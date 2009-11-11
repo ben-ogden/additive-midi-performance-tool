@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiUnavailableException;
@@ -120,6 +121,21 @@ public abstract class AmptDevice implements AmptMidiDevice {
         closeDevice();
         
         _isOpen = false;
+    }
+
+   /**
+     * Connect a transmitter (output) from this MidiDevice to a receiver (input)
+     * of the given MidiDevice.
+     *
+     * @param device the MidiDevice to connect to
+     * @throws MidiUnavailableException if the connection cannot be made due to
+     *                    either of the devices not being open or if there are
+     *                    no additional transmitters or receivers to make the
+     *                    connection
+     */
+    @Override
+    public void connectTo(MidiDevice anotherDevice) throws MidiUnavailableException {
+        this.getTransmitter().setReceiver(anotherDevice.getReceiver());
     }
 
     /**

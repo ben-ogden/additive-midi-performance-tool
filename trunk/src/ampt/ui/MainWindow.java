@@ -6,18 +6,16 @@
 package ampt.ui;
 
 import ampt.core.devices.ChordFilterDevice;
-import ampt.ui.canvas.ChordFilterBox;
-import ampt.ui.canvas.KeyboardBox;
-import ampt.ui.canvas.MidiDeviceBox;
+import ampt.core.devices.KeyboardDevice;
 import ampt.ui.canvas.MidiDeviceButton;
-import ampt.ui.keyboard.KeyboardDevice;
+import ampt.ui.filters.ChordFilterBox;
+import ampt.ui.filters.KeyboardBox;
+import ampt.ui.filters.MidiDeviceBox;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
