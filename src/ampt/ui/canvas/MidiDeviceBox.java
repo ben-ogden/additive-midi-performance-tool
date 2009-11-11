@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ampt.ui.canvas;
 
 import java.awt.Color;
@@ -12,72 +8,77 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
-import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Receiver;
-import javax.sound.midi.Transmitter;
 import javax.swing.JPanel;
 
 /**
  * This class is a box that is drawn on the canvas panel.  The box represents
  * a MidiDevice.
  *
+ * TODO need a way to remove box from canvas. that method should also close the
+ * midiDevice
+ *
  * @author Christopher Redding
  */
 public class MidiDeviceBox extends JPanel {
 
     protected MidiDevice midiDevice;
+
+    //TODO - maybe keep track of number of transmitters and receivers instead of
+    //       if have any... also, this could change during runtime so perhaps
+    //       code should call midiDevice to see how many if want to support
+    //       drawing multiple arrows on the box
     protected boolean hasTransmitter = false;
     protected boolean hasReceiver = false;
+    
     protected String text;
     protected boolean overridePaintComponent = true;
 
+    private static int PREFERRED_HEIGHT = 71;
+    private static int PREFERRED_WIDTH = 71;
+    
     /**
      * Create the Box, and associate it with the correct MidiDevice.
+     *
      * @param deviceInfo
      */
-    public MidiDeviceBox(MidiDevice device) {
-        this.midiDevice = device;
-        
-        Info deviceInfo = device.getDeviceInfo();
-        this.setPreferredSize(new Dimension(71, 71));
-        try {
-            this.text = deviceInfo.getName();
-            if (midiDevice.getMaxReceivers() != 0) {
-                hasReceiver = true;
-            }
-            if (midiDevice.getMaxTransmitters() != 0) {
-                hasTransmitter = true;
-            }
-            this.setToolTipText("Name: " + deviceInfo.getName() + " Description: " + deviceInfo.getDescription() + " Vendor: " + deviceInfo.getVendor() + " Version: " + deviceInfo.getVersion());
+    public MidiDeviceBox(MidiDevice device) throws MidiUnavailableException {
 
-        } catch (NullPointerException ex) {
-            // Do Nothing
+        this.midiDevice = device;
+
+        // open the device once it is placed on the canvas
+        midiDevice.open();
+
+        Info deviceInfo = device.getDeviceInfo();
+        this.setPreferredSize(new Dimension(PREFERRED_HEIGHT, PREFERRED_WIDTH));
+
+        this.text = deviceInfo.getName();
+
+        if (midiDevice.getMaxReceivers() != 0) {
+            hasReceiver = true;
         }
+        if (midiDevice.getMaxTransmitters() != 0) {
+            hasTransmitter = true;
+        }
+        this.setToolTipText("Name: " + deviceInfo.getName() + " Description: " + deviceInfo.getDescription() + " Vendor: " + deviceInfo.getVendor() + " Version: " + deviceInfo.getVersion());
+
         // Add a mouse adapter so we can move the box around the canvas panel.
         MyMouseAdapter mouseAdapter = new MyMouseAdapter(this);
         this.addMouseListener(mouseAdapter);
         this.addMouseMotionListener(mouseAdapter);
+
     }
 
     /**
-     * This is a convenience method for getting a transmitter.  It is
-     * designed to be used by the MidiDeviceConnection class.
+     * Connect the output of this MidiDeviceBox to the input of another
+     * MidiDeviceBox.
+     *
+     * @param anotherDevice The device that will be connected to
+     *
+     * @throws MidiUnavailableException
      */
-    public Transmitter getTransmitter() throws MidiUnavailableException {
-//        MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
-        midiDevice.open();
-        return midiDevice.getTransmitter();
-    }
-
-    /**
-     * This is a convenience method for getting a receiver.  It is
-     * designed to be used by the MidiDeviceConnection class.
-     */
-    public Receiver getReceiver() throws MidiUnavailableException {
-//        MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
-        midiDevice.open();
-        return midiDevice.getReceiver();
+    public void connectTo(MidiDeviceBox anotherDevice) throws MidiUnavailableException {
+        midiDevice.getTransmitter().setReceiver(anotherDevice.midiDevice.getReceiver());
     }
 
     @Override
@@ -114,9 +115,6 @@ public class MidiDeviceBox extends JPanel {
             g.drawString(token, 7, height);
             height += 15;
         }
-
-
-
 
         g.setColor(color);
     }
