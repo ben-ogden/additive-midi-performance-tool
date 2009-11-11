@@ -5,7 +5,6 @@
  */
 package ampt.ui;
 
-import ampt.examples.AnimatedMetronome;
 import ampt.core.devices.ChordFilterDevice;
 import ampt.ui.canvas.ChordFilterBox;
 import ampt.ui.canvas.KeyboardBox;
@@ -13,6 +12,8 @@ import ampt.ui.canvas.MidiDeviceBox;
 import ampt.ui.canvas.MidiDeviceButton;
 import ampt.ui.keyboard.KeyboardDevice;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
@@ -21,8 +22,11 @@ import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-import javax.swing.Box;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JOptionPane;
 
 /**
@@ -74,8 +78,9 @@ public class MainWindow extends JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        fileMenu = new javax.swing.JMenu();
+        editMenu = new javax.swing.JMenu();
+        viewMenu = new javax.swing.JMenu();
 
         canvasToolbar1.setRollover(true);
 
@@ -118,7 +123,7 @@ public class MainWindow extends JFrame {
     canvasPanel1.setLayout(canvasPanel1Layout);
     canvasPanel1Layout.setHorizontalGroup(
         canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 244, Short.MAX_VALUE)
+        .addGap(0, 234, Short.MAX_VALUE)
     );
     canvasPanel1Layout.setVerticalGroup(
         canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,10 +146,7 @@ public class MainWindow extends JFrame {
             .addContainerGap())
     );
 
-    jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
-
     metronomePanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
-    jPanel3.add(metronomePanel1);
 
     filterPropertiesPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
 
@@ -152,14 +154,27 @@ public class MainWindow extends JFrame {
     filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
     filterPropertiesPanel1Layout.setHorizontalGroup(
         filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 175, Short.MAX_VALUE)
+        .addGap(0, 189, Short.MAX_VALUE)
     );
     filterPropertiesPanel1Layout.setVerticalGroup(
         filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 146, Short.MAX_VALUE)
+        .addGap(0, 114, Short.MAX_VALUE)
     );
 
-    jPanel3.add(filterPropertiesPanel1);
+    javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+    jPanel3.setLayout(jPanel3Layout);
+    jPanel3Layout.setHorizontalGroup(
+        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+        .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    jPanel3Layout.setVerticalGroup(
+        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel3Layout.createSequentialGroup()
+            .addComponent(metronomePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
@@ -169,14 +184,14 @@ public class MainWindow extends JFrame {
             .addComponent(canvasToolbar2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addComponent(canvasToolbar2, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
     );
 
     jTabbedPane1.addTab("Canvas", jPanel1);
@@ -191,11 +206,27 @@ public class MainWindow extends JFrame {
 
     jSplitPane1.setRightComponent(jScrollPane1);
 
-    jMenu1.setText("File");
-    jMenuBar1.add(jMenu1);
+    fileMenu.setText("File");
+    jMenuBar1.add(fileMenu);
 
-    jMenu2.setText("Edit");
-    jMenuBar1.add(jMenu2);
+    editMenu.setText("Edit");
+    jMenuBar1.add(editMenu);
+
+    viewMenu.setText("View");
+
+    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+        JMenuItem item = new JMenuItem(info.getName());
+
+        item.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                viewMenuHandler(evt);
+            }
+        });
+
+        viewMenu.add(item);
+    }
+
+    jMenuBar1.add(viewMenu);
 
     setJMenuBar(jMenuBar1);
 
@@ -225,10 +256,27 @@ public class MainWindow extends JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 new MainWindow().setVisible(true);
             }
         });
+    }
+
+    private void viewMenuHandler(ActionEvent event){
+        JMenuItem source = (JMenuItem) event.getSource();
+        String lookAndFeelName = source.getText();
+        for(LookAndFeelInfo info: UIManager.getInstalledLookAndFeels()){
+            if(lookAndFeelName.equals(info.getName())){
+                try{
+                    UIManager.setLookAndFeel(info.getClassName());
+                    SwingUtilities.updateComponentTreeUI(this);
+                    this.pack();
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -237,7 +285,7 @@ public class MainWindow extends JFrame {
      * MidiDevice or a filter can be placed on the canvas.
      * @param evt
      */
-    private void ButtonHandler(java.awt.event.ActionEvent evt) {
+    private void ButtonHandler(ActionEvent evt) {
         // TODO add your handling code here:
         final Object source = evt.getSource();
         if (canvasButtonMouseAdapter != null) {
@@ -284,9 +332,9 @@ public class MainWindow extends JFrame {
     private ampt.ui.canvas.CanvasPanel canvasPanel1;
     private ampt.ui.canvas.CanvasToolbar canvasToolbar1;
     private ampt.ui.canvas.CanvasToolbar canvasToolbar2;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenu fileMenu;
     private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -296,5 +344,6 @@ public class MainWindow extends JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextPane jTextPane1;
     private ampt.examples.MetronomePanel metronomePanel1;
+    private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }
