@@ -1,18 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ampt.ui.canvas;
 
-import ampt.examples.filters.ChordFilterDevice;
-import ampt.examples.filters.ChordFilterDevice.ChordInversion;
-import ampt.examples.filters.ChordFilterDevice.ChordType;
+import ampt.core.devices.ChordFilterDevice;
+import ampt.midi.chord.ChordInversion;
+import ampt.midi.chord.ChordType;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import javax.sound.midi.MidiUnavailableException;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -28,8 +25,10 @@ public class ChordFilterBox extends MidiDeviceBox implements ActionListener{
     private JComboBox chordTypesComboBox;
     private JComboBox chordInversionsComboBox;
 
-    public ChordFilterBox(ChordFilterDevice device){
+    public ChordFilterBox(ChordFilterDevice device) throws MidiUnavailableException{
+        
         super(device);
+
         // Needed to override preferred size to be set by the components inside
         // this box
         this.setPreferredSize(null);
