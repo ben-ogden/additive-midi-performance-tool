@@ -15,7 +15,6 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
-import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Transmitter;
 import javax.sound.midi.MidiDevice.Info;
 import javax.swing.JButton;

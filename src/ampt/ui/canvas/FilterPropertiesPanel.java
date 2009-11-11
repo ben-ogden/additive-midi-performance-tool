@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * FilterPropertiesPanel.java
  *
  * Created on Oct 21, 2009, 3:03:48 PM

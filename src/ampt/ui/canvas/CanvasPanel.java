@@ -5,6 +5,7 @@
  */
 package ampt.ui.canvas;
 
+import ampt.ui.filters.MidiDeviceBox;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.MenuItem;
@@ -15,8 +16,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JOptionPane;
 
@@ -66,7 +65,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         if (c instanceof MidiDeviceBox) {
             MidiDeviceBox box = (MidiDeviceBox) c;
             midiDeviceBoxes.add(box);
-            if (box.hasTransmitter) {
+            if (box.hasTransmitter()) {
                 MyActionListener myActionListener = new MyActionListener(box, this);
                 final PopupMenu popupMenu = new PopupMenu();
                 MenuItem menuItem = new MenuItem("Add Filter Connection");
@@ -121,7 +120,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         public void actionPerformed(ActionEvent e) {
             MyMouseAdapter mouseAdapter = new MyMouseAdapter(box, panel);
             for (MidiDeviceBox toBox : midiDeviceBoxes) {
-                if(toBox.hasReceiver)
+                if(toBox.hasReceiver())
                     toBox.addMouseListener(mouseAdapter);
             }
             panel.addMouseListener(mouseAdapter);

@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * MetronomePanel.java
  *
  * Created on Nov 10, 2009, 5:54:23 PM

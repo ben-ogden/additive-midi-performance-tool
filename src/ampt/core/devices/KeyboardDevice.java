@@ -1,6 +1,5 @@
-package ampt.ui.keyboard;
+package ampt.core.devices;
 
-import ampt.core.devices.AmptDevice;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;

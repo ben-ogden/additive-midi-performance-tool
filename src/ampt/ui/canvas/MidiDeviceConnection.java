@@ -1,5 +1,6 @@
 package ampt.ui.canvas;
 
+import ampt.ui.filters.MidiDeviceBox;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.sound.midi.MidiUnavailableException;

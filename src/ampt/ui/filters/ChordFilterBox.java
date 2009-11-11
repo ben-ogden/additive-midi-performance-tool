@@ -1,4 +1,4 @@
-package ampt.ui.canvas;
+package ampt.ui.filters;
 
 import ampt.core.devices.ChordFilterDevice;
 import ampt.midi.chord.ChordInversion;

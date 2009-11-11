@@ -1,6 +1,5 @@
 package ampt.core.devices;
 
-import ampt.ui.keyboard.KeyboardDevice;
 import java.util.ArrayList;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;

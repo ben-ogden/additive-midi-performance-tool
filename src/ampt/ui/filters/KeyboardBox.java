@@ -1,7 +1,6 @@
-package ampt.ui.canvas;
+package ampt.ui.filters;
 
-import ampt.ui.keyboard.KeyboardDevice;
-import ampt.ui.keyboard.KeyboardDevice.KeyboardReceiver;
+import ampt.core.devices.KeyboardDevice;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,6 +19,7 @@ import javax.swing.event.ChangeListener;
 /**
  * This class extends MidiDeviceBox in order to have the keyboard and its
  * properties be part of the canvas box.
+ * 
  * @author Christopher
  */
 public class KeyboardBox extends MidiDeviceBox implements ChangeListener, ActionListener{
@@ -36,7 +36,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
      * Constructor to create the box.
      * @param device
      */
-    public KeyboardBox(KeyboardDevice device) throws MidiUnavailableException{
+    public KeyboardBox(KeyboardDevice device) throws MidiUnavailableException {
 
         super(device);
         
@@ -94,10 +94,6 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         eastPanel.add(octaveComboBox);
 
         this.add(eastPanel, BorderLayout.EAST);
-
-
-//        this.add(southPanel, BorderLayout.SOUTH);
-
     }
 
     /**

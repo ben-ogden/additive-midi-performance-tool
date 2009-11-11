@@ -41,7 +41,7 @@ public class FlutterFilterVariation implements Receiver, Transmitter {
 
                 //create a new thread with a new generator
                 Thread thread = new Thread(
-                        new NoteGenerator(sMsg, receiverOut, timeStamp));
+                        new NoteGenerator2(sMsg, receiverOut, timeStamp));
 
                 //put the thread in the map
                 notesMap.put(key, thread);
@@ -78,13 +78,13 @@ public class FlutterFilterVariation implements Receiver, Transmitter {
     }
 }
 
-class NoteGenerator implements Runnable {
+class NoteGenerator2 implements Runnable {
 
     private ShortMessage message;
     private Receiver receiverOut;
     private long timeStamp;
 
-    public NoteGenerator(ShortMessage message, Receiver receiverOut, long timeStamp) {
+    public NoteGenerator2(ShortMessage message, Receiver receiverOut, long timeStamp) {
 
         this.message = message;
         this.receiverOut = receiverOut;
