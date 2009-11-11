@@ -52,7 +52,7 @@ public class TestClockWithNotes {
                 msg2.setMessage(ShortMessage.NOTE_OFF,
                         0, 60 + (tickCount % 12), 93);
                 //calculate next tick
-                nextTick = timeStamp + tickLength;
+                nextTick += tickLength;
                 tickCount++;
             }
         }
@@ -79,7 +79,7 @@ public class TestClockWithNotes {
                 msg2.setMessage(ShortMessage.NOTE_OFF,
                         0, 60 + (tickCount % 12), 93);
                 //calculate next tick
-                nextTick = timeStamp + tickLength;
+                nextTick += tickLength;
                 tickCount++;
             }
         }
@@ -107,7 +107,7 @@ public class TestClockWithNotes {
                 msg2.setMessage(ShortMessage.NOTE_OFF,
                         0, 60 + (tickCount % 12), 93);
                 //calculate next tick
-                nextTick = timeStamp + tickLength;
+                nextTick += tickLength;
                 tickCount++;
             }
         }
