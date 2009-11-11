@@ -1,6 +1,7 @@
 package ampt.ui.canvas;
 
 import ampt.ui.keyboard.KeyboardDevice;
+import ampt.ui.keyboard.KeyboardDevice.KeyboardReceiver;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;

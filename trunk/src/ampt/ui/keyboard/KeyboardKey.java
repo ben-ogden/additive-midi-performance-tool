@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -25,131 +27,145 @@ import javax.swing.KeyStroke;
  */
 public abstract class KeyboardKey extends JButton implements MouseListener {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    private final int note;
+    protected char keyBinding = ' ';
+    private Receiver keyboardReceiver;
+    protected boolean pressed = false;
 
-	private final int note;
-	protected char keyBinding = ' ';
-        private KeyboardDevice keyboardDevice;
+    /**
+     * Constructor to set the note number that this key represents. Also sets up
+     * the mouse listener for changing the color of the key
+     *
+     * @param note
+     *            The note that this key represents
+     * @param channel
+     *            The channel to send MIDI messages on.
+     */
+    public KeyboardKey(final int note, Receiver keyboardReceiver) {
+        super();
+        this.note = note;
+        this.keyboardReceiver = keyboardReceiver;
+        this.addMouseListener(this);
+    }
 
-	protected boolean pressed = false;
+    /**
+     * Constructor to set the note number that this key represents. Also sets up
+     * the mouse listener for changing the color of the key
+     *
+     * @param note
+     *            The note that this key represents
+     * @param keyBinding
+     *            The key to bind this button to
+     * @param channel
+     *            The channel to send MIDI messages on
+     */
+    public KeyboardKey(final int note, char keyBinding, Receiver keyboardReceiver) {
 
-	/**
-	 * Constructor to set the note number that this key represents. Also sets up
-	 * the mouse listener for changing the color of the key
-	 * 
-	 * @param note
-	 *            The note that this key represents
-	 * @param channel
-	 *            The channel to send MIDI messages on.
-	 */
-	public KeyboardKey(final int note, KeyboardDevice keyboardDevice) {
-		super();
-		this.note = note;
-                this.keyboardDevice = keyboardDevice;
-		this.addMouseListener(this);
-	}
+        this(note, keyboardReceiver);
 
-	/**
-	 * Constructor to set the note number that this key represents. Also sets up
-	 * the mouse listener for changing the color of the key
-	 * 
-	 * @param note
-	 *            The note that this key represents
-	 * @param keyBinding
-	 *            The key to bind this button to
-	 * @param channel
-	 *            The channel to send MIDI messages on
-	 */
-	public KeyboardKey(final int note, char keyBinding, KeyboardDevice keyboardDevice) {
-		this(note, keyboardDevice);
+        this.keyBinding = keyBinding;
 
-		this.keyBinding = keyBinding;
+        InputMap inputMap = this.getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        char upperKeyBinding = Character.toUpperCase(keyBinding);
+        inputMap.put(KeyStroke.getKeyStroke("pressed " + upperKeyBinding),
+                "pressed");
+        inputMap.put(KeyStroke.getKeyStroke("released " + upperKeyBinding),
+                "released");
+        ActionMap actionMap = this.getActionMap();
+        actionMap.put("pressed", new AbstractAction() {
 
-		InputMap inputMap = this.getInputMap(WHEN_IN_FOCUSED_WINDOW);
-		char upperKeyBinding = Character.toUpperCase(keyBinding);
-		inputMap.put(KeyStroke.getKeyStroke("pressed " + upperKeyBinding),
-				"pressed");
-		inputMap.put(KeyStroke.getKeyStroke("released " + upperKeyBinding),
-				"released");
-		ActionMap actionMap = this.getActionMap();
-		actionMap.put("pressed", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                if (!pressed) {
+                    pressed = true;
+                    repaint();
+                    setNoteOn();
+                }
+            }
+        });
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (!pressed) {
-					pressed = true;
-					repaint();
-					setNoteOn();
-				}
-			}
-		});
+        actionMap.put("released", new AbstractAction() {
 
-		actionMap.put("released", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pressed = false;
+                repaint();
+                setNoteOff();
+            }
+        });
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pressed = false;
-				repaint();
-				setNoteOff();
-			}
-		});
+    }
 
-	}
+    /**
+     * returns the note this key represents
+     * @return
+     */
+    public int getNote() {
+        return note;
+    }
 
-	/**
-	 * returns the note this key represents
-	 * @return
-	 */
-	public int getNote() {
-		return note;
-	}
+    /**
+     * Mouse Listeners that are not used
+     */
+    @Override
+    public void mouseClicked(final MouseEvent event) {
+    }
 
-	/**
-	 * Mouse Listeners that are not used
-	 */
-	@Override
-	public void mouseClicked(final MouseEvent event) {
-	}
-	@Override
-	public void mouseEntered(final MouseEvent event) {
-	}
-	@Override
-	public void mouseExited(final MouseEvent event) {
-	}
+    @Override
+    public void mouseEntered(final MouseEvent event) {
+    }
 
-	/**
-	 * Listener for when the button is pressed to change the color of the button
-	 */
-	@Override
-	public void mousePressed(final MouseEvent event) {
-		pressed = true;
-		this.repaint();
-		this.setNoteOn();
-	}
+    @Override
+    public void mouseExited(final MouseEvent event) {
+    }
 
-	/**
-	 * Listener for when the button is pressed to change the color of the button
-	 */
-	@Override
-	public void mouseReleased(final MouseEvent event) {
-		pressed = false;
-		this.repaint();
-		this.setNoteOff();
+    /**
+     * Listener for when the button is pressed to change the color of the button
+     */
+    @Override
+    public void mousePressed(final MouseEvent event) {
+        pressed = true;
+        this.repaint();
+        this.setNoteOn();
+    }
 
-	}
+    /**
+     * Listener for when the button is pressed to change the color of the button
+     */
+    @Override
+    public void mouseReleased(final MouseEvent event) {
+        pressed = false;
+        this.repaint();
+        this.setNoteOff();
 
-	/**
-	 * Sends a Note On message to the set receiver on the set channel.
-	 */
-	public void setNoteOn() {
-		keyboardDevice.sendMessage(ShortMessage.NOTE_ON, note);
-	}
+    }
 
-	/**
-	 * Sends a Note Off message to the set receiver on the set channel.
-	 */
-	public void setNoteOff() {
-		keyboardDevice.sendMessage(ShortMessage.NOTE_OFF, note);
-	}
+    /**
+     * Sends a Note On message to the set receiver on the set channel.
+     */
+    public void setNoteOn() {
+        ShortMessage msg = new ShortMessage();
+        try {
+            msg.setMessage(ShortMessage.NOTE_ON, note, 0);
+        } catch (InvalidMidiDataException ex) {
+            // this shouldn't happen
+            throw new RuntimeException(ex);
+        }
+        keyboardReceiver.send(msg, -1);
+    }
 
+    /**
+     * Sends a Note Off message to the set receiver on the set channel.
+     */
+    public void setNoteOff() {
+        ShortMessage msg = new ShortMessage();
+        try {
+            msg.setMessage(ShortMessage.NOTE_OFF, note, 0);
+         } catch (InvalidMidiDataException ex) {
+            // this shouldn't happen
+            throw new RuntimeException(ex);
+        }
+        keyboardReceiver.send(msg, -1);
+    }
 }

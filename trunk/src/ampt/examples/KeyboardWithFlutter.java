@@ -9,7 +9,7 @@ import ampt.ui.keyboard.KeyboardPanel;
  
 public class KeyboardWithFlutter extends JFrame {
  
-    public KeyboardWithFlutter() {
+    public KeyboardWithFlutter() throws MidiUnavailableException {
         this.setTitle("Keyboard with Filters Test");
         KeyboardDevice keyboardDevice = new KeyboardDevice();
         KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice);
@@ -31,7 +31,7 @@ public class KeyboardWithFlutter extends JFrame {
 		this.setVisible(true);
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MidiUnavailableException {
 		new KeyboardWithFlutter();
 	}
  }
