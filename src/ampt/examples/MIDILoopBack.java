@@ -27,9 +27,6 @@ import javax.swing.JPanel;
  * labeled MIDI In contains transmitters, which likely represent MIDI In
  * hardware ports.
  *
- * TODO disconnect the devices when changing routing
- * TODO close devices when exiting
- * 
  */
 public class MIDILoopBack extends JFrame implements ActionListener {
 
@@ -191,8 +188,6 @@ public class MIDILoopBack extends JFrame implements ActionListener {
          * Exit Button *
          ***************/
         if (event.getSource().equals(exitButton)) {
-
-            //TODO close midi resources
 
             System.exit(0);
         }
