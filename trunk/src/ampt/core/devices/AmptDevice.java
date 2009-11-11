@@ -3,7 +3,7 @@ package ampt.core.devices;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import javax.sound.midi.MidiDevice;
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiUnavailableException;
@@ -15,7 +15,7 @@ import javax.sound.midi.Transmitter;
  *
  * @author Ben Ogden
  */
-public abstract class AmptDevice implements MidiDevice {
+public abstract class AmptDevice implements AmptMidiDevice {
 
     // to simplify, the vendor and version will be static for all AMPT devices
     private static final String VENDOR = "AMPT";
@@ -200,9 +200,18 @@ public abstract class AmptDevice implements MidiDevice {
      */
     @Override
     public synchronized Receiver getReceiver() throws MidiUnavailableException {
+
+        // device must be open
         if(!_isOpen) {
             throw new MidiUnavailableException("The AMPT device is not open.");
         }
+        
+        // device must support additional receivers
+        if(_receivers.size() >= getMaxReceivers() && getMaxReceivers() != -1) {
+            throw new MidiUnavailableException(
+                    "There are no receivers available for this device.");
+        }
+
         // get a new receiver
         Receiver r = getAmptReceiver();
         _receivers.add(r);
@@ -223,9 +232,19 @@ public abstract class AmptDevice implements MidiDevice {
      */
     @Override
     public synchronized Transmitter getTransmitter() throws MidiUnavailableException {
+        
+        // device must be open
         if(!_isOpen) {
             throw new MidiUnavailableException("The AMPT device is not open.");
         }
+        
+        // device must support additional transmitters
+        if(_transmitters.size() >= getMaxTransmitters() && getMaxTransmitters() != -1) {
+            throw new MidiUnavailableException(
+                    "There are no more receivers available for this device.");
+        }
+
+        // get a new transmitter
         Transmitter t = new AmptTransmitter();
         _transmitters.add(t);
         return t;
@@ -293,7 +312,7 @@ public abstract class AmptDevice implements MidiDevice {
          * @param message the MIDI message to send
          * @param timeStamp the time-stamp for the message, in microseconds
          */
-        protected abstract List<MidiMessage> filter(MidiMessage message, long timeStamp);
+        protected abstract List<MidiMessage> filter(MidiMessage message, long timeStamp) throws InvalidMidiDataException;
 
         /**
          * Sends a MIDI message and time-stamp to this receiver. If
@@ -326,7 +345,13 @@ public abstract class AmptDevice implements MidiDevice {
             }
 
             // delegate to the implementing class to get list of messages to send
-            List<MidiMessage> msgs = filter(msg, timeStamp);
+            List<MidiMessage> msgs;
+            try {
+                msgs = filter(msg, timeStamp);
+            } catch (InvalidMidiDataException imde) {
+                //TODO setup filter logging to MIDI console?
+                throw new RuntimeException(imde);
+            }
 
             // send messages to each registered transmitter
             for(MidiMessage midiMessage : msgs) {
