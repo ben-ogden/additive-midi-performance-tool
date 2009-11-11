@@ -6,7 +6,7 @@
 package ampt.ui;
 
 import ampt.examples.AnimatedMetronome;
-import ampt.examples.filters.ChordFilterDevice;
+import ampt.core.devices.ChordFilterDevice;
 import ampt.ui.canvas.ChordFilterBox;
 import ampt.ui.canvas.KeyboardBox;
 import ampt.ui.canvas.MidiDeviceBox;
