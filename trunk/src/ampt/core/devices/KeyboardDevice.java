@@ -43,7 +43,6 @@ public class KeyboardDevice extends AmptDevice {
     }
 
     public void setChannel(int channel){
-        //TODO - does the numbering start at 1 or 0?
         if(channel < 0 || channel > 15){
             throw new IllegalArgumentException("Invalid Channel Number");
         }
