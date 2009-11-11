@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class ChordFilterDevice extends AmptDevice {
 
-    private static final String DEVICE_NAME = "Chord Filter";
+    public static final String DEVICE_NAME = "Chord Filter";
     private static final String DEVICE_DESCRIPTION = "Creates a chord from a single note";
 
     private ChordType chordType;
@@ -46,17 +46,6 @@ public class ChordFilterDevice extends AmptDevice {
         this.chordInversion = chordInversion;
     }
 
-    /**
-     * Returns a new Chord Filter Receiver that is not yet bound to any
-     * transmitters.
-     *
-     * @return a new ChordFilterReceiver
-     */
-    @Override
-    protected Receiver getAmptReceiver() {
-        return new ChordFilterReceiver();
-    }
-
     @Override
     protected void initDevice() {
         // nothing to do
@@ -67,6 +56,17 @@ public class ChordFilterDevice extends AmptDevice {
         // nothing to do
     }
 
+    /**
+     * Returns a new Chord Filter Receiver that is not yet bound to any
+     * transmitters.
+     *
+     * @return a new ChordFilterReceiver
+     */
+    @Override
+    protected Receiver getAmptReceiver() {
+        return new ChordFilterReceiver();
+    }
+    
     /**
      * Inner class that implements a receiver for a chord filter.  This is
      * where all of the actual filtering takes place.
