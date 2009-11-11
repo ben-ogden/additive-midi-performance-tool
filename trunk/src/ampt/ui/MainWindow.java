@@ -15,12 +15,15 @@ import ampt.ui.keyboard.KeyboardDevice;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.Box;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * This is the main window for the GUI.  It contains a split pane, in which the
@@ -248,14 +251,14 @@ public class MainWindow extends JFrame {
                 canvasPanel1.removeMouseListener(this);
                 Point point = e.getPoint();
                 if (source instanceof MidiDeviceButton) {
-                    MidiDeviceButton deviceButton = (MidiDeviceButton) source;
-                    try{
+                    try {
+                        MidiDeviceButton deviceButton = (MidiDeviceButton) source;
                         MidiDevice device = MidiSystem.getMidiDevice(deviceButton.getDeviceInfo());
                         MidiDeviceBox box = null;
-                        if(device instanceof KeyboardDevice){
+                        if (device instanceof KeyboardDevice) {
                             KeyboardDevice keyboard = (KeyboardDevice) device;
                             box = new KeyboardBox(keyboard);
-                        } else if (device instanceof ChordFilterDevice){
+                        } else if (device instanceof ChordFilterDevice) {
                             ChordFilterDevice chordDevice = (ChordFilterDevice) device;
                             box = new ChordFilterBox(chordDevice);
                         } else {
@@ -265,20 +268,18 @@ public class MainWindow extends JFrame {
                         box.setLocation(point);
                         box.setSize(box.getPreferredSize());
                         box.validate();
-//                        if (box.getMidiDevice() instanceof KeyboardDevice) {
-//                            KeyboardPanel keyboard = new KeyboardPanel((KeyboardDevice) box.getMidiDevice());
-//                            jTabbedPane1.addTab("Keyboard", keyboard);
-//                        }
-                    } catch (MidiUnavailableException ex){
-                        ex.printStackTrace();
+                        canvasPanel1.repaint();
+                    } catch (MidiUnavailableException ex) {
+
+                        JOptionPane.showMessageDialog(null,
+                                "Unable to add device  to canvas. " + ex.getLocalizedMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    canvasPanel1.repaint();
                 }
             }
         };
         canvasPanel1.addMouseListener(canvasButtonMouseAdapter);
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private ampt.ui.canvas.CanvasPanel canvasPanel1;
     private ampt.ui.canvas.CanvasToolbar canvasToolbar1;
