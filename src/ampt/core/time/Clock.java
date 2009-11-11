@@ -7,11 +7,6 @@ package ampt.core.time;
  * <p>Note:Currently the high resolution clock is only available for Windows
  * users. Users on other platforms will get the standard clock.
  *
- * <p>Note (by Rob): added an overloaded getInstance() that takes an int
- * parameter in order to select the nanoTime timer.
- *
- * TODO add native clocks for OSX and Linux.
- *
  * @author Ben
  */
 public abstract class Clock {
@@ -68,8 +63,6 @@ public abstract class Clock {
     // Stores the last time stampTime was call, like a stopwatch.
     protected long stampTime;
 
-    //TODO - add javadoc
-
     public abstract long getTime();
 
     public abstract int getDefaultUnit();
@@ -79,5 +72,4 @@ public abstract class Clock {
     public abstract long getElapsedTime();
 
     public abstract long getElapsedTime(int unit);
-
 }
