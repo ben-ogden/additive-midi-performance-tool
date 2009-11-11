@@ -1,6 +1,6 @@
 package ampt.core.devices;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.spi.MidiDeviceProvider;
@@ -12,19 +12,22 @@ import javax.sound.midi.spi.MidiDeviceProvider;
  */
 public class AmptMidiDeviceProvider extends MidiDeviceProvider{
 
-    private ArrayList<Info> infoList;
+    private HashMap<Info, Class> deviceMap;
+
 
     /**
      * Constructor which creates the list of supported devices.
      */
     public AmptMidiDeviceProvider(){
-        infoList = new ArrayList<Info>();
 
-        //TODO
+        deviceMap = new HashMap<Info, Class>();
 
-        // Add an info from each installed filter to the vector
-        infoList.add(new ChordFilterDevice().getDeviceInfo());
-        infoList.add(new KeyboardDevice().getDeviceInfo());
+        /*
+         * Register all AMPT devices here with the Info and device Class
+         */
+        deviceMap.put(new ChordFilterDevice().getDeviceInfo(), ChordFilterDevice.class);
+        deviceMap.put(new KeyboardDevice().getDeviceInfo(), KeyboardDevice.class);
+        
     }
 
     /**
@@ -35,7 +38,7 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
      */
     @Override
     public Info[] getDeviceInfo() {
-        return (Info[]) infoList.toArray(new Info[0]);
+        return deviceMap.keySet().toArray(new Info[0]);
     }
 
     /**
@@ -47,15 +50,27 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
     @Override
     public MidiDevice getDevice(Info info) {
 
-        if(ChordFilterDevice.DEVICE_NAME.equals(info.getName())) {
-            return new ChordFilterDevice();
+        // get the class for this device and attempt to instantiate it
+        Class amptDeviceClass = deviceMap.get(info);
+
+        if(null == amptDeviceClass) {
+            throw new IllegalArgumentException(
+                    "Device not supported by this provider.");
         }
 
-        if(KeyboardDevice.DEVICE_NAME.equals(info.getName())){
-            return new KeyboardDevice();
+        try {
+
+            //TODO - preferable to use a static getInstance method instead of
+            //       calling constructor in case some filters are singleton
+
+            return (MidiDevice) amptDeviceClass.newInstance();
+
+        } catch (InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (IllegalAccessException iae) {
+            throw new RuntimeException(iae);
         }
 
-        throw new IllegalArgumentException("Device not supported by this MidiDeviceProvider.");
     }
 
 }
