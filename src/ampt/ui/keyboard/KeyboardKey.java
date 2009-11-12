@@ -10,7 +10,7 @@ import javax.sound.midi.ShortMessage;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
-import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 /**
@@ -25,7 +25,7 @@ import javax.swing.KeyStroke;
  * 08/13/09 [Chris] Added displaying of key binding on each key
  * @author Christopher S. Redding 
  */
-public abstract class KeyboardKey extends JButton implements MouseListener {
+public abstract class KeyboardKey extends JComponent implements MouseListener {
 
     private static final long serialVersionUID = 1L;
     private final int note;
