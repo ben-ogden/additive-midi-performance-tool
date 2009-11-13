@@ -27,6 +27,7 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
          */
         deviceMap.put(new ChordFilterDevice().getDeviceInfo(), ChordFilterDevice.class);
         deviceMap.put(new KeyboardDevice().getDeviceInfo(), KeyboardDevice.class);
+        deviceMap.put(new NoteViewerDevice().getDeviceInfo(), NoteViewerDevice.class);
         
     }
 

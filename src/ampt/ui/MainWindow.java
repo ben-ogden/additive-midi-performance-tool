@@ -7,10 +7,12 @@ package ampt.ui;
 
 import ampt.core.devices.ChordFilterDevice;
 import ampt.core.devices.KeyboardDevice;
+import ampt.core.devices.NoteViewerDevice;
 import ampt.ui.canvas.MidiDeviceButton;
 import ampt.ui.filters.ChordFilterBox;
 import ampt.ui.filters.KeyboardBox;
 import ampt.ui.filters.MidiDeviceBox;
+import ampt.ui.filters.NoteViewerBox;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -307,6 +309,9 @@ public class MainWindow extends JFrame {
                         } else if (device instanceof ChordFilterDevice) {
                             ChordFilterDevice chordDevice = (ChordFilterDevice) device;
                             box = new ChordFilterBox(chordDevice);
+                        } else if (device instanceof NoteViewerDevice) {
+                            NoteViewerDevice noteViewerDevice = (NoteViewerDevice) device;
+                            box = new NoteViewerBox(noteViewerDevice);
                         } else {
                             box = new MidiDeviceBox(device);
                         }
