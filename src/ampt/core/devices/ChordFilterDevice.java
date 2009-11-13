@@ -24,10 +24,8 @@ public class ChordFilterDevice extends AmptDevice {
 
     public static final String DEVICE_NAME = "Chord Filter";
     private static final String DEVICE_DESCRIPTION = "Creates a chord from a single note";
-
     private ChordType chordType;
     private ChordInversion chordInversion;
-
 
     public ChordFilterDevice() {
 
@@ -38,11 +36,11 @@ public class ChordFilterDevice extends AmptDevice {
         chordInversion = ChordInversion.ROOT_POSITION;
     }
 
-    public void setChordType(ChordType chordType){
+    public void setChordType(ChordType chordType) {
         this.chordType = chordType;
     }
 
-    public void setChordInversion(ChordInversion chordInversion){
+    public void setChordInversion(ChordInversion chordInversion) {
         this.chordInversion = chordInversion;
     }
 
@@ -66,7 +64,7 @@ public class ChordFilterDevice extends AmptDevice {
     protected Receiver getAmptReceiver() {
         return new ChordFilterReceiver();
     }
-    
+
     /**
      * Inner class that implements a receiver for a chord filter.  This is
      * where all of the actual filtering takes place.
@@ -74,7 +72,6 @@ public class ChordFilterDevice extends AmptDevice {
     public class ChordFilterReceiver extends AmptReceiver {
 
         List<MidiMessage> messages = new ArrayList<MidiMessage>();
-
 
         @Override
         protected List<MidiMessage> filter(MidiMessage message, long timeStamp) {
@@ -90,13 +87,6 @@ public class ChordFilterDevice extends AmptDevice {
                 ShortMessage root = (ShortMessage) message;
                 // We only care about note on and note off messages.
                 if (root.getCommand() == ShortMessage.NOTE_ON || root.getCommand() == ShortMessage.NOTE_OFF) {
-
-                    try {
-                        root.setMessage(root.getCommand(), root.getChannel(), root.getData1() + chordInversion.getRootInterval(), root.getData2());
-                        messages.add(root);
-                    } catch (InvalidMidiDataException ex){
-                        // fail silently?
-                    }
 
                     // Create the note that makes the third of the chord.
                     third = new ShortMessage();
@@ -117,10 +107,16 @@ public class ChordFilterDevice extends AmptDevice {
                     } catch (InvalidMidiDataException ex) {
                         // fail silently?
                     }
+
+                    try {
+                        root.setMessage(root.getCommand(), root.getChannel(), root.getData1() + chordInversion.getRootInterval(), root.getData2());
+                        messages.add(root);
+                    } catch (InvalidMidiDataException ex) {
+                        // fail silently?
+                    }
                 }
             }
             return messages;
         }
     }
-
 }
