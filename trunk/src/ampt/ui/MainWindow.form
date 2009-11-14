@@ -116,7 +116,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="canvasToolbar2" alignment="0" pref="252" max="32767" attributes="0"/>
+                      <Component id="canvasToolbar2" alignment="0" pref="250" max="32767" attributes="0"/>
                       <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
                       <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
                   </Group>
@@ -135,7 +135,7 @@
                     <Property name="rollover" type="boolean" value="true"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();&#xa;for(Info deviceInfo: deviceInfos){&#xa;    MidiDeviceButton button = new MidiDeviceButton(deviceInfo);&#xa;    canvasToolbar2.add(button);&#xa;        button.addActionListener(new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                ButtonHandler(evt);&#xa;            }&#xa;        });&#xa;}&#xa;&#xa;//ChordFilterButton chordButton = new ChordFilterButton();&#xa;//canvasToolbar2.add(chordButton);&#xa;//chordButton.addActionListener(new java.awt.event.ActionListener() {&#xa;//            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;//                ButtonHandler(evt);&#xa;//            }&#xa;//        });"/>
+                    <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();&#xa;for(Info deviceInfo: deviceInfos){&#xa;    &#xa;    // don&apos;t list excluded devices&#xa;    if(excludedDevices.contains(deviceInfo.getName())) {&#xa;        continue;&#xa;    }&#xa;&#xa;    MidiDeviceButton button = new MidiDeviceButton(deviceInfo);&#xa;    canvasToolbar2.add(button);&#xa;        button.addActionListener(new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                buttonHandler(evt);&#xa;            }&#xa;        });&#xa;&#xa;}"/>
                   </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
@@ -179,12 +179,12 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="234" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="238" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="211" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="213" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
@@ -232,12 +232,12 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="189" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="193" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="140" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="142" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>

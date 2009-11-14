@@ -18,6 +18,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
@@ -38,6 +41,12 @@ import javax.swing.JOptionPane;
  */
 public class MainWindow extends JFrame {
 
+    /*
+     * To exclude a MidiDevice from the toolbar, add the device to the list
+     * below.
+     */
+    private List<String> excludedDevices = Arrays.asList("Microsoft MIDI Mapper");
+    
     /*
      * This is used for listening for the user clicking on the canvas panel so
      * the user can place a filter after choosing the filter from the Toolbar.
@@ -98,156 +107,155 @@ public class MainWindow extends JFrame {
 
         Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();
         for(Info deviceInfo: deviceInfos){
+
+            // don't list excluded devices
+            if(excludedDevices.contains(deviceInfo.getName())) {
+                continue;
+            }
+
             MidiDeviceButton button = new MidiDeviceButton(deviceInfo);
             canvasToolbar2.add(button);
             button.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    ButtonHandler(evt);
+                    buttonHandler(evt);
                 }
             });
+
         }
 
-        //ChordFilterButton chordButton = new ChordFilterButton();
-        //canvasToolbar2.add(chordButton);
-        //chordButton.addActionListener(new java.awt.event.ActionListener() {
-            //            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //                ButtonHandler(evt);
-                //            }
-            //        });
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas"));
 
-    jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas"));
+        canvasPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-    canvasPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        javax.swing.GroupLayout canvasPanel1Layout = new javax.swing.GroupLayout(canvasPanel1);
+        canvasPanel1.setLayout(canvasPanel1Layout);
+        canvasPanel1Layout.setHorizontalGroup(
+            canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 238, Short.MAX_VALUE)
+        );
+        canvasPanel1Layout.setVerticalGroup(
+            canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 213, Short.MAX_VALUE)
+        );
 
-    javax.swing.GroupLayout canvasPanel1Layout = new javax.swing.GroupLayout(canvasPanel1);
-    canvasPanel1.setLayout(canvasPanel1Layout);
-    canvasPanel1Layout.setHorizontalGroup(
-        canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 234, Short.MAX_VALUE)
-    );
-    canvasPanel1Layout.setVerticalGroup(
-        canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 185, Short.MAX_VALUE)
-    );
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(canvasPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(canvasPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(jPanel2Layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(canvasPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addContainerGap())
-    );
-    jPanel2Layout.setVerticalGroup(
-        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(jPanel2Layout.createSequentialGroup()
-            .addComponent(canvasPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addContainerGap())
-    );
+        metronomePanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
 
-    metronomePanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
+        filterPropertiesPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
 
-    filterPropertiesPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
+        javax.swing.GroupLayout filterPropertiesPanel1Layout = new javax.swing.GroupLayout(filterPropertiesPanel1);
+        filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
+        filterPropertiesPanel1Layout.setHorizontalGroup(
+            filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 193, Short.MAX_VALUE)
+        );
+        filterPropertiesPanel1Layout.setVerticalGroup(
+            filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 142, Short.MAX_VALUE)
+        );
 
-    javax.swing.GroupLayout filterPropertiesPanel1Layout = new javax.swing.GroupLayout(filterPropertiesPanel1);
-    filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
-    filterPropertiesPanel1Layout.setHorizontalGroup(
-        filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 189, Short.MAX_VALUE)
-    );
-    filterPropertiesPanel1Layout.setVerticalGroup(
-        filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 114, Short.MAX_VALUE)
-    );
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+            .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(metronomePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-    javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-    jPanel3.setLayout(jPanel3Layout);
-    jPanel3Layout.setHorizontalGroup(
-        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
-        .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-    );
-    jPanel3Layout.setVerticalGroup(
-        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(jPanel3Layout.createSequentialGroup()
-            .addComponent(metronomePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    );
-
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(jPanel1Layout.createSequentialGroup()
-            .addComponent(canvasToolbar2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(canvasToolbar2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(canvasToolbar2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-    );
-    jPanel1Layout.setVerticalGroup(
-        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(canvasToolbar2, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-    );
+        );
 
-    jTabbedPane1.addTab("Canvas", jPanel1);
+        jTabbedPane1.addTab("Canvas", jPanel1);
 
-    jSplitPane1.setLeftComponent(jTabbedPane1);
+        jSplitPane1.setLeftComponent(jTabbedPane1);
 
-    jScrollPane1.setPreferredSize(new java.awt.Dimension(24, 200));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(24, 200));
 
-    jTextPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Console"));
-    jTextPane1.setEditable(false);
-    jScrollPane1.setViewportView(jTextPane1);
+        jTextPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Console"));
+        jTextPane1.setEditable(false);
+        jScrollPane1.setViewportView(jTextPane1);
 
-    jSplitPane1.setRightComponent(jScrollPane1);
+        jSplitPane1.setRightComponent(jScrollPane1);
 
-    fileMenu.setText("File");
-    jMenuBar1.add(fileMenu);
+        fileMenu.setText("File");
+        jMenuBar1.add(fileMenu);
 
-    editMenu.setText("Edit");
-    jMenuBar1.add(editMenu);
+        editMenu.setText("Edit");
+        jMenuBar1.add(editMenu);
 
-    viewMenu.setText("View");
+        viewMenu.setText("View");
 
-    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-        JMenuItem item = new JMenuItem(info.getName());
+        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            JMenuItem item = new JMenuItem(info.getName());
 
-        item.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                viewMenuHandler(evt);
-            }
-        });
+            item.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    viewMenuHandler(evt);
+                }
+            });
 
-        viewMenu.add(item);
-    }
+            viewMenu.add(item);
+        }
 
-    jMenuBar1.add(viewMenu);
+        jMenuBar1.add(viewMenu);
 
-    setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBar1);
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
-            .addContainerGap())
-    );
-    layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-            .addContainerGap())
-    );
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
-    pack();
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -283,10 +291,12 @@ public class MainWindow extends JFrame {
      * A button handler for all of the buttons on the toolbar.  This method
      * registers a mouse adapter on the canvas so the box that represents a
      * MidiDevice or a filter can be placed on the canvas.
+     *
      * @param evt
      */
-    private void ButtonHandler(ActionEvent evt) {
-        // TODO add your handling code here:
+    private void buttonHandler(ActionEvent evt) {
+
+
         final Object source = evt.getSource();
         if (canvasButtonMouseAdapter != null) {
             canvasPanel1.removeMouseListener(canvasButtonMouseAdapter);
@@ -296,12 +306,15 @@ public class MainWindow extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                
                 canvasPanel1.removeMouseListener(this);
                 Point point = e.getPoint();
                 if (source instanceof MidiDeviceButton) {
                     try {
                         MidiDeviceButton deviceButton = (MidiDeviceButton) source;
+
                         MidiDevice device = MidiSystem.getMidiDevice(deviceButton.getDeviceInfo());
+
                         MidiDeviceBox box = null;
                         if (device instanceof KeyboardDevice) {
                             KeyboardDevice keyboard = (KeyboardDevice) device;
