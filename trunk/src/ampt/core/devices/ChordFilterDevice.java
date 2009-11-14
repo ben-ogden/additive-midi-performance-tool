@@ -22,8 +22,9 @@ import java.util.LinkedList;
  */
 public class ChordFilterDevice extends AmptDevice {
 
-    public static final String DEVICE_NAME = "Chord Filter";
+    private static final String DEVICE_NAME = "Chord Filter";
     private static final String DEVICE_DESCRIPTION = "Creates a chord from a single note";
+    
     private ChordType chordType;
     private ChordInversion chordInversion;
 

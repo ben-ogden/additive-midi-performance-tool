@@ -1,7 +1,5 @@
 package ampt.core.devices;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
@@ -13,7 +11,7 @@ import javax.sound.midi.ShortMessage;
  */
 public class KeyboardDevice extends AmptDevice {
 
-    public static final String DEVICE_NAME = "Software Keyboard";
+    private static final String DEVICE_NAME = "Software Keyboard";
     private static final String DEVICE_DESCRIPTION = "A software MIDI keyboard";
 
     private static final int OCTAVE_INTERVAL = 12;

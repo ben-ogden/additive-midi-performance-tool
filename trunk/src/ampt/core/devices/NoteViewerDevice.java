@@ -15,7 +15,7 @@ import javax.sound.midi.ShortMessage;
  */
 public class NoteViewerDevice extends AmptDevice {
 
-    public static final String DEVICE_NAME = "Note Viewer";
+    private static final String DEVICE_NAME = "Note Viewer";
     private static final String DEVICE_DESCRIPTION = "Displays the notes on a staff";
     private List<NoteViewerBox> listeners;
 
