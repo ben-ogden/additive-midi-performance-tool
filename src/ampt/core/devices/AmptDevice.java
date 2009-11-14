@@ -21,7 +21,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
     // to simplify, the vendor and version will be static for all AMPT devices
     private static final String VENDOR = "AMPT";
     private static final String VERSION = "alpha"; // don't want to deal with this
-
+    
     // Each device has a AmptDeviceInfo describing that device
     private final AmptDeviceInfo _deviceInfo;
 
@@ -79,7 +79,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
     public synchronized void open() throws MidiUnavailableException {
 
         // can't open a device twice
-        if(_isOpen) {
+        if (_isOpen) {
             throw new MidiUnavailableException(_deviceInfo.getName() +
                     " is already in use.");
         }
@@ -106,24 +106,24 @@ public abstract class AmptDevice implements AmptMidiDevice {
     public synchronized void close() {
 
         // close any open receivers
-        for(Receiver r : _receivers) {
+        for (Receiver r : _receivers) {
             r.close();
         }
         _receivers.clear();
 
         // close any open transmitters
-        for(Transmitter t : _transmitters) {
+        for (Transmitter t : _transmitters) {
             t.close();
         }
         _transmitters.clear();
-        
+
         // implementation provided by subclasses
         closeDevice();
-        
+
         _isOpen = false;
     }
 
-   /**
+    /**
      * Connect a transmitter (output) from this MidiDevice to a receiver (input)
      * of the given MidiDevice.
      *
@@ -218,12 +218,12 @@ public abstract class AmptDevice implements AmptMidiDevice {
     public synchronized Receiver getReceiver() throws MidiUnavailableException {
 
         // device must be open
-        if(!_isOpen) {
+        if (!_isOpen) {
             throw new MidiUnavailableException("The AMPT device is not open.");
         }
-        
+
         // device must support additional receivers
-        if(_receivers.size() >= getMaxReceivers() && getMaxReceivers() != -1) {
+        if (_receivers.size() >= getMaxReceivers() && getMaxReceivers() != -1) {
             throw new MidiUnavailableException(
                     "There are no receivers available for this device.");
         }
@@ -248,14 +248,14 @@ public abstract class AmptDevice implements AmptMidiDevice {
      */
     @Override
     public synchronized Transmitter getTransmitter() throws MidiUnavailableException {
-        
+
         // device must be open
-        if(!_isOpen) {
+        if (!_isOpen) {
             throw new MidiUnavailableException("The AMPT device is not open.");
         }
-        
+
         // device must support additional transmitters
-        if(_transmitters.size() >= getMaxTransmitters() && getMaxTransmitters() != -1) {
+        if (_transmitters.size() >= getMaxTransmitters() && getMaxTransmitters() != -1) {
             throw new MidiUnavailableException(
                     "There are no more receivers available for this device.");
         }
@@ -275,7 +275,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
     @Override
     public Info getDeviceInfo() {
 
-        if(null == _deviceInfo) {
+        if (null == _deviceInfo) {
             throw new IllegalStateException("The AMPT device was not properly initialized.");
         }
         return _deviceInfo;
@@ -293,6 +293,74 @@ public abstract class AmptDevice implements AmptMidiDevice {
     @Override
     public long getMicrosecondPosition() {
         return -1;
+    }
+
+    /**
+     * Sends a given MidiMessage immediately to all Transmitters registered
+     * with this AMPT device.
+     *
+     * @param midiMessage the MidiMessage to send
+     */
+    protected void sendNow(MidiMessage midiMessage) {
+
+        // nothing to send if there are no transmitters
+        if (_transmitters.isEmpty()) {
+            return;
+        }
+
+        // send message to each registered transmitter
+        for (Transmitter transmitter : _transmitters) {
+            sendNow(midiMessage, transmitter);
+        }
+    }
+
+   /**
+     * Sends a list of MidiMessages immediately to all Transmitters registered
+     * with this AMPT device.
+     *
+     * @param midiMessage the MidiMessage to send
+     */
+    protected void sendNow(List<MidiMessage> midiMessages) {
+
+        // nothing to send if there are no transmitters
+        if (_transmitters.isEmpty()) {
+            return;
+        }
+
+        // send messages to each registered transmitter
+        for (Transmitter transmitter : _transmitters) {
+            for(MidiMessage midiMessage : midiMessages) {
+                sendNow(midiMessage, transmitter);
+            }
+        }
+    }
+
+    /**
+     * Sends a given MidiMessage to a given transmitter. Most devices will want
+     * to use sendNow(MidiMessage) but this method will be useful for devices
+     * that need to control output to specific transmitters.
+     *
+     * @param midiMessage the MidiMessage to send
+     * @param receiver the Receiver to whic
+     */
+    protected void sendNow(final MidiMessage midiMessage, Transmitter transmitter) {
+
+        // perform sanity checks
+        if (null == transmitter) {
+            throw new IllegalArgumentException("Transmitter expected.");
+        }
+
+        final Receiver receiver = transmitter.getReceiver();
+
+        if (null == receiver) {
+            throw new IllegalStateException("Receiver not initialized.");
+        }
+
+        /*
+         * This may eventually use another thread if needed
+         */
+        receiver.send(midiMessage, -1); // timestamp not currently supported
+
     }
 
     /**
@@ -328,7 +396,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
          * @param message the MIDI message to send
          * @param timeStamp the time-stamp for the message, in microseconds
          */
-        protected abstract List<MidiMessage> filter(MidiMessage message, long timeStamp) throws InvalidMidiDataException;
+        protected abstract void filter(MidiMessage message, long timeStamp) throws InvalidMidiDataException;
 
         /**
          * Sends a MIDI message and time-stamp to this receiver. If
@@ -346,48 +414,22 @@ public abstract class AmptDevice implements AmptMidiDevice {
         public void send(MidiMessage msg, long timeStamp) {
 
             // can't send if the device is closed
-            if(!_isOpen) {
+            if (!_isOpen) {
                 throw new IllegalStateException("This AmptDevice is closed.");
             }
 
             // can't send if the receiver is closed
-            if(_receiverClosed) {
+            if (_receiverClosed) {
                 throw new IllegalStateException("This AmptReceiver is closed.");
             }
 
-            // delegate to the implementing class to get list of messages to send
-            List<MidiMessage> msgs;
+            // delegate to the implementing filter
             try {
-                msgs = filter(msg, timeStamp);
+                filter(msg, timeStamp);
             } catch (InvalidMidiDataException imde) {
                 //TODO setup filter logging to MIDI console?
                 throw new RuntimeException(imde);
             }
-
-            // don't need to send if there are no transmitters
-            if(_transmitters.isEmpty()) {
-                return;
-            }
-
-            // send messages to each registered transmitter
-            for(MidiMessage midiMessage : msgs) {
-
-                for (Transmitter t : _transmitters) {
-
-                    Receiver receiver = t.getReceiver();
-
-                    // perform sanity check
-                    if(null == receiver) {
-                        throw new IllegalStateException("Receiver not initialized.");
-                    }
-
-                    // TODO - add scheduling
-                    // what if each Device is in its own thread and the
-                    // timestamp value here provides the delay?
-                    receiver.send(midiMessage, timeStamp);
-                }
-            }
-
         }
 
         @Override
@@ -395,46 +437,14 @@ public abstract class AmptDevice implements AmptMidiDevice {
             _receiverClosed = true;
 
             //TODO - this should be synchronized on super, not this... not sure how to do that
-            synchronized(_receivers) {
+            synchronized (_receivers) {
                 _receivers.remove(this);
             }
         }
 
-//        /**
-//         * Inner class which takes care of sending midi messages to the
-//         * appropriate receivers
-//         */
-//
-//        public class MessageSenderRunnable implements Runnable {
-//
-//            private Receiver receiver;
-//            private MidiMessage message;
-//            private long timeStamp;
-//
-//            /**
-//             * Constructor that takes the necessary arguments for the message to
-//             * be sent.
-//             *
-//             * @param receiver - The receiver to send the message to.
-//             * @param message - The message to send.
-//             * @param timeStamp - The timestamp of the message
-//             */
-//            public MessageSenderRunnable(Receiver receiver, MidiMessage message, long timeStamp) {
-//                this.receiver = receiver;
-//                this.message = message;
-//                this.timeStamp = timeStamp;
-//            }
-//
-//            // This is called when the thread starts running.
-//            @Override
-//            public void run() {
-//                receiver.send(message, timeStamp);
-//            }
-//        }
-        
     } // class AmptReceiver
 
-   /**
+    /**
      * A Transmitter sends MidiEvent objects to one or more Receivers. This
      * represents an output port on an AMPT Device. There may be multiple
      * Transmitters for a device.
@@ -456,6 +466,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
 
             //TODO Should this close the existing receiver if replacing?
             // _receiver.close();
+
             _receiver = receiver;
         }
 
@@ -478,12 +489,11 @@ public abstract class AmptDevice implements AmptMidiDevice {
          */
         @Override
         public void close() {
-            
+
             //TODO Should this close the receiver?
             // _receiver.close();
-            
+
             _transmitters.remove(this);
         }
     } // class AmptTransmitter
-
 }

@@ -84,12 +84,8 @@ public class KeyboardDevice extends AmptDevice {
      */
     public class KeyboardReceiver extends AmptReceiver {
 
-        List<MidiMessage> messages = new ArrayList<MidiMessage>();
-
         @Override
-        protected List<MidiMessage> filter(MidiMessage message, long timeStamp) throws InvalidMidiDataException {
-
-            messages.clear();
+        protected void filter(MidiMessage message, long timeStamp) throws InvalidMidiDataException {
 
             // scale the note value to appropriate octave
             // element 1 in message.getMessage is the same as msgNote.getData1() for a ShortMessage
@@ -99,8 +95,7 @@ public class KeyboardDevice extends AmptDevice {
             ShortMessage msgNote = new ShortMessage();
             msgNote.setMessage(message.getStatus(), _channel, note, _velocity);
 
-            messages.add(msgNote);
-            return messages;
+            sendNow(msgNote);
         }
     }
 
