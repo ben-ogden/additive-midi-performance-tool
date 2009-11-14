@@ -211,7 +211,7 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="examples.MetronomePanel" name="metronomePanel1">
+                    <Component class="ampt.ui.canvas.MetronomePanel" name="metronomePanel1">
                       <Properties>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">

@@ -73,7 +73,7 @@ public class MainWindow extends JFrame {
         jPanel2 = new javax.swing.JPanel();
         canvasPanel1 = new ampt.ui.canvas.CanvasPanel();
         jPanel3 = new javax.swing.JPanel();
-        metronomePanel1 = new examples.MetronomePanel();
+        metronomePanel1 = new ampt.ui.canvas.MetronomePanel();
         filterPropertiesPanel1 = new ampt.ui.canvas.FilterPropertiesPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
@@ -346,7 +346,7 @@ public class MainWindow extends JFrame {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextPane jTextPane1;
-    private examples.MetronomePanel metronomePanel1;
+    private ampt.ui.canvas.MetronomePanel metronomePanel1;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }
