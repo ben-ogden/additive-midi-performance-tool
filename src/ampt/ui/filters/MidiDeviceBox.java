@@ -60,7 +60,14 @@ public class MidiDeviceBox extends JPanel {
         if (midiDevice.getMaxTransmitters() != 0) {
             hasTransmitter = true;
         }
-        this.setToolTipText("Name: " + deviceInfo.getName() + " Description: " + deviceInfo.getDescription() + " Vendor: " + deviceInfo.getVendor() + " Version: " + deviceInfo.getVersion());
+
+        // use description for tooltip, otherwise device name
+        String description = deviceInfo.getDescription();
+        if(null != description && description.length() > 0) {
+            this.setToolTipText(description);
+        } else {
+            this.setToolTipText(deviceInfo.getName());
+        }
 
         // Add a mouse adapter so we can move the box around the canvas panel.
         MyMouseAdapter mouseAdapter = new MyMouseAdapter(this);
