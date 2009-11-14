@@ -18,10 +18,6 @@ import javax.sound.midi.Transmitter;
  */
 public abstract class AmptDevice implements AmptMidiDevice {
 
-    // to simplify, the vendor and version will be static for all AMPT devices
-    private static final String VENDOR = "AMPT";
-    private static final String VERSION = "alpha"; // don't want to deal with this
-    
     // Each device has a AmptDeviceInfo describing that device
     private final AmptDeviceInfo _deviceInfo;
 
@@ -41,7 +37,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * @param description
      */
     public AmptDevice(String name, String description) {
-        _deviceInfo = new AmptDeviceInfo(name, VENDOR, description, VERSION);
+        _deviceInfo = new AmptDeviceInfo(name, description, this.getClass());
     }
 
     /**
@@ -133,7 +129,6 @@ public abstract class AmptDevice implements AmptMidiDevice {
      *                    no additional transmitters or receivers to make the
      *                    connection
      */
-    @Override
     public void connectTo(MidiDevice anotherDevice) throws MidiUnavailableException {
         this.getTransmitter().setReceiver(anotherDevice.getReceiver());
     }
@@ -362,18 +357,6 @@ public abstract class AmptDevice implements AmptMidiDevice {
         receiver.send(midiMessage, -1); // timestamp not currently supported
 
     }
-
-    /**
-     * A MidiDevice.Info object contains assorted data about a MidiDevice,
-     * including its name, the company who created it, and descriptive text.
-     */
-    public class AmptDeviceInfo extends Info {
-
-        public AmptDeviceInfo(String name, String vendor, String description,
-                String version) {
-            super(name, vendor, description, version);
-        }
-    } // class AmptDeviceInfo
 
     /**
      * A Receivers accepts MIDI messages. This represents an input port on an
