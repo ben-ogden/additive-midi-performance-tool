@@ -1,6 +1,5 @@
 package ampt.examples.filters;
 
-import examples.filters.*;
 import java.util.HashMap;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
