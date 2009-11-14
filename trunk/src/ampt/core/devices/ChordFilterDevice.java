@@ -8,7 +8,7 @@ import javax.sound.midi.ShortMessage;
 
 import ampt.midi.chord.ChordType;
 import ampt.midi.chord.ChordInversion;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * This is an implementation of a filter that creates a chord.  In this 
@@ -71,12 +71,14 @@ public class ChordFilterDevice extends AmptDevice {
      */
     public class ChordFilterReceiver extends AmptReceiver {
 
-        List<MidiMessage> messages = new ArrayList<MidiMessage>();
+        int channel, command, data1, data2;
 
         @Override
-        protected List<MidiMessage> filter(MidiMessage message, long timeStamp) {
+        protected void filter(MidiMessage message, long timeStamp) {
 
-            messages.clear();
+            // using a list in case the chordfilter is expanded to support chords larger than 3 notes
+            List<MidiMessage> messages = new LinkedList<MidiMessage>();
+
 
             ShortMessage third = null;
             ShortMessage fifth = null;
@@ -84,39 +86,44 @@ public class ChordFilterDevice extends AmptDevice {
             // If the message is not a short message, we don't know how to deal
             // with it now.
             if (message instanceof ShortMessage) {
+
                 ShortMessage root = (ShortMessage) message;
+                command = root.getCommand();
+                channel = root.getChannel();
+                data1 = root.getData1();
+                data2 = root.getData2();
+
                 // We only care about note on and note off messages.
                 if (root.getCommand() == ShortMessage.NOTE_ON || root.getCommand() == ShortMessage.NOTE_OFF) {
+
+                    try {
+                        root.setMessage(command, channel, data1 + chordInversion.getRootInterval(), data2);
+                        messages.add(root);
+                    } catch (InvalidMidiDataException ex) {}
+
 
                     // Create the note that makes the third of the chord.
                     third = new ShortMessage();
                     // Try to make the message, if it fails, then the note for
                     // the third is probably not supported.
                     try {
-                        third.setMessage(root.getCommand(), root.getChannel(), root.getData1() + chordType.getThirdInterval() + chordInversion.getThirdInterval(), root.getData2());
+                        third.setMessage(command, channel, data1 + chordType.getThirdInterval() + chordInversion.getThirdInterval(), data2);
                         messages.add(third);
-                    } catch (InvalidMidiDataException ex) {
-                        // fail silently?
-                    }
+                    } catch (InvalidMidiDataException ex) {}
+
                     // Try to make the message, if it fails, then the note for
                     // the fifth is probably not supported.
                     fifth = new ShortMessage();
                     try {
-                        fifth.setMessage(root.getCommand(), root.getChannel(), root.getData1() + chordType.getFifthInterval() + chordInversion.getFifthInterval(), root.getData2());
+                        fifth.setMessage(command, channel, data1 + chordType.getFifthInterval() + chordInversion.getFifthInterval(), data2);
                         messages.add(fifth);
-                    } catch (InvalidMidiDataException ex) {
-                        // fail silently?
-                    }
-
-                    try {
-                        root.setMessage(root.getCommand(), root.getChannel(), root.getData1() + chordInversion.getRootInterval(), root.getData2());
-                        messages.add(root);
-                    } catch (InvalidMidiDataException ex) {
-                        // fail silently?
-                    }
+                    } catch (InvalidMidiDataException ex) {}
                 }
             }
-            return messages;
+
+            // send all the messages
+            sendNow(messages);
+
         }
     }
 }
