@@ -1,6 +1,7 @@
 package ampt.core.devices;
 
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.spi.MidiDeviceProvider;
@@ -12,23 +13,28 @@ import javax.sound.midi.spi.MidiDeviceProvider;
  */
 public class AmptMidiDeviceProvider extends MidiDeviceProvider{
 
-    private HashMap<Info, Class> deviceMap;
-
+    /*
+     * Synchronized, sorted set since multiple threads may be acting on the
+     * device provider and since we want devices to always appear in the same
+     * order.
+     */
+    private List<Info> deviceList;
 
     /**
-     * Constructor which creates the list of supported devices.
+     * Create a new AmptMidiDeviceProvider. This is called by MidiSystem and is
+     * registered in META-INF.services/javax.sound.midi.spi.MidiDeviceProvider.
      */
     public AmptMidiDeviceProvider(){
 
-        deviceMap = new HashMap<Info, Class>();
+        deviceList = new LinkedList<Info>();
 
         /*
-         * Register all AMPT devices here with the Info and device Class
+         * Register all AMPT devices here with the device name and device Class
          */
-        deviceMap.put(new ChordFilterDevice().getDeviceInfo(), ChordFilterDevice.class);
-        deviceMap.put(new KeyboardDevice().getDeviceInfo(), KeyboardDevice.class);
-        deviceMap.put(new NoteViewerDevice().getDeviceInfo(), NoteViewerDevice.class);
-        
+        deviceList.add(new ChordFilterDevice().getDeviceInfo());
+        deviceList.add(new KeyboardDevice().getDeviceInfo());
+        deviceList.add(new NoteViewerDevice().getDeviceInfo());
+
     }
 
     /**
@@ -39,7 +45,7 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
      */
     @Override
     public Info[] getDeviceInfo() {
-        return deviceMap.keySet().toArray(new Info[0]);
+        return deviceList.toArray(new Info[0]);
     }
 
     /**
@@ -52,7 +58,7 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
     public MidiDevice getDevice(Info info) {
 
         // get the class for this device and attempt to instantiate it
-        Class amptDeviceClass = deviceMap.get(info);
+        Class amptDeviceClass = ((AmptDeviceInfo)info).getDeviceClass();
 
         if(null == amptDeviceClass) {
             throw new IllegalArgumentException(
@@ -61,9 +67,7 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
 
         try {
 
-            //TODO - preferable to use a static getInstance method instead of
-            //       calling constructor in case some filters are singleton
-
+            // create a new AmptMidiDevice
             return (MidiDevice) amptDeviceClass.newInstance();
 
         } catch (InstantiationException ie) {
