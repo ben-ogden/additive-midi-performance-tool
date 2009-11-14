@@ -1,10 +1,15 @@
-package ampt.ui.canvas;
+package ampt.examples;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 
 /**
  * this class demonstrates a simple metronome animation.
@@ -17,9 +22,6 @@ public class AnimatedMetronome extends JPanel implements Runnable {
     private final AtomicInteger tempo = new AtomicInteger(60);
     private final AtomicInteger position = new AtomicInteger(1);
 
-    public AnimatedMetronome() {
-        this.setPreferredSize(new Dimension(28, 90));
-    }
     /*
      * @param tempo the desired tempo
      */
@@ -36,22 +38,22 @@ public class AnimatedMetronome extends JPanel implements Runnable {
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setPaint(Color.WHITE);
-        g2d.fill((new Rectangle2D.Float(2, 2, 60, 25)));
+        g2d.fill((new Rectangle2D.Float(20, 20, 40, 25)));
+
+        g2d.setPaint(Color.BLACK);
+        g2d.draw(new Rectangle2D.Float(19, 19, 41, 26));
+        g2d.drawLine(29, 20, 29, 23);
+        g2d.drawLine(40, 20, 40, 26);
+        g2d.drawLine(51, 20, 51, 23);
 
         g2d.setPaint(Color.GREEN);
         for(int i = 0; i < position.get(); i++) {
-            g2d.fill((new Rectangle2D.Float(2 + (3 * i), 2, 3, 25)));
+            g2d.fill((new Rectangle2D.Float(20 + (2 * i), (40 - i), 2, 5 + i)));
         }
-
-        g2d.setPaint(Color.BLACK);
-        g2d.draw(new Rectangle2D.Float(1, 1, 61, 26));
-        g2d.drawLine(16, 2, 16, 4);
-        g2d.drawLine(31, 2, 31, 7);
-        g2d.drawLine(46, 2, 46, 4);
 
         g2d.setPaint(Color.RED);
         if (position.get() == 20) {
-            g2d.fill((new Ellipse2D.Float(63, 1, 25, 25)));
+            g2d.fill((new Ellipse2D.Float(70, 15, 30, 30)));
         }
     }
 
@@ -97,6 +99,15 @@ public class AnimatedMetronome extends JPanel implements Runnable {
                 nextTick += (1000000000 / (tempo.get() / 3));
             }
         }
+    }
+
+    public static void main(String args[]) {
+        JFrame frame = new JFrame("Metronome Animation");
+        frame.setSize(100, 100);
+        AnimatedMetronome am = new AnimatedMetronome();
+        frame.setContentPane(am);
+        frame.setVisible(true);
+        am.start();
     }
 
 }
