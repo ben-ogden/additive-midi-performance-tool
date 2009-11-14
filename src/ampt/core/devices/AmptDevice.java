@@ -355,11 +355,6 @@ public abstract class AmptDevice implements AmptMidiDevice {
                 throw new IllegalStateException("This AmptReceiver is closed.");
             }
 
-            // don't need to send if there are no transmitters
-            if(_transmitters.isEmpty()) {
-                return;
-            }
-
             // delegate to the implementing class to get list of messages to send
             List<MidiMessage> msgs;
             try {
@@ -367,6 +362,11 @@ public abstract class AmptDevice implements AmptMidiDevice {
             } catch (InvalidMidiDataException imde) {
                 //TODO setup filter logging to MIDI console?
                 throw new RuntimeException(imde);
+            }
+
+            // don't need to send if there are no transmitters
+            if(_transmitters.isEmpty()) {
+                return;
             }
 
             // send messages to each registered transmitter
