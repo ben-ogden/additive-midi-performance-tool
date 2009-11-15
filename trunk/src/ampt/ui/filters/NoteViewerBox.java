@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ampt.ui.filters;
 
 import ampt.core.devices.NoteViewerDevice;
@@ -10,8 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -91,25 +86,23 @@ public class NoteViewerBox extends MidiDeviceBox{
         overridePaintComponent = false;
 
         this.setPreferredSize(new Dimension(100, 250));
-
         this.setBackground(Color.WHITE);
         this.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Viewer", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP));
-
         this.setLayout(null);
 
+
+
         try{
-            File bassClefFile = new File("C:/Documents and Settings/Christopher/My Documents/NetBeansProjects/AMPT/trunk/src/images/bassclef.jpg");
-//            File bassClefFile = new File("./images/bassclef.jpg");
-            bassClefImage = ImageIO.read(bassClefFile);
+            InputStream bassInStream = this.getClass().getClassLoader().getResourceAsStream("images/bassclef.jpg");
+            bassClefImage = ImageIO.read(bassInStream);            
         } catch (IOException ex){
-            bassClefImage = null;
+            //TODO log error or throw exception?
         }
         try{
-            File trebleClefFile = new File("C:/Documents and Settings/Christopher/My Documents/NetBeansProjects/AMPT/trunk/src/images/trebleclef.jpg");
-//            File trebleClefFile = new File("./images/trebleclef.jpg");
-            trebleClefImage = ImageIO.read(trebleClefFile);
+            InputStream trebleInStream = this.getClass().getClassLoader().getResourceAsStream("images/trebleclef.jpg");
+            trebleClefImage = ImageIO.read(trebleInStream);
         } catch (IOException ex) {
-            trebleClefImage = null;
+            //TODO log error or throw exception?
         }
 
 
