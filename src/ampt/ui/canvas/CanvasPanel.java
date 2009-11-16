@@ -8,16 +8,19 @@ package ampt.ui.canvas;
 import ampt.ui.filters.MidiDeviceBox;
 import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 /**
  * This is the canvas that the ampt system is visually represented on.
@@ -28,6 +31,9 @@ public class CanvasPanel extends javax.swing.JPanel {
 
     Vector<MidiDeviceBox> midiDeviceBoxes;
     Vector<MidiDeviceConnection> midiDeviceConnections;
+    private JMenuItem addConnectionMenuItem;
+
+//    private JPopupMenu popupMenu;
 
     /** Creates new form CanvasPanel */
     public CanvasPanel() {
@@ -66,12 +72,14 @@ public class CanvasPanel extends javax.swing.JPanel {
             MidiDeviceBox box = (MidiDeviceBox) c;
             midiDeviceBoxes.add(box);
             if (box.hasTransmitter()) {
-                MyActionListener myActionListener = new MyActionListener(box, this);
-                final PopupMenu popupMenu = new PopupMenu();
-                MenuItem menuItem = new MenuItem("Add Filter Connection");
-                menuItem.addActionListener(myActionListener);
-                popupMenu.add(menuItem);
+                final AddConnectionActionListener myActionListener = new AddConnectionActionListener(box, this);
+                final JPopupMenu popupMenu = new JPopupMenu();
+                addConnectionMenuItem = new JMenuItem("Add Filter Connection");
+                addConnectionMenuItem.addActionListener(myActionListener);
+                popupMenu.add(addConnectionMenuItem);
                 this.add(popupMenu);
+                final JMenu removeConnectionMenu = new JMenu("Remove Filter Connection");
+                final CanvasPanel thisPanel = this;
                 MouseListener popupListener = new MouseAdapter() {
 
                     public void mousePressed(MouseEvent e) {
@@ -84,6 +92,32 @@ public class CanvasPanel extends javax.swing.JPanel {
 
                     private void maybeShowPopup(MouseEvent e) {
                         if (e.isPopupTrigger()) {
+                            /** Fist we need to add the remove connection menu if
+                             * there are any active connections to this device
+                             */
+                            removeConnectionMenu.removeAll();
+                            boolean hasConnections = false;
+                            for (final MidiDeviceConnection conn : midiDeviceConnections) {
+                                if (conn.getFrom().equals(e.getSource())) {
+                                    JMenuItem menuItem = new JMenuItem("To: " + conn.getTo().getDeviceInfo().getName());
+                                    menuItem.addActionListener(new RemoveConnectionActionListener(conn, thisPanel));
+                                    removeConnectionMenu.add(menuItem);
+                                    hasConnections = true;
+                                } else if (conn.getTo().equals(e.getSource())) {
+                                    JMenuItem menuItem = new JMenuItem("From: " + conn.getFrom().getDeviceInfo().getName());
+                                    menuItem.addActionListener(myActionListener);
+                                    removeConnectionMenu.add(menuItem);
+                                    hasConnections = true;
+                                }
+                            }
+                            // if there are connections, add the menu
+                            if (hasConnections) {
+                                popupMenu.add(removeConnectionMenu);
+                            }
+                            // if there are no connections, remove the menu
+                            else {
+                                popupMenu.remove(removeConnectionMenu);
+                            }
                             popupMenu.show(e.getComponent(),
                                     e.getX(), e.getY());
                         }
@@ -99,6 +133,36 @@ public class CanvasPanel extends javax.swing.JPanel {
     }
 
     @Override
+    public void remove(Component comp) {
+        if(comp instanceof MidiDeviceBox){
+            MidiDeviceBox box = (MidiDeviceBox) comp;
+            midiDeviceBoxes.remove(box);
+            for(MidiDeviceConnection conn : midiDeviceConnections){
+                if(conn.getTo().equals(box) || conn.getFrom().equals(box)){
+                    this.remove(conn);
+                }
+            }
+            super.remove(comp);
+        }
+        if(comp instanceof MidiDeviceConnection){
+            try {
+                MidiDeviceConnection conn = (MidiDeviceConnection) comp;
+                conn.getFrom().disconnectFrom(conn.getTo());
+                midiDeviceConnections.remove(conn);
+                super.remove(comp);
+            } catch (MidiUnavailableException ex) {
+                JOptionPane.showMessageDialog(null,
+                            "Unable to disconnect these devices. " + ex.getLocalizedMessage(),
+                            "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else {
+            super.remove(comp);
+        }
+        System.out.println(comp);
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (MidiDeviceConnection conn : midiDeviceConnections) {
@@ -106,12 +170,12 @@ public class CanvasPanel extends javax.swing.JPanel {
         }
     }
 
-    private class MyActionListener implements ActionListener {
+    private class AddConnectionActionListener implements ActionListener {
 
         private MidiDeviceBox box;
         private CanvasPanel panel;
 
-        public MyActionListener(MidiDeviceBox box, CanvasPanel panel) {
+        public AddConnectionActionListener(MidiDeviceBox box, CanvasPanel panel) {
             this.box = box;
             this.panel = panel;
         }
@@ -120,11 +184,30 @@ public class CanvasPanel extends javax.swing.JPanel {
         public void actionPerformed(ActionEvent e) {
             MyMouseAdapter mouseAdapter = new MyMouseAdapter(box, panel);
             for (MidiDeviceBox toBox : midiDeviceBoxes) {
-                if(toBox.hasReceiver())
+                if (toBox.hasReceiver()) {
                     toBox.addMouseListener(mouseAdapter);
+                }
             }
             panel.addMouseListener(mouseAdapter);
         }
+    }
+
+    private class RemoveConnectionActionListener implements ActionListener {
+
+        private MidiDeviceConnection conn;
+        private CanvasPanel panel;
+
+        public RemoveConnectionActionListener(MidiDeviceConnection conn, CanvasPanel panel) {
+            this.conn = conn;
+            this.panel = panel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            panel.remove(conn);
+            panel.repaint();
+        }
+
     }
 
     private class MyMouseAdapter extends MouseAdapter {
@@ -157,13 +240,12 @@ public class CanvasPanel extends javax.swing.JPanel {
                     panel.add(new MidiDeviceConnection(sourceBox, destBox));
                     panel.repaint();
                 } catch (MidiUnavailableException ex) {
-                    
+
                     JOptionPane.showMessageDialog(null,
-                            "Unable to connect these devices. "
-                            + ex.getLocalizedMessage(),
+                            "Unable to connect these devices. " + ex.getLocalizedMessage(),
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                
+
             }
 
         }

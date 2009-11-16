@@ -9,6 +9,8 @@ import java.awt.event.MouseEvent;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Receiver;
+import javax.sound.midi.Transmitter;
 import javax.swing.JPanel;
 
 /**
@@ -76,6 +78,10 @@ public class MidiDeviceBox extends JPanel {
 
     }
 
+    public Info getDeviceInfo(){
+        return midiDevice.getDeviceInfo();
+    }
+
     /**
      * Connect the output of this MidiDeviceBox to the input of another
      * MidiDeviceBox.
@@ -88,6 +94,25 @@ public class MidiDeviceBox extends JPanel {
         //TODO - i would prefer if we could call AmptDevice.connectTo, but not all
         //       devices are AmptDevices.
         midiDevice.getTransmitter().setReceiver(anotherDevice.midiDevice.getReceiver());
+    }
+
+    /**
+     * Disconnects the output of this MidiDeviceBox from the input of another
+     * MidiDeviceBox.
+     *
+     * @param anotherDevice The device that will be disconnected
+     * 
+     * @throws MidiUnavailableException
+     */
+    public void disconnectFrom(MidiDeviceBox anotherDevice) throws MidiUnavailableException {
+        for(Transmitter transmitter : midiDevice.getTransmitters()){
+            for(Receiver receiver : anotherDevice.midiDevice.getReceivers()){
+                if(transmitter.getReceiver().equals(receiver)){
+                    transmitter.close();
+                    return;
+                }
+            }
+        }
     }
 
     public boolean hasTransmitter() {

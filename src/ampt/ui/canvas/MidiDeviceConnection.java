@@ -24,6 +24,14 @@ public class MidiDeviceConnection extends JComponent {
         from.connectTo(to);
     }
 
+    public MidiDeviceBox getFrom(){
+        return _from;
+    }
+
+    public MidiDeviceBox getTo(){
+        return _to;
+    }
+
     public void paintOnCanvas(Graphics g) {
         int fromTopX = _from.getX() + _from.getWidth() / 2;
         int fromTopY = _from.getY();
