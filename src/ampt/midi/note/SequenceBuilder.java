@@ -185,35 +185,4 @@ public class SequenceBuilder {
     public int trackCount() {
         return sequence.getTracks().length;
     }
-
-    public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, InterruptedException {
-        SequenceBuilder sb = new SequenceBuilder(Sequence.PPQ, 480);
-        sb.addEighthNote(0, 60, 93);
-
-        final Sequencer sqr = MidiSystem.getSequencer();
-        sqr.open();
-        sqr.setSequence(sb.getSequence());
-        sqr.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
-        sqr.setLoopStartPoint(0);
-        sqr.setLoopEndPoint(sb.getSequence().getTickLength());
-        sqr.setTempoInMPQ(1000000);
-        sqr.addMetaEventListener(new MetaEventListener(){
-            public void meta(MetaMessage m) {
-                System.out.println("meta");
-            }
-        });
-        sqr.start();
-
-        Thread.sleep(5000);
-
-        MetaMessage msg = new MetaMessage();
-        byte[] data = {62, 66, 32};
-        msg.setMessage(81, data, 3);
-        MidiEvent e = new MidiEvent(msg, 0);
-        sqr.setTickPosition(0);
-        sqr.getSequence().getTracks()[0].add(e);
-        //sqr.getReceiver().send(msg, -1);
-
-        //sqr.setTempoInMPQ(500000);
-    }
 }
