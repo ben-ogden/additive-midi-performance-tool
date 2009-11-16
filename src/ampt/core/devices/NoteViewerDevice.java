@@ -56,11 +56,18 @@ public class NoteViewerDevice extends AmptDevice {
                 final ShortMessage sMsg = (ShortMessage) message;
                 for (final NoteViewerBox box : listeners) {
 
-                    if (sMsg.getCommand() == ShortMessage.NOTE_ON) {
-                        box.noteOn(sMsg.getData1());
-                    } else if (sMsg.getCommand() == ShortMessage.NOTE_OFF) {
+                    // check for note off - some keyboards transmit note off as
+                    // note one with velocity of zero
+                    if (sMsg.getCommand() == ShortMessage.NOTE_OFF ||
+                                (sMsg.getCommand() == ShortMessage.NOTE_ON &&
+                                 sMsg.getData2() == 0x0)) {
                         box.noteOff(sMsg.getData1());
                     }
+
+                    // check for note on
+                    else if (sMsg.getCommand() == ShortMessage.NOTE_ON) {
+                        box.noteOn(sMsg.getData1());
+                    } 
 
                 }
             }
