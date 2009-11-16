@@ -21,6 +21,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 
 /**
  * This is the canvas that the ampt system is visually represented on.
@@ -31,10 +32,8 @@ public class CanvasPanel extends javax.swing.JPanel {
 
     Vector<MidiDeviceBox> midiDeviceBoxes;
     Vector<MidiDeviceConnection> midiDeviceConnections;
-    private JMenuItem addConnectionMenuItem;
 
 //    private JPopupMenu popupMenu;
-
     /** Creates new form CanvasPanel */
     public CanvasPanel() {
         initComponents();
@@ -71,60 +70,59 @@ public class CanvasPanel extends javax.swing.JPanel {
         if (c instanceof MidiDeviceBox) {
             MidiDeviceBox box = (MidiDeviceBox) c;
             midiDeviceBoxes.add(box);
+            final JPopupMenu popupMenu = new JPopupMenu();
             if (box.hasTransmitter()) {
-                final AddConnectionActionListener myActionListener = new AddConnectionActionListener(box, this);
-                final JPopupMenu popupMenu = new JPopupMenu();
-                addConnectionMenuItem = new JMenuItem("Add Filter Connection");
-                addConnectionMenuItem.addActionListener(myActionListener);
+                JMenuItem addConnectionMenuItem = new JMenuItem("Add Filter Connection");
+                addConnectionMenuItem.addActionListener(new AddConnectionActionListener(box, this));
                 popupMenu.add(addConnectionMenuItem);
-                this.add(popupMenu);
-                final JMenu removeConnectionMenu = new JMenu("Remove Filter Connection");
-                final CanvasPanel thisPanel = this;
-                MouseListener popupListener = new MouseAdapter() {
-
-                    public void mousePressed(MouseEvent e) {
-                        maybeShowPopup(e);
-                    }
-
-                    public void mouseReleased(MouseEvent e) {
-                        maybeShowPopup(e);
-                    }
-
-                    private void maybeShowPopup(MouseEvent e) {
-                        if (e.isPopupTrigger()) {
-                            /** Fist we need to add the remove connection menu if
-                             * there are any active connections to this device
-                             */
-                            removeConnectionMenu.removeAll();
-                            boolean hasConnections = false;
-                            for (final MidiDeviceConnection conn : midiDeviceConnections) {
-                                if (conn.getFrom().equals(e.getSource())) {
-                                    JMenuItem menuItem = new JMenuItem("To: " + conn.getTo().getDeviceInfo().getName());
-                                    menuItem.addActionListener(new RemoveConnectionActionListener(conn, thisPanel));
-                                    removeConnectionMenu.add(menuItem);
-                                    hasConnections = true;
-                                } else if (conn.getTo().equals(e.getSource())) {
-                                    JMenuItem menuItem = new JMenuItem("From: " + conn.getFrom().getDeviceInfo().getName());
-                                    menuItem.addActionListener(myActionListener);
-                                    removeConnectionMenu.add(menuItem);
-                                    hasConnections = true;
-                                }
-                            }
-                            // if there are connections, add the menu
-                            if (hasConnections) {
-                                popupMenu.add(removeConnectionMenu);
-                            }
-                            // if there are no connections, remove the menu
-                            else {
-                                popupMenu.remove(removeConnectionMenu);
-                            }
-                            popupMenu.show(e.getComponent(),
-                                    e.getX(), e.getY());
-                        }
-                    }
-                };
-                box.addMouseListener(popupListener);
             }
+            this.add(popupMenu);
+            final JMenu removeConnectionMenu = new JMenu("Remove Filter Connection");
+            final CanvasPanel thisPanel = this;
+            MouseListener popupListener = new MouseAdapter() {
+
+                public void mousePressed(MouseEvent e) {
+                    maybeShowPopup(e);
+                }
+
+                public void mouseReleased(MouseEvent e) {
+                    maybeShowPopup(e);
+                }
+
+                private void maybeShowPopup(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        /** Fist we need to add the remove connection menu if
+                         * there are any active connections to this device
+                         */
+                        removeConnectionMenu.removeAll();
+                        boolean hasConnections = false;
+                        for (final MidiDeviceConnection conn : midiDeviceConnections) {
+                            if (conn.getFrom().equals(e.getSource())) {
+                                JMenuItem menuItem = new JMenuItem("To: " + conn.getTo().getDeviceInfo().getName());
+                                menuItem.addActionListener(new RemoveConnectionActionListener(conn, thisPanel));
+                                removeConnectionMenu.add(menuItem);
+                                hasConnections = true;
+                            } else if (conn.getTo().equals(e.getSource())) {
+                                JMenuItem menuItem = new JMenuItem("From: " + conn.getFrom().getDeviceInfo().getName());
+                                menuItem.addActionListener(new RemoveConnectionActionListener(conn, thisPanel));
+                                removeConnectionMenu.add(menuItem);
+                                hasConnections = true;
+                            }
+                        }
+                        // if there are connections, add the menu
+                        if (hasConnections) {
+                            popupMenu.add(removeConnectionMenu);
+                        } // if there are no connections, remove the menu
+                        else {
+                            popupMenu.remove(removeConnectionMenu);
+                        }
+                        popupMenu.show(e.getComponent(),
+                                e.getX(), e.getY());
+                    }
+                }
+            };
+            box.addMouseListener(popupListener);
+
         } else if (c instanceof MidiDeviceConnection) {
             MidiDeviceConnection conn = (MidiDeviceConnection) c;
             midiDeviceConnections.add(conn);
@@ -134,17 +132,18 @@ public class CanvasPanel extends javax.swing.JPanel {
 
     @Override
     public void remove(Component comp) {
-        if(comp instanceof MidiDeviceBox){
+        if (comp instanceof MidiDeviceBox) {
             MidiDeviceBox box = (MidiDeviceBox) comp;
-            midiDeviceBoxes.remove(box);
-            for(MidiDeviceConnection conn : midiDeviceConnections){
-                if(conn.getTo().equals(box) || conn.getFrom().equals(box)){
+            for (MidiDeviceConnection conn : midiDeviceConnections) {
+                if (conn.getTo().equals(box) || conn.getFrom().equals(box)) {
                     this.remove(conn);
                 }
             }
+            box.closeDevice();
+            midiDeviceBoxes.remove(box);
             super.remove(comp);
         }
-        if(comp instanceof MidiDeviceConnection){
+        if (comp instanceof MidiDeviceConnection) {
             try {
                 MidiDeviceConnection conn = (MidiDeviceConnection) comp;
                 conn.getFrom().disconnectFrom(conn.getTo());
@@ -152,14 +151,12 @@ public class CanvasPanel extends javax.swing.JPanel {
                 super.remove(comp);
             } catch (MidiUnavailableException ex) {
                 JOptionPane.showMessageDialog(null,
-                            "Unable to disconnect these devices. " + ex.getLocalizedMessage(),
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                        "Unable to disconnect these devices. " + ex.getLocalizedMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        else {
+        } else {
             super.remove(comp);
         }
-        System.out.println(comp);
     }
 
     @Override
@@ -207,7 +204,23 @@ public class CanvasPanel extends javax.swing.JPanel {
             panel.remove(conn);
             panel.repaint();
         }
+    }
 
+    private class RemoveBoxActionListener implements ActionListener {
+
+        private MidiDeviceBox box;
+        private CanvasPanel panel;
+
+        public RemoveBoxActionListener(MidiDeviceBox box, CanvasPanel panel) {
+            this.box = box;
+            this.panel = panel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            panel.remove(box);
+            panel.repaint();
+        }
     }
 
     private class MyMouseAdapter extends MouseAdapter {
