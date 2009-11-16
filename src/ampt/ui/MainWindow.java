@@ -13,6 +13,7 @@ import ampt.ui.filters.ChordFilterBox;
 import ampt.ui.filters.KeyboardBox;
 import ampt.ui.filters.MidiDeviceBox;
 import ampt.ui.filters.NoteViewerBox;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,36 +75,32 @@ public class MainWindow extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        canvasToolbar1 = new ampt.ui.canvas.CanvasToolbar();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        canvasToolbar2 = new ampt.ui.canvas.CanvasToolbar();
-        jPanel2 = new javax.swing.JPanel();
+        splitPane = new javax.swing.JSplitPane();
+        canvasPane = new javax.swing.JPanel();
+        toolbarPane = new ampt.ui.canvas.CanvasToolbar();
+        canvasPanel = new javax.swing.JPanel();
         canvasPanel1 = new ampt.ui.canvas.CanvasPanel();
-        jPanel3 = new javax.swing.JPanel();
+        propertiesPanel = new javax.swing.JPanel();
         metronomePanel1 = new ampt.ui.canvas.MetronomePanel();
         filterPropertiesPanel1 = new ampt.ui.canvas.FilterPropertiesPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        consoleScrollPane = new javax.swing.JScrollPane();
+        consolePane = new ampt.ui.canvas.AmptConsolePane();
+        amptMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
         viewMenu = new javax.swing.JMenu();
 
-        canvasToolbar1.setRollover(true);
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Additive MIDI Performance Tool");
 
-        jSplitPane1.setBorder(null);
-        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        jSplitPane1.setResizeWeight(0.5);
+        splitPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        splitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        splitPane.setResizeWeight(0.5);
 
-        canvasToolbar2.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas Toolbar"));
-        canvasToolbar2.setFloatable(false);
-        canvasToolbar2.setOrientation(1);
-        canvasToolbar2.setRollover(true);
+        toolbarPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas Toolbar"));
+        toolbarPane.setFloatable(false);
+        toolbarPane.setOrientation(1);
+        toolbarPane.setRollover(true);
 
         Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();
         for(Info deviceInfo: deviceInfos){
@@ -114,7 +111,7 @@ public class MainWindow extends JFrame {
             }
 
             MidiDeviceButton button = new MidiDeviceButton(deviceInfo);
-            canvasToolbar2.add(button);
+            toolbarPane.add(button);
             button.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     buttonHandler(evt);
@@ -123,7 +120,7 @@ public class MainWindow extends JFrame {
 
         }
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas"));
+        canvasPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas"));
 
         canvasPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -131,25 +128,25 @@ public class MainWindow extends JFrame {
         canvasPanel1.setLayout(canvasPanel1Layout);
         canvasPanel1Layout.setHorizontalGroup(
             canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 238, Short.MAX_VALUE)
+            .addGap(0, 464, Short.MAX_VALUE)
         );
         canvasPanel1Layout.setVerticalGroup(
             canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 213, Short.MAX_VALUE)
+            .addGap(0, 526, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout canvasPanelLayout = new javax.swing.GroupLayout(canvasPanel);
+        canvasPanel.setLayout(canvasPanelLayout);
+        canvasPanelLayout.setHorizontalGroup(
+            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(canvasPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(canvasPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        canvasPanelLayout.setVerticalGroup(
+            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(canvasPanelLayout.createSequentialGroup()
                 .addComponent(canvasPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -162,63 +159,64 @@ public class MainWindow extends JFrame {
         filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
         filterPropertiesPanel1Layout.setHorizontalGroup(
             filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 193, Short.MAX_VALUE)
+            .addGap(0, 171, Short.MAX_VALUE)
         );
         filterPropertiesPanel1Layout.setVerticalGroup(
             filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 142, Short.MAX_VALUE)
+            .addGap(0, 455, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+        javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
+        propertiesPanel.setLayout(propertiesPanelLayout);
+        propertiesPanelLayout.setHorizontalGroup(
+            propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
             .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        propertiesPanelLayout.setVerticalGroup(
+            propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(propertiesPanelLayout.createSequentialGroup()
                 .addComponent(metronomePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(canvasToolbar2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+        javax.swing.GroupLayout canvasPaneLayout = new javax.swing.GroupLayout(canvasPane);
+        canvasPane.setLayout(canvasPaneLayout);
+        canvasPaneLayout.setHorizontalGroup(
+            canvasPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(canvasPaneLayout.createSequentialGroup()
+                .addComponent(toolbarPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(propertiesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasToolbar2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        canvasPaneLayout.setVerticalGroup(
+            canvasPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(toolbarPane, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+            .addComponent(propertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Canvas", jPanel1);
+        splitPane.setTopComponent(canvasPane);
 
-        jSplitPane1.setLeftComponent(jTabbedPane1);
+        consoleScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "MIDI Console"));
+        consoleScrollPane.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
+        consoleScrollPane.setViewportBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(24, 200));
+        consolePane.setBorder(null);
+        consolePane.setForeground(new java.awt.Color(51, 51, 51));
+        consolePane.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
+        consoleScrollPane.setViewportView(consolePane);
 
-        jTextPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Console"));
-        jTextPane1.setEditable(false);
-        jScrollPane1.setViewportView(jTextPane1);
-
-        jSplitPane1.setRightComponent(jScrollPane1);
+        splitPane.setBottomComponent(consoleScrollPane);
 
         fileMenu.setText("File");
-        jMenuBar1.add(fileMenu);
+        amptMenuBar.add(fileMenu);
 
         editMenu.setText("Edit");
-        jMenuBar1.add(editMenu);
+        amptMenuBar.add(editMenu);
 
         viewMenu.setText("View");
 
@@ -234,9 +232,9 @@ public class MainWindow extends JFrame {
             viewMenu.add(item);
         }
 
-        jMenuBar1.add(viewMenu);
+        amptMenuBar.add(viewMenu);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(amptMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -244,14 +242,14 @@ public class MainWindow extends JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
+                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 874, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -318,12 +316,18 @@ public class MainWindow extends JFrame {
                         MidiDeviceBox box = null;
                         if (device instanceof KeyboardDevice) {
                             KeyboardDevice keyboard = (KeyboardDevice) device;
+                            keyboard.setLogger(consolePane.getPrintStream(Color.CYAN));
+                            keyboard.setMidiDebugEnabled(true);
                             box = new KeyboardBox(keyboard);
                         } else if (device instanceof ChordFilterDevice) {
                             ChordFilterDevice chordDevice = (ChordFilterDevice) device;
+                            chordDevice.setLogger(consolePane.getPrintStream(Color.BLUE));
+                            chordDevice.setMidiDebugEnabled(true);
                             box = new ChordFilterBox(chordDevice);
                         } else if (device instanceof NoteViewerDevice) {
                             NoteViewerDevice noteViewerDevice = (NoteViewerDevice) device;
+                            noteViewerDevice.setLogger(consolePane.getPrintStream(Color.RED));
+                            noteViewerDevice.setMidiDebugEnabled(true);
                             box = new NoteViewerBox(noteViewerDevice);
                         } else {
                             box = new MidiDeviceBox(device);
@@ -345,21 +349,19 @@ public class MainWindow extends JFrame {
         canvasPanel1.addMouseListener(canvasButtonMouseAdapter);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuBar amptMenuBar;
+    private javax.swing.JPanel canvasPane;
+    private javax.swing.JPanel canvasPanel;
     private ampt.ui.canvas.CanvasPanel canvasPanel1;
-    private ampt.ui.canvas.CanvasToolbar canvasToolbar1;
-    private ampt.ui.canvas.CanvasToolbar canvasToolbar2;
+    private ampt.ui.canvas.AmptConsolePane consolePane;
+    private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel1;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextPane jTextPane1;
     private ampt.ui.canvas.MetronomePanel metronomePanel1;
+    private javax.swing.JPanel propertiesPanel;
+    private javax.swing.JSplitPane splitPane;
+    private ampt.ui.canvas.CanvasToolbar toolbarPane;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }

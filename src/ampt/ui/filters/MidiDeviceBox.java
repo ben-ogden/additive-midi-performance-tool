@@ -31,7 +31,7 @@ public class MidiDeviceBox extends JPanel {
     private boolean hasTransmitter = false;
     private boolean hasReceiver = false;
     
-    protected String text;
+    protected String deviceName;
     protected boolean overridePaintComponent = true;
 
     private static int PREFERRED_HEIGHT = 71;
@@ -52,7 +52,7 @@ public class MidiDeviceBox extends JPanel {
         Info deviceInfo = device.getDeviceInfo();
         this.setPreferredSize(new Dimension(PREFERRED_HEIGHT, PREFERRED_WIDTH));
 
-        this.text = deviceInfo.getName();
+        this.deviceName = deviceInfo.getName();
 
         if (midiDevice.getMaxReceivers() != 0) {
             hasReceiver = true;
@@ -125,8 +125,8 @@ public class MidiDeviceBox extends JPanel {
             g.drawLine(67, 38, 70, 35);
         }
 
-        // draw the text
-        String[] tokens = text.split(" ", 4);
+        // draw the deviceName
+        String[] tokens = deviceName.split(" ", 4);
         int height = 12;
         for (String token : tokens) {
             g.drawString(token, 7, height);
