@@ -348,7 +348,7 @@ public class MainWindow extends JFrame {
         canvasButtonMouseAdapter = new MouseAdapter() {
 
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 
                 theActualCanvasPanel.removeMouseListener(this);
                 Point point = e.getPoint();
