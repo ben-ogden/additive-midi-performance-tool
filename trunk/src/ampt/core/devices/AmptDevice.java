@@ -27,8 +27,10 @@ public abstract class AmptDevice implements AmptMidiDevice {
 
     // Each device has a list of receivers and transmitters. Any methods
     // operating on these lists must be synchronized.
-    private List<Receiver> _receivers;
-    private List<Transmitter> _transmitters;
+    private final List<Receiver> _receivers =
+            Collections.synchronizedList(new LinkedList<Receiver>());
+    private final List<Transmitter> _transmitters =
+            Collections.synchronizedList(new LinkedList<Transmitter>());
 
     // A file or interactive log to which devices can send debug or error messages.
     private PrintStream _logger;
@@ -79,7 +81,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * @throws MidiUnavailableException if the device is already open
      */
     @Override
-    public synchronized void open() throws MidiUnavailableException {
+    public void open() throws MidiUnavailableException {
 
         // can't open a device twice
         if (_isOpen) {
@@ -89,8 +91,6 @@ public abstract class AmptDevice implements AmptMidiDevice {
 
         // initialize the device
         _isOpen = true;
-        _receivers = new LinkedList<Receiver>();
-        _transmitters = new LinkedList<Transmitter>();
 
         // optional implementation provided by subclasses
         initDevice();
@@ -106,19 +106,23 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * 
      */
     @Override
-    public synchronized void close() {
+    public void close() {
 
         // close any open receivers
-        for (Receiver r : _receivers) {
-            r.close();
+        synchronized(_receivers) {
+            for (Receiver r : _receivers) {
+                r.close();
+            }
+            _receivers.clear();
         }
-        _receivers.clear();
 
         // close any open transmitters
-        for (Transmitter t : _transmitters) {
-            t.close();
+        synchronized(_transmitters) {
+            for (Transmitter t : _transmitters) {
+                t.close();
+            }
+            _transmitters.clear();
         }
-        _transmitters.clear();
 
         // implementation provided by subclasses
         closeDevice();
@@ -189,7 +193,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * @return an unmodifiable list of the open receivers
      */
     @Override
-    public synchronized List<Receiver> getReceivers() {
+    public List<Receiver> getReceivers() {
         return Collections.unmodifiableList(_receivers);
     }
 
@@ -200,7 +204,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * @return an unmodifiable list of the open transmitters
      */
     @Override
-    public synchronized List<Transmitter> getTransmitters() {
+    public List<Transmitter> getTransmitters() {
         return Collections.unmodifiableList(_transmitters);
     }
 
@@ -217,7 +221,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      *                due to resource restrictions or if the device is not open
      */
     @Override
-    public synchronized Receiver getReceiver() throws MidiUnavailableException {
+    public Receiver getReceiver() throws MidiUnavailableException {
 
         // device must be open
         if (!_isOpen) {
@@ -249,7 +253,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      *                due to resource restrictions or if the device is not open
      */
     @Override
-    public synchronized Transmitter getTransmitter() throws MidiUnavailableException {
+    public Transmitter getTransmitter() throws MidiUnavailableException {
 
         // device must be open
         if (!_isOpen) {
@@ -348,8 +352,10 @@ public abstract class AmptDevice implements AmptMidiDevice {
         }
 
         // send message to each registered transmitter
-        for (Transmitter transmitter : _transmitters) {
-            sendNow(midiMessage, transmitter);
+        synchronized(_transmitters) {
+            for (Transmitter transmitter : _transmitters) {
+                sendNow(midiMessage, transmitter);
+            }
         }
     }
 
@@ -367,9 +373,11 @@ public abstract class AmptDevice implements AmptMidiDevice {
         }
 
         // send messages to each registered transmitter
-        for (Transmitter transmitter : _transmitters) {
-            for (MidiMessage midiMessage : midiMessages) {
-                sendNow(midiMessage, transmitter);
+        synchronized(_transmitters) {
+            for (Transmitter transmitter : _transmitters) {
+                for (MidiMessage midiMessage : midiMessages) {
+                    sendNow(midiMessage, transmitter);
+                }
             }
         }
     }
@@ -452,6 +460,8 @@ public abstract class AmptDevice implements AmptMidiDevice {
 
             // debug the midi message if debug is enabled
             if (_midiDebugEnabled) {
+                _logger.print(_deviceInfo.getName());
+                _logger.print(": ");
                 byte[] msgBytes = msg.getMessage(); // length of array returned not guaranteed to match the actual message length
                 for (int i = 0; i < msg.getLength(); i++) {
                     _logger.print((int) (msgBytes[i] & 0xFF));
@@ -471,11 +481,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
         @Override
         public void close() {
             _receiverClosed = true;
-
-            //TODO - this should be synchronized on super, not this... not sure how to do that
-            synchronized (_receivers) {
-                _receivers.remove(this);
-            }
+            _receivers.remove(this);
         }
     } // class AmptReceiver
 
