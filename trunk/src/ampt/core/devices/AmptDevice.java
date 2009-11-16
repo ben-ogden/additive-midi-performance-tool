@@ -1,5 +1,6 @@
 package ampt.core.devices;
 
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +29,12 @@ public abstract class AmptDevice implements AmptMidiDevice {
     // operating on these lists must be synchronized.
     private List<Receiver> _receivers;
     private List<Transmitter> _transmitters;
+
+    // A file or interactive log to which devices can send debug or error messages.
+    private PrintStream _logger;
+
+    // If this device should write debug for incoming MIDI messages
+    private boolean _midiDebugEnabled = false;
 
     /**
      * Create a new AmptDevice. This constructor should be called by classes
@@ -291,6 +298,43 @@ public abstract class AmptDevice implements AmptMidiDevice {
     }
 
     /**
+     * Set the OutputStream for this AmptDevice.
+     *
+     * @param out
+     */
+    public void setLogger(PrintStream out) {
+        _logger = out;
+    }
+
+    /**
+     * @return true if MIDI debugging is enabled for incomming MIDI messages on
+     *         this device, otherwise false
+     */
+    public boolean getMidiDebugEnabled() {
+        return _midiDebugEnabled;
+    }
+    
+    /**
+     * Enable or disable debugging for incoming MIDI messages on this device.
+     * 
+     * @param midiDebug true to enable MIDI debugging, otherwise false
+     */
+    public void setMidiDebugEnabled(boolean midiDebug) {
+        _midiDebugEnabled = midiDebug;
+    }
+
+    /**
+     * Write a message to the logger associated with this device.
+     * 
+     * @param msgToLog
+     */
+    protected void log(String msgToLog) {
+        if(null != _logger && null != msgToLog) {
+            _logger.println(msgToLog);
+        }
+    }
+
+    /**
      * Sends a given MidiMessage immediately to all Transmitters registered
      * with this AMPT device.
      *
@@ -309,7 +353,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
         }
     }
 
-   /**
+    /**
      * Sends a list of MidiMessages immediately to all Transmitters registered
      * with this AMPT device.
      *
@@ -324,7 +368,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
 
         // send messages to each registered transmitter
         for (Transmitter transmitter : _transmitters) {
-            for(MidiMessage midiMessage : midiMessages) {
+            for (MidiMessage midiMessage : midiMessages) {
                 sendNow(midiMessage, transmitter);
             }
         }
@@ -406,12 +450,21 @@ public abstract class AmptDevice implements AmptMidiDevice {
                 throw new IllegalStateException("This AmptReceiver is closed.");
             }
 
+            // debug the midi message if debug is enabled
+            if (_midiDebugEnabled) {
+                byte[] msgBytes = msg.getMessage(); // length of array returned not guaranteed to match the actual message length
+                for (int i = 0; i < msg.getLength(); i++) {
+                    _logger.print((int) (msgBytes[i] & 0xFF));
+                    _logger.print(' ');
+                }
+                _logger.println();
+            }
+
             // delegate to the implementing filter
             try {
                 filter(msg, timeStamp);
             } catch (InvalidMidiDataException imde) {
-                //TODO setup filter logging to MIDI console?
-                throw new RuntimeException(imde);
+                log(imde.getMessage());
             }
         }
 
@@ -424,7 +477,6 @@ public abstract class AmptDevice implements AmptMidiDevice {
                 _receivers.remove(this);
             }
         }
-
     } // class AmptReceiver
 
     /**
