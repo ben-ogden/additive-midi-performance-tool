@@ -139,7 +139,10 @@ public class CanvasPanel extends javax.swing.JPanel {
                     this.remove(conn);
                 }
             }
-            box.closeDevice();
+            
+            //TODO ?
+            //box.closeDevice();
+
             midiDeviceBoxes.remove(box);
             super.remove(comp);
         }
