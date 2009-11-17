@@ -55,42 +55,89 @@ public class MidiDeviceConnection extends JComponent {
         double fromBottomToTop = Math.sqrt(Math.pow((fromBottomX - toTopX), 2) + Math.pow((fromBottomY - toTopY), 2));
         double fromLeftToRight = Math.sqrt(Math.pow((fromLeftX - toRightX), 2) + Math.pow((fromLeftY - toRightY), 2));
         double fromRightToLeft = Math.sqrt(Math.pow((fromRightX - toLeftX), 2) + Math.pow((fromRightY - toLeftY), 2));
-        int fromX, fromY, toX, toY;
+        int fromX, fromY, toX, toY, arrowFromX1, arrowFromX2, arrowFromY1, arrowFromY2, arrowToX, arrowToY;
         if (fromTopToBottom <= fromBottomToTop && fromTopToBottom <= fromLeftToRight && fromTopToBottom <= fromRightToLeft) {
             fromX = fromTopX;
             fromY = fromTopY;
             toX = toBottomX;
             toY = toBottomY;
-//            arrowFromX1 = toX - (int) (7 * Math.sin((Math.asin((toRightX - fromLeftX) / fromLeftToRight)) / 2));
-//            arrowFromY1 = toY - (int) (7 * Math.cos((Math.asin((toRightY - fromLeftY) / fromLeftToRight)) / 2));
+            arrowToX = toX - ((toX - fromX) / 2);
+            arrowToY = toY - ((toY - fromY) / 2);
+            if(toX < fromX) {
+                arrowFromX1 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromTopToBottom)) + Math.PI / 4));
+                arrowFromY1 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromTopToBottom)) + Math.PI / 4));
+                arrowFromX2 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromTopToBottom)) - Math.PI / 4));
+                arrowFromY2 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromTopToBottom)) - Math.PI / 4));
+            } else {
+                arrowFromX1 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromTopToBottom)) - Math.PI / 4));
+                arrowFromY1 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromTopToBottom)) + Math.PI / 4));
+                arrowFromX2 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromTopToBottom)) + Math.PI / 4));
+                arrowFromY2 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromTopToBottom)) - Math.PI / 4));
+            }
         } else if (fromBottomToTop <= fromLeftToRight && fromBottomToTop <= fromRightToLeft) {
             fromX = fromBottomX;
             fromY = fromBottomY;
             toX = toTopX;
             toY = toTopY;
-//            arrowFromX1 = toX - (int) (7 * Math.sin((Math.asin((toRightX - fromLeftX) / fromLeftToRight)) / 2));
-//            arrowFromY1 = toY - (int) (7 * Math.cos((Math.asin((toRightY - fromLeftY) / fromLeftToRight)) / 2));
+            arrowToX = toX - ((toX - fromX) / 2);
+            arrowToY = toY - ((toY - fromY) / 2);
+            if(toX > fromX){
+                arrowFromX1 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromBottomToTop)) + Math.PI / 4));
+                arrowFromY1 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromBottomToTop)) + Math.PI / 4));
+                arrowFromX2 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromBottomToTop)) - Math.PI / 4));
+                arrowFromY2 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromBottomToTop)) - Math.PI / 4));
+            } else {
+                arrowFromX1 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromBottomToTop)) - Math.PI / 4));
+                arrowFromY1 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromBottomToTop)) + Math.PI / 4));
+                arrowFromX2 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromBottomToTop)) + Math.PI / 4));
+                arrowFromY2 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromBottomToTop)) - Math.PI / 4));
+            }
         } else if (fromLeftToRight <= fromRightToLeft) {
             fromX = fromLeftX;
             fromY = fromLeftY;
             toX = toRightX;
             toY = toRightY;
-//            arrowFromX1 = toX - (int) (7 * Math.sin((Math.asin((toRightX - fromLeftX) / fromLeftToRight)) / 3));
-//            arrowFromY1 = toY - (int) (7 * Math.cos((Math.asin((toRightY - fromLeftY) / fromLeftToRight)) / 3));
+            arrowToX = toX - ((toX - fromX) / 2);
+            arrowToY = toY - ((toY - fromY) / 2);
+            if(toY < fromY){
+                arrowFromX1 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromLeftToRight)) + Math.PI / 4));
+                arrowFromY1 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromLeftToRight)) + Math.PI / 4));
+                arrowFromX2 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromLeftToRight)) - Math.PI / 4));
+                arrowFromY2 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromLeftToRight)) - Math.PI / 4));
+            } else {
+                arrowFromX1 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromLeftToRight)) - Math.PI / 4));
+                arrowFromY1 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromLeftToRight)) + Math.PI / 4));
+                arrowFromX2 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromLeftToRight)) + Math.PI / 4));
+                arrowFromY2 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromLeftToRight)) - Math.PI / 4));
+            }
         } else {
             fromX = fromRightX;
             fromY = fromRightY;
             toX = toLeftX;
             toY = toLeftY;
-//            arrowFromX1 = toX - (int) (7 * Math.sin((Math.asin((toRightX - fromLeftX) / fromLeftToRight)) / 2));
-//            arrowFromY1 = toY - (int) (7 * Math.cos((Math.asin((toRightY - fromLeftY) / fromLeftToRight)) / 2));
+            arrowToX = toX - ((toX - fromX) / 2);
+            arrowToY = toY - ((toY - fromY) / 2);
+            if(toY > fromY){
+                arrowFromX1 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromRightToLeft)) + Math.PI / 4));
+                arrowFromY1 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromRightToLeft)) + Math.PI / 4));
+                arrowFromX2 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromRightToLeft)) - Math.PI / 4));
+                arrowFromY2 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromRightToLeft)) - Math.PI / 4));
+            }
+            else {
+                arrowFromX1 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromRightToLeft)) - Math.PI / 4));
+                arrowFromY1 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromRightToLeft)) + Math.PI / 4));
+                arrowFromX2 = arrowToX - (int) (7 * Math.sin((Math.asin((toX - fromX) / fromRightToLeft)) + Math.PI / 4));
+                arrowFromY2 = arrowToY - (int) (7 * Math.cos((Math.acos((toY - fromY) / fromRightToLeft)) - Math.PI / 4));
+            }
+
         }
 
         Color color = g.getColor();
         g.setColor(Color.BLACK);
 
         g.drawLine(fromX, fromY, toX, toY);
-//        g.drawLine(arrowFromX1, arrowFromY1, toX, toY);
+        g.drawLine(arrowFromX1, arrowFromY1, arrowToX, arrowToY);
+        g.drawLine(arrowFromX2, arrowFromY2, arrowToX, arrowToY);
         g.setColor(color);
     }
 }
