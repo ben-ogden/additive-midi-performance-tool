@@ -34,6 +34,7 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
         deviceList.add(new ChordFilterDevice().getDeviceInfo());
         deviceList.add(new KeyboardDevice().getDeviceInfo());
         deviceList.add(new NoteViewerDevice().getDeviceInfo());
+        deviceList.add(new ArpFilterDevice().getDeviceInfo());
 
     }
 
