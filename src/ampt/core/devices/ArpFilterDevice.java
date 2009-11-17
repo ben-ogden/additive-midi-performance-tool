@@ -131,9 +131,12 @@ public class ArpFilterDevice extends AmptDevice {
     public static void main(String[] args) throws InterruptedException, MidiUnavailableException, InvalidMidiDataException {
         Synthesizer synth = MidiSystem.getSynthesizer();
         ArpFilterDevice arp = new ArpFilterDevice();
+        ChordFilterDevice chord = new ChordFilterDevice();
         synth.open();
         arp.open();
-        arp.getTransmitter().setReceiver(synth.getReceiver());
+        chord.open();
+        arp.getTransmitter().setReceiver(chord.getReceiver());
+        chord.getTransmitter().setReceiver(synth.getReceiver());
         Receiver receiver = arp.getReceiver();
         ShortMessage sMsg = new ShortMessage();
 
