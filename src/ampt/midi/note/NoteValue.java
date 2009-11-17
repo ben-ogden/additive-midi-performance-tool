@@ -3,8 +3,9 @@ package ampt.midi.note;
 import javax.sound.midi.Sequence;
 
 /**
- *
- * @author Robert
+ * For getting tick values of notes types for a given tempo
+ * 
+ * @author Robert Szewczyk
  */
 public enum NoteValue {
     SIXTYFOURTH_NOTE(16F),
@@ -32,6 +33,7 @@ public enum NoteValue {
             throw new UnsupportedOperationException("SMPTE Timing Not Yet Supported");
         if (divisionType == Sequence.SMPTE_30DROP)
             throw new UnsupportedOperationException("SMPTE Timing Not Yet Supported");
-        return -1;
+
+        throw new IllegalArgumentException("Division Type is Not Legal");
     }
 }

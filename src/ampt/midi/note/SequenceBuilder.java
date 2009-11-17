@@ -4,12 +4,12 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MetaMessage;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Track;
-import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MetaEventListener;
 
 /**
@@ -144,6 +144,11 @@ public class SequenceBuilder {
      */
     public void addSixteenthRest() {
         tickPositions[currentTrack] += NoteValue.getTickLength(NoteValue.SIXTEENTH_NOTE, divisionType, resolution);
+    }
+
+    public void addBpmTempoChange(float bpm) {
+        MetaMessage msg = new MetaMessage();
+        long mpq = (long)(6000000F / bpm);
     }
 
     /*
