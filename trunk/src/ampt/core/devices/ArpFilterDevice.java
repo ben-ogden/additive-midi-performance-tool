@@ -29,8 +29,6 @@ public class ArpFilterDevice extends AmptDevice {
     public final static String DEVICE_NAME = "AMPT Arp Filter";
     public final static String DEVICE_DESCRIPTION = "An arpeggiator for use with AMPT";
 
-    //TODO - can anyone think of a reason there needs to be more than one?
-    private AmptReceiver receiver = new ArpFilterReceiver();
     private HashMap<String, Sequencer> arpeggios = new HashMap<String, Sequencer>();
 
     public ArpFilterDevice() {
@@ -39,17 +37,17 @@ public class ArpFilterDevice extends AmptDevice {
 
     @Override
     public AmptReceiver getAmptReceiver() {
-        return receiver;
+        return new ArpFilterReceiver();
     }
 
     @Override
     public void closeDevice() {
-        receiver.close();
+        //move along, nothing to see here;
     }
 
     @Override
     public void initDevice() {
-        receiver = new ArpFilterReceiver();
+        //moving along, nothing to see here;
     }
 
     private Sequencer playArpeggio(Sequence sequence) {
@@ -77,6 +75,7 @@ public class ArpFilterDevice extends AmptDevice {
             sqr.setLoopStartPoint(0);
             sqr.setLoopEndPoint(sequence.getTickLength());
             sqr.start();
+
         } catch (MidiUnavailableException e) {
             e.printStackTrace();
         } catch (InvalidMidiDataException e) {
