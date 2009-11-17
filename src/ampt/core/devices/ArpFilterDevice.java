@@ -12,10 +12,6 @@ import javax.sound.midi.Transmitter;
 import java.util.HashMap;
 import java.util.List;
 
-//the following are needed for main() - can be removed in final version
-import javax.sound.midi.Receiver;
-import javax.sound.midi.Synthesizer;
-
 /**
  * This device plays an arpeggio based on the note played.
  *
@@ -126,25 +122,5 @@ public class ArpFilterDevice extends AmptDevice {
             //forward on any messages received
             sendNow(message);
         }
-    }
-
-    public static void main(String[] args) throws InterruptedException, MidiUnavailableException, InvalidMidiDataException {
-        Synthesizer synth = MidiSystem.getSynthesizer();
-        ArpFilterDevice arp = new ArpFilterDevice();
-        ChordFilterDevice chord = new ChordFilterDevice();
-        synth.open();
-        arp.open();
-        chord.open();
-        arp.getTransmitter().setReceiver(chord.getReceiver());
-        chord.getTransmitter().setReceiver(synth.getReceiver());
-        Receiver receiver = arp.getReceiver();
-        ShortMessage sMsg = new ShortMessage();
-
-
-        sMsg.setMessage(ShortMessage.NOTE_ON, 0, 60, 93);
-        receiver.send(sMsg, -1);
-        sMsg.setMessage(ShortMessage.NOTE_OFF, 0, 60, 93);
-        Thread.sleep(5000);
-        receiver.send(sMsg, -1);
     }
 }
