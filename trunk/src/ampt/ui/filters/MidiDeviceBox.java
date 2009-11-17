@@ -78,6 +78,10 @@ public class MidiDeviceBox extends JPanel {
 
     }
 
+    public void closeDevice(){
+        midiDevice.close();
+    }
+
     public Info getDeviceInfo(){
         return midiDevice.getDeviceInfo();
     }
