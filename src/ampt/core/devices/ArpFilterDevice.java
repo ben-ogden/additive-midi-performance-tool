@@ -26,7 +26,7 @@ import javax.sound.midi.Synthesizer;
  */
 public class ArpFilterDevice extends AmptDevice {
 
-    public final static String DEVICE_NAME = "AMPT Arp Filter";
+    public final static String DEVICE_NAME = "Arpeggiator";
     public final static String DEVICE_DESCRIPTION = "An arpeggiator for use with AMPT";
 
     private HashMap<String, Sequencer> arpeggios = new HashMap<String, Sequencer>();
@@ -42,12 +42,12 @@ public class ArpFilterDevice extends AmptDevice {
 
     @Override
     public void closeDevice() {
-        //move along, nothing to see here;
+        //moving along, nothing to see here
     }
 
     @Override
     public void initDevice() {
-        //moving along, nothing to see here;
+        //moving along, nothing to see here
     }
 
     private Sequencer playArpeggio(Sequence sequence) {
@@ -56,8 +56,7 @@ public class ArpFilterDevice extends AmptDevice {
         try {
             sqr = MidiSystem.getSequencer();
 
-            //The Real Time Sequencer is linked to Java Synthesizer by default, so it
-            //needs to be unconnected first.
+            //Remove any default connections
             List<Transmitter> transmitters = sqr.getTransmitters();
             for(Transmitter transmitter : transmitters)
                 transmitter.close();
@@ -85,7 +84,8 @@ public class ArpFilterDevice extends AmptDevice {
         //sequencer is returned so that it can be closed later
         return sqr;
     }
-    public class ArpFilterReceiver extends AmptReceiver {
+    
+    public final class ArpFilterReceiver extends AmptReceiver {
 
         @Override
         public void filter(MidiMessage message, long timeStamp) {
