@@ -32,6 +32,19 @@ public class MidiDeviceConnection extends JComponent {
         return _to;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof MidiDeviceConnection){
+            MidiDeviceConnection anotherConn = (MidiDeviceConnection) obj;
+            if(this._from.equals(anotherConn._from) && this._to.equals(anotherConn._to)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     public void paintOnCanvas(Graphics g) {
         int fromTopX = _from.getX() + _from.getWidth() / 2;
         int fromTopY = _from.getY();
