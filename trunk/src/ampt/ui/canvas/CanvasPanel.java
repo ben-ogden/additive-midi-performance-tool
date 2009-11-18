@@ -66,7 +66,6 @@ public class CanvasPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
     public Component add(Component c) {
-        super.add(c);
         if (c instanceof MidiDeviceBox) {
             MidiDeviceBox box = (MidiDeviceBox) c;
             midiDeviceBoxes.add(box);
@@ -125,8 +124,12 @@ public class CanvasPanel extends javax.swing.JPanel {
 
         } else if (c instanceof MidiDeviceConnection) {
             MidiDeviceConnection conn = (MidiDeviceConnection) c;
+            if(midiDeviceConnections.contains(conn)){
+                return c;
+            }
             midiDeviceConnections.add(conn);
         }
+        super.add(c);
         return c;
     }
 
