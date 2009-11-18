@@ -11,6 +11,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Transmitter;
 import java.util.HashMap;
 import java.util.List;
+import javax.sound.midi.Receiver;
 
 /**
  * This device plays an arpeggio based on the note played.
@@ -57,11 +58,18 @@ public class ArpFilterDevice extends AmptDevice {
             for(Transmitter transmitter : transmitters)
                 transmitter.close();
 
-            //Sync sequencer transmiters with arp transmitters
-            transmitters = getTransmitters();
-            for(Transmitter transmitter : transmitters) {
-                sqr.getTransmitter().setReceiver(transmitter.getReceiver());
-            }
+            sqr.getTransmitter().setReceiver(new Receiver() {
+                @Override
+                public void send(MidiMessage message, long timeStamp) {
+                    if (message.getStatus() == 145 || message.getStatus() == 129)
+                        sendNow(message);
+                    }
+
+                    @Override
+                    public void close() {
+                        //moving along, nothing to see here.
+                    }
+            });
 
             //play the arpeggio
             sqr.open();
@@ -88,14 +96,16 @@ public class ArpFilterDevice extends AmptDevice {
 
             if (message instanceof ShortMessage) {
                 ShortMessage sMsg = (ShortMessage) message;
+                String key = sMsg.getChannel() + ":" + sMsg.getData1();
 
                 //first check for key released
                 if ((sMsg.getCommand() == ShortMessage.NOTE_OFF) || (sMsg.getCommand() ==
                         ShortMessage.NOTE_ON && sMsg.getData2() == 0)) {
 
                     //find the arpeggio and stop it
-                    String key = sMsg.getChannel() + ":" + sMsg.getData1();
-                    arpeggios.get(key).close();
+                    Sequencer sqr = arpeggios.remove(key);
+                    sqr.stop();
+                    sqr.close();
                 }
 
                 //check for key pressed
@@ -108,13 +118,12 @@ public class ArpFilterDevice extends AmptDevice {
                     SequenceBuilder sb = new SequenceBuilder(Sequence.PPQ, 480);
                     sb.addEighthNote(channel, tone, velocity);
                     sb.addEighthNote(channel, tone + 4, velocity);
-                    sb.addEighthNote(channel, tone + 8, velocity);
+                    sb.addEighthNote(channel, tone + 7, velocity);
                     sb.addEighthNote(channel, tone + 12, velocity);
-                    sb.addEighthNote(channel, tone + 8, velocity);
+                    sb.addEighthNote(channel, tone + 7, velocity);
                     sb.addEighthNote(channel, tone + 4, velocity);
 
                     //start arpeggio playing and put it in hash map
-                    String key = channel + ":" + tone;
                     arpeggios.put(key, playArpeggio(sb.getSequence()));
                 }
             }

@@ -104,6 +104,7 @@ public class SequenceBuilder {
         (sequence.getTracks())[currentTrack].add(event);
         tickPositions[currentTrack] += NoteValue.getTickLength(NoteValue.EIGHTH_NOTE, divisionType, resolution);
         event = new MidiEvent(noteOff(channel, value, velocity), tickPositions[currentTrack] - 1);
+        tickPositions[currentTrack]++;
         (sequence.getTracks())[currentTrack].add(event);
     }
 
