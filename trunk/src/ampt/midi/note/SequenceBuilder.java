@@ -4,13 +4,6 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MetaMessage;
-
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequencer;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Track;
-import javax.sound.midi.MetaEventListener;
 
 /**
  * This class aides in the construction of a MIDI sequence.
@@ -77,79 +70,16 @@ public class SequenceBuilder {
         return msg;
     }
 
-    /*
-     * Adds a quarter note to the currently selected track
-     *
-     * @param channel the channel over which the note is to be played
-     * @param value the tone value of the note
-     * @param velocity velocity of the note
-     */
-    public void addQuarterNote(int channel, int value, int velocity) {
-        MidiEvent event = new MidiEvent(noteOn(channel, value, velocity), tickPositions[currentTrack]);
+    public void addNote(NoteValue noteValue, int channel, int tone, int velocity) {
+        MidiEvent event = new MidiEvent(noteOn(channel, tone, velocity), tickPositions[currentTrack]);
         (sequence.getTracks())[currentTrack].add(event);
-        tickPositions[currentTrack] += NoteValue.getTickLength(NoteValue.QUARTER_NOTE, divisionType, resolution);
-        event = new MidiEvent(noteOff(channel, value, velocity), tickPositions[currentTrack] - 1);
+        tickPositions[currentTrack] += NoteValue.getTickLength(noteValue, divisionType, resolution);
+        event = new MidiEvent(noteOff(channel, tone, velocity), tickPositions[currentTrack] - 1);
         (sequence.getTracks())[currentTrack].add(event);
     }
 
-    /*
-     * Adds an eighth note to the currently selected track
-     *
-     * @param channel the channel over which the note is to be played
-     * @param value the tone value of the note
-     * @param velocity velocity of the note
-     */
-    public void addEighthNote(int channel, int value, int velocity) {
-        MidiEvent event = new MidiEvent(noteOn(channel, value, velocity), tickPositions[currentTrack]);
-        (sequence.getTracks())[currentTrack].add(event);
-        tickPositions[currentTrack] += NoteValue.getTickLength(NoteValue.EIGHTH_NOTE, divisionType, resolution);
-        event = new MidiEvent(noteOff(channel, value, velocity), tickPositions[currentTrack] - 1);
-        tickPositions[currentTrack]++;
-        (sequence.getTracks())[currentTrack].add(event);
-    }
-
-    /*
-     * Adds a sixteenth note to the currently selected track
-     *
-     * @param channel the channel over which the note is to be played
-     * @param value the tone value of the note
-     * @param velocity velocity of the note
-     */
-    public void addSixteenthNote(int channel, int value, int velocity) {
-        MidiEvent event = new MidiEvent(noteOn(channel, value, velocity), tickPositions[currentTrack]);
-        (sequence.getTracks())[currentTrack].add(event);
-        tickPositions[currentTrack] += NoteValue.getTickLength(NoteValue.SIXTEENTH_NOTE, divisionType, resolution);
-        event = new MidiEvent(noteOff(channel, value, velocity), tickPositions[currentTrack] - 1);
-        (sequence.getTracks())[currentTrack].add(event);
-    }
-
-    /*
-     * Adds a quarter note value rest to the currently selected track
-     *
-     */
-    public void addQuarterRest() {
-        tickPositions[currentTrack] += NoteValue.getTickLength(NoteValue.QUARTER_NOTE, divisionType, resolution);
-    }
-
-    /*
-     * Adds an eighth note value rest to the currently selected track
-     *
-     */
-    public void addEighthRest() {
-        tickPositions[currentTrack] += NoteValue.getTickLength(NoteValue.EIGHTH_NOTE, divisionType, resolution);
-    }
-
-    /*
-     * Adds a sixteenth note value rest to the currently selected track
-     *
-     */
-    public void addSixteenthRest() {
-        tickPositions[currentTrack] += NoteValue.getTickLength(NoteValue.SIXTEENTH_NOTE, divisionType, resolution);
-    }
-
-    public void addBpmTempoChange(float bpm) {
-        MetaMessage msg = new MetaMessage();
-        long mpq = (long)(6000000F / bpm);
+    public void addRest(NoteValue noteValue) {
+        tickPositions[currentTrack] += NoteValue.getTickLength(noteValue, divisionType, resolution);
     }
 
     /*

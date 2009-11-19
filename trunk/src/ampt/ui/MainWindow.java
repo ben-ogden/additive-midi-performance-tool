@@ -8,11 +8,13 @@ package ampt.ui;
 import ampt.core.devices.ChordFilterDevice;
 import ampt.core.devices.KeyboardDevice;
 import ampt.core.devices.NoteViewerDevice;
+import ampt.core.devices.ArpFilterDevice;
 import ampt.ui.canvas.MidiDeviceButton;
 import ampt.ui.filters.ChordFilterBox;
 import ampt.ui.filters.KeyboardBox;
 import ampt.ui.filters.MidiDeviceBox;
 import ampt.ui.filters.NoteViewerBox;
+import ampt.ui.filters.ArpFilterBox;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -374,7 +376,12 @@ public class MainWindow extends JFrame {
                             noteViewerDevice.setLogger(consolePane.getPrintStream(Color.RED));
                             noteViewerDevice.setMidiDebugEnabled(true);
                             box = new NoteViewerBox(noteViewerDevice);
-                        } else {
+                        } else if (device instanceof ArpFilterDevice){
+                            ArpFilterDevice arpFilterDevice = (ArpFilterDevice) device;
+                            arpFilterDevice.setLogger(consolePane.getPrintStream(Color.GREEN));
+                            arpFilterDevice.setMidiDebugEnabled(true);
+                            box = new ArpFilterBox(arpFilterDevice);
+                        }else {
                             box = new MidiDeviceBox(device);
                         }
                         theActualCanvasPanel.add(box);
