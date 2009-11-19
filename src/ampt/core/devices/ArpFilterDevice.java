@@ -17,7 +17,7 @@ import javax.sound.midi.Receiver;
  * This device plays an arpeggio based on the note played.
  *
  * TODO - currently the arpeggio is fixed and arbitrary - need to provide options to
- * play proper argeggios
+ * play proper arpeggios
  *
  * @author Robert
  */
@@ -61,7 +61,7 @@ public class ArpFilterDevice extends AmptDevice {
             sqr.getTransmitter().setReceiver(new Receiver() {
                 @Override
                 public void send(MidiMessage message, long timeStamp) {
-                    if (message.getStatus() == 145 || message.getStatus() == 129)
+                    if (message.getStatus() >= 128 && message.getStatus() <= 159)
                         sendNow(message);
                     }
 
