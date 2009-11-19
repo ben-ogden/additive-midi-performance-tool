@@ -1,17 +1,18 @@
 package ampt.core.devices;
 
 import ampt.midi.note.SequenceBuilder;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.HashMap;
+import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Receiver;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Transmitter;
-import java.util.HashMap;
-import java.util.List;
-import javax.sound.midi.Receiver;
 
 /**
  * This device plays an arpeggio based on the note played.
@@ -26,7 +27,11 @@ public class ArpFilterDevice extends AmptDevice {
     public final static String DEVICE_NAME = "Arpeggiator";
     public final static String DEVICE_DESCRIPTION = "An arpeggiator for use with AMPT";
 
-    private HashMap<String, Sequencer> arpeggios = new HashMap<String, Sequencer>();
+    private final HashMap<String, Sequencer> arpeggios = new HashMap<String, Sequencer>();
+    private final ArrayBlockingQueue<Sequencer> sequencerPool =
+            new ArrayBlockingQueue<Sequencer>(12);
+    private Runnable sequenceGenerator;
+    private boolean generateSequencers = true;
 
     public ArpFilterDevice() {
         super(DEVICE_NAME, DEVICE_DESCRIPTION);
@@ -39,54 +44,83 @@ public class ArpFilterDevice extends AmptDevice {
 
     @Override
     public void closeDevice() {
-        //moving along, nothing to see here
+        //stop generating sequencers for the pool
+        generateSequencers = false;
     }
 
     @Override
     public void initDevice() {
-        //moving along, nothing to see here
+        //when put in a thread this will continually generate a sequencer that is as
+        //initialized as possible for the sequencer pool - it generates them as they are
+        //taken out of the pool.
+        sequenceGenerator = new Runnable() {
+            @Override
+            public void run() {
+                while(generateSequencers == true) {
+                    try {
+                        //initialize the sequencer as much as possible
+                        Sequencer sequencer = MidiSystem.getSequencer();
+                        sequencer.open();
+                        sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
+                        sequencer.setLoopStartPoint(0);
+
+                        //kill any default connections (the Java Real Time Sequencer is
+                        //connected to the Java Synthesizer)
+                        List<Transmitter> transmitters = sequencer.getTransmitters();
+                        for (final Transmitter transmitter : transmitters)
+                            transmitter.close();
+
+                        //this receiver acts as a shim between the sequencer and
+                        //the destination devices - it removes any messages that are
+                        //not either a note on or note off
+                        sequencer.getTransmitter().setReceiver(new Receiver() {
+                            @Override
+                            public void send(MidiMessage message, long timeStamp) {
+                                if (message.getStatus() >= 128 &&
+                                        message.getStatus() <= 159)
+
+                                    sendNow(message);
+                            }
+
+                            @Override
+                            public void close() {
+                                //moving along, nothing to see here
+                            }
+                        });
+
+                        //put the sequence in the pool
+                        sequencerPool.put(sequencer);
+                        Thread.sleep(0, 1);
+                    } catch (MidiUnavailableException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        //start generating sequences
+        (new Thread(sequenceGenerator)).start();
     }
 
     private Sequencer playArpeggio(Sequence sequence) {
 
-        Sequencer sqr = null;
+        Sequencer sequencer = null;
+
         try {
-            sqr = MidiSystem.getSequencer();
-
-            //Remove any default connections
-            List<Transmitter> transmitters = sqr.getTransmitters();
-            for(Transmitter transmitter : transmitters)
-                transmitter.close();
-
-            sqr.getTransmitter().setReceiver(new Receiver() {
-                @Override
-                public void send(MidiMessage message, long timeStamp) {
-                    if (message.getStatus() >= 128 && message.getStatus() <= 159)
-                        sendNow(message);
-                    }
-
-                    @Override
-                    public void close() {
-                        //moving along, nothing to see here.
-                    }
-            });
-
-            //play the arpeggio
-            sqr.open();
-            sqr.setSequence(sequence);
-            sqr.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
-            sqr.setLoopStartPoint(0);
-            sqr.setLoopEndPoint(sequence.getTickLength());
-            sqr.start();
-
-        } catch (MidiUnavailableException e) {
+            sequencer = sequencerPool.take();
+            sequencer.setSequence(sequence);
+            sequencer.setLoopEndPoint(sequence.getTickLength());
+            sequencer.start();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         }
 
         //sequencer is returned so that it can be closed later
-        return sqr;
+        return sequencer;
     }
     
     public final class ArpFilterReceiver extends AmptReceiver {
