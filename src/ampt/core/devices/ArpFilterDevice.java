@@ -1,6 +1,8 @@
 package ampt.core.devices;
 
 import ampt.midi.note.SequenceBuilder;
+import ampt.midi.chord.ChordType;
+import ampt.midi.note.NoteValue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +34,8 @@ public class ArpFilterDevice extends AmptDevice {
             new ArrayBlockingQueue<Sequencer>(12);
     private Runnable sequenceGenerator;
     private boolean generateSequencers = true;
+    private ChordType chordType = ChordType.MAJOR;
+    private NoteValue noteValue = NoteValue.EIGHTH_NOTE;
 
     public ArpFilterDevice() {
         super(DEVICE_NAME, DEVICE_DESCRIPTION);
@@ -46,6 +50,14 @@ public class ArpFilterDevice extends AmptDevice {
     public void closeDevice() {
         //stop generating sequencers for the pool
         generateSequencers = false;
+    }
+
+    public void setNoteValue(NoteValue noteValue) {
+        this.noteValue = noteValue;
+    }
+
+    public void setChordType(ChordType chordType) {
+        this.chordType = chordType;
     }
 
     @Override
@@ -150,12 +162,16 @@ public class ArpFilterDevice extends AmptDevice {
 
                     //build the arpeggio
                     SequenceBuilder sb = new SequenceBuilder(Sequence.PPQ, 480);
-                    sb.addEighthNote(channel, tone, velocity);
-                    sb.addEighthNote(channel, tone + 4, velocity);
-                    sb.addEighthNote(channel, tone + 7, velocity);
-                    sb.addEighthNote(channel, tone + 12, velocity);
-                    sb.addEighthNote(channel, tone + 7, velocity);
-                    sb.addEighthNote(channel, tone + 4, velocity);
+                    sb.addNote(noteValue, channel, tone, velocity);
+                    sb.addNote(noteValue, channel, tone +
+                            chordType.getThirdInterval(), velocity);
+                    sb.addNote(noteValue, channel, tone +
+                            chordType.getFifthInterval(), velocity);
+                    sb.addNote(noteValue, channel, tone + 12, velocity);
+                    sb.addNote(noteValue, channel, tone +
+                            chordType.getFifthInterval(), velocity);
+                    sb.addNote(noteValue, channel, tone +
+                            chordType.getThirdInterval(), velocity);
 
                     //start arpeggio playing and put it in hash map
                     arpeggios.put(key, playArpeggio(sb.getSequence()));
