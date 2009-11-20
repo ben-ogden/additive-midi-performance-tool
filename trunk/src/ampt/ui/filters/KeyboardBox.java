@@ -4,11 +4,13 @@ import ampt.core.devices.KeyboardDevice;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.LineBorder;
@@ -74,7 +76,10 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         // Make an east panel to contain the channel and octave selecters
         JPanel eastPanel = new JPanel();
         eastPanel.setBackground(Color.CYAN);
-        eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
+        eastPanel.setLayout(new BorderLayout());
+        JPanel centerEastPanel = new JPanel();
+        centerEastPanel.setBackground(Color.CYAN);
+        centerEastPanel.setLayout(new BoxLayout(centerEastPanel, BoxLayout.Y_AXIS));
         Integer[] channels = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         channelComboBox = new JComboBox(channels);
         channelComboBox.setBackground(Color.CYAN);
@@ -82,7 +87,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         device.setChannel(channels[0]);
         channelComboBox.addActionListener(this);
         channelComboBox.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Chan."));
-        eastPanel.add(channelComboBox);
+        centerEastPanel.add(channelComboBox);
 
         Integer[] octaves = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         octaveComboBox = new JComboBox(octaves);
@@ -91,7 +96,27 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         device.setOctave(octaves[5]);
         octaveComboBox.addActionListener(this);
         octaveComboBox.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Octave"));
-        eastPanel.add(octaveComboBox);
+        centerEastPanel.add(octaveComboBox);
+
+        eastPanel.add(centerEastPanel, BorderLayout.CENTER);
+
+        if(hasTransmitter()){
+            JPanel eastEastPanel = new JPanel();
+            eastEastPanel.setBackground(Color.CYAN);
+            eastEastPanel.setLayout(new GridLayout(2,1));
+            eastEastPanel.add(new JLabel());
+            eastEastPanel.add(new BoxArrow());
+            eastPanel.add(eastEastPanel, BorderLayout.EAST);
+        }
+
+//        if(hasReceiver()){
+//            JPanel westPanel = new JPanel();
+//            westPanel.setBackground(Color.CYAN);
+//            westPanel.setLayout(new GridLayout(2,1));
+//            westPanel.add(new JLabel());
+//            westPanel.add(new BoxArrow());
+//            this.add(westPanel, BorderLayout.WEST);
+//        }
 
         this.add(eastPanel, BorderLayout.EAST);
     }
