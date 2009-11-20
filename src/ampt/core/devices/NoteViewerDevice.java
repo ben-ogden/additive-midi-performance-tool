@@ -61,12 +61,12 @@ public class NoteViewerDevice extends AmptDevice {
                     if (sMsg.getCommand() == ShortMessage.NOTE_OFF ||
                                 (sMsg.getCommand() == ShortMessage.NOTE_ON &&
                                  sMsg.getData2() == 0x0)) {
-                        box.noteOff(sMsg.getData1());
+                        box.noteOff(sMsg.getChannel(), sMsg.getData1());
                     }
 
                     // check for note on
                     else if (sMsg.getCommand() == ShortMessage.NOTE_ON) {
-                        box.noteOn(sMsg.getData1());
+                        box.noteOn(sMsg.getChannel(), sMsg.getData1());
                     } 
 
                 }

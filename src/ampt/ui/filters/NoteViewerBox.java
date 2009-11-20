@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.border.LineBorder;
@@ -22,14 +24,13 @@ import javax.swing.border.TitledBorder;
 public class NoteViewerBox extends MidiDeviceBox {
 
     /**
-     * Use a sorted map which maps the note number to the number of times that
-     * this note is 'on'.  By using a sorted map, we can easily get the highest
-     * and lowest note, so we know how many ledger lines we need to draw on the 
-     * box.
+     * Use a sorted map which maps the channel number to the set of notes that
+     * are on for that channel.
      * 
      * NOTE: The map should be synchronized so we can have concurrent access.
      */
-    SortedMap<Integer, Integer> notes;
+    SortedMap<Integer, SortedSet<Integer>> notes;
+//    SortedSet<Integer> notes;
     private static final int staffX1 = 20;
     private static final int staffX2 = 80;
     private static final int ledgerX1 = 54;
@@ -79,7 +80,12 @@ public class NoteViewerBox extends MidiDeviceBox {
         device.addNoteViewerBox(this);
 
         // use a syncrhonized sorted map so we can access the map concurrently.
-        notes = Collections.synchronizedSortedMap(new TreeMap<Integer, Integer>());
+        notes = Collections.synchronizedSortedMap(new TreeMap<Integer, SortedSet<Integer>>());
+
+        // put in the set of notes for each channel
+        for(int channel = 0; channel < 16; channel++){
+            notes.put(channel, Collections.synchronizedSortedSet(new TreeSet<Integer>()));
+        }
 
         overridePaintComponent = false;
 
@@ -106,31 +112,13 @@ public class NoteViewerBox extends MidiDeviceBox {
 
     }
 
-    public void noteOn(int note) {
-        synchronized (notes) {
-            if (notes.containsKey(note)) {
-                int count = notes.get(note);
-                count++;
-                notes.put(note, count);
-            } else {
-                notes.put(note, 1);
-            }
-        }
+    public void noteOn(int channel, int note) {
+        notes.get(channel).add(note);
         this.repaint();
     }
 
-    public void noteOff(int note) {
-        synchronized (notes) {
-            if (notes.containsKey(note)) {
-                int count = notes.get(note);
-                count--;
-                if (count <= 0) {
-                    notes.remove(note);
-                } else {
-                    notes.put(note, count);
-                }
-            }
-        }
+    public void noteOff(int channel, int note) {
+        notes.get(channel).remove(note);
         this.repaint();
     }
 
@@ -155,83 +143,101 @@ public class NoteViewerBox extends MidiDeviceBox {
 
         // Draw the treble staff
         int lineCount = 0;
-        int staffY = middleCLedgerY - lineSpacing;
+        int trebleStaffY = middleCLedgerY - lineSpacing;
         while (lineCount < staffLineCount) {
-            g.drawLine(staffX1, staffY, staffX2, staffY);
+            g.drawLine(staffX1, trebleStaffY, staffX2, trebleStaffY);
             lineCount++;
-            staffY -= lineSpacing;
+            trebleStaffY -= lineSpacing;
+        }
+
+        // Draw the bass staff
+        lineCount = 0;
+        int bassStaffY = middleCLedgerY + lineSpacing;
+        while (lineCount < staffLineCount) {
+            g.drawLine(staffX1, bassStaffY, staffX2, bassStaffY);
+            lineCount++;
+            bassStaffY += lineSpacing;
+        }
+
+
+
+
+
+
+
+        int topNote = middleCNoteNum;
+        int bottomNote = middleCNoteNum;
+        boolean hasMiddleC = false;
+
+        // Draw the notes
+        synchronized (notes) {
+            for(SortedSet<Integer> channelNotes: notes.values()){
+                for(int note : channelNotes){
+
+                    if(note > topNote){
+                        topNote = note;
+                    }
+                    if(note < bottomNote){
+                        bottomNote = note;
+                    }
+
+                    if(note == middleCNoteNum){
+                        hasMiddleC = true;
+                    }
+
+                    int relativeNote = getNotePositionRelativeToMiddleC(note);
+
+                    int noteY = middleCNoteY - (relativeNote * noteSpacing);
+                    int noteX = spaceNoteX;
+                    if (relativeNote % 2 == 0) {
+                        noteX = lineNoteX;
+                    }
+                    g.drawOval(noteX, noteY, noteWidth, noteHeight);
+                    g.fillOval(noteX, noteY, noteWidth, noteHeight);
+
+                    if (getIsNoteFlat(note)) {
+                        g.drawOval(flatOvalXNoteMod + noteX, flatOvalYNoteMod + noteY, flatOvalWidth, flatOvalHeight);
+                        g.drawLine(flatLineX1NoteMod + noteX, flatLineY1NoteMod + noteY, flatLineX2NoteMod + noteX, flatLineY2NoteMod + noteY);
+                    }
+                    if (getIsNoteSharp(note)) {
+                        g.drawLine(sharpHorX1NoteMod + noteX, sharpHorY1NoteMod + noteY, sharpHorX2NoteMod + noteX, sharpHorY1NoteMod + noteY);
+                        g.drawLine(sharpHorX1NoteMod + noteX, sharpHorY2NoteMod + noteY, sharpHorX2NoteMod + noteX, sharpHorY2NoteMod + noteY);
+                        g.drawLine(sharpVerX1NoteMod + noteX, sharpVerY1NoteMod + noteY, sharpVerX2NoteMod + noteX, sharpVerY2NoteMod + noteY);
+                        g.drawLine(sharpVerX3NoteMod + noteX, sharpVerY1NoteMod + noteY, sharpVerX4NoteMod + noteX, sharpVerY2NoteMod + noteY);
+                    }
+                }
+            }
         }
 
         // Draw Ledger Lines above treble staff
         if (notes.isEmpty() == false) {
-            int topNote = notes.lastKey();
             int relativeTopNote = getNotePositionRelativeToMiddleC(topNote);
             int numLedgerLines = relativeTopNote / 2 - staffLineCount;
             lineCount = 0;
 
             while (numLedgerLines > 0 && numLedgerLines > lineCount) {
-                g.drawLine(ledgerX1, staffY, ledgerX2, staffY);
+                g.drawLine(ledgerX1, trebleStaffY, ledgerX2, trebleStaffY);
                 lineCount++;
-                staffY -= lineSpacing;
+                trebleStaffY -= lineSpacing;
             }
         }
-
-        // Draw the bass staff
-        lineCount = 0;
-        staffY = middleCLedgerY + lineSpacing;
-        while (lineCount < staffLineCount) {
-            g.drawLine(staffX1, staffY, staffX2, staffY);
-            lineCount++;
-            staffY += lineSpacing;
-        }
-
+        
         // Draw Ledger Lines Below Bass Staff
         if (notes.isEmpty() == false) {
-            int topNote = notes.firstKey();
-            int relativeTopNote = getNotePositionRelativeToMiddleC(topNote);
-            int numLedgerLines = (-relativeTopNote) / 2 - staffLineCount;
+            int relativeBottomNote = getNotePositionRelativeToMiddleC(bottomNote);
+            int numLedgerLines = (-relativeBottomNote) / 2 - staffLineCount;
             lineCount = 0;
 
             while (numLedgerLines > 0 && numLedgerLines > lineCount) {
-                g.drawLine(ledgerX1, staffY, ledgerX2, staffY);
+                g.drawLine(ledgerX1, bassStaffY, ledgerX2, bassStaffY);
                 lineCount++;
-                staffY += lineSpacing;
+                bassStaffY += lineSpacing;
             }
         }
 
         // Draw Middle C ledger line if needed
-        if (notes.containsKey(middleCNoteNum) || notes.containsKey(middleCNoteNum + 1)) {
+        if (hasMiddleC) {
             g.drawLine(ledgerX1, middleCLedgerY, ledgerX2, middleCLedgerY);
-        }
-
-
-
-
-
-        // Draw the notes
-        synchronized (notes) {
-            for (int note : notes.keySet()) {
-                int relativeNote = getNotePositionRelativeToMiddleC(note);
-
-                int noteY = middleCNoteY - (relativeNote * noteSpacing);
-                int noteX = spaceNoteX;
-                if (relativeNote % 2 == 0) {
-                    noteX = lineNoteX;
-                }
-                g.drawOval(noteX, noteY, noteWidth, noteHeight);
-                g.fillOval(noteX, noteY, noteWidth, noteHeight);
-
-                if (getIsNoteFlat(note)) {
-                    g.drawOval(flatOvalXNoteMod + noteX, flatOvalYNoteMod + noteY, flatOvalWidth, flatOvalHeight);
-                    g.drawLine(flatLineX1NoteMod + noteX, flatLineY1NoteMod + noteY, flatLineX2NoteMod + noteX, flatLineY2NoteMod + noteY);
-                }
-                if (getIsNoteSharp(note)) {
-                    g.drawLine(sharpHorX1NoteMod + noteX, sharpHorY1NoteMod + noteY, sharpHorX2NoteMod + noteX, sharpHorY1NoteMod + noteY);
-                    g.drawLine(sharpHorX1NoteMod + noteX, sharpHorY2NoteMod + noteY, sharpHorX2NoteMod + noteX, sharpHorY2NoteMod + noteY);
-                    g.drawLine(sharpVerX1NoteMod + noteX, sharpVerY1NoteMod + noteY, sharpVerX2NoteMod + noteX, sharpVerY2NoteMod + noteY);
-                    g.drawLine(sharpVerX3NoteMod + noteX, sharpVerY1NoteMod + noteY, sharpVerX4NoteMod + noteX, sharpVerY2NoteMod + noteY);
-                }
-            }
         }
 
 
