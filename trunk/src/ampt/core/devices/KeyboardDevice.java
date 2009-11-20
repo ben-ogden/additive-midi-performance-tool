@@ -1,5 +1,7 @@
 package ampt.core.devices;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
@@ -44,6 +46,8 @@ public class KeyboardDevice extends AmptDevice {
         if(channel < 0 || channel > 15){
             throw new IllegalArgumentException("Invalid Channel Number");
         }
+        
+        sendNotesOff();
         this._channel = channel;
     }
 
@@ -51,7 +55,22 @@ public class KeyboardDevice extends AmptDevice {
         if(octave < 0 || octave > 9){
             throw new IllegalArgumentException("Invalid Octave Number");
         }
+
+        sendNotesOff();
         this._octave = octave;
+    }
+
+    private void sendNotesOff(){
+        ShortMessage msg = new ShortMessage();
+        for(int note = 0; note < 12; note++){
+            try {
+                msg.setMessage(ShortMessage.NOTE_OFF, _channel, note, 0);
+                this.getAmptReceiver().send(msg, -1);
+            } catch (InvalidMidiDataException ex) {
+                // This shouldn't happen
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
 
