@@ -29,6 +29,14 @@ public class ArpFilterDevice extends AmptDevice {
     public final static String DEVICE_NAME = "Arpeggiator";
     public final static String DEVICE_DESCRIPTION = "An arpeggiator for use with AMPT";
 
+    public final static int ASCEND = 0;
+    public final static int DESCEND = 1;
+    public final static int ASCEND_DESCEND = 2;
+    public final static int DESCEND_ASCEND = 3;
+    public final static int RANDOM = 4;
+    public final static String[] arpTypes = {"Ascend", "Descend", "Ascend and Descend",
+            "Descend and Ascend", "Random"};
+
     private final HashMap<String, Sequencer> arpeggios = new HashMap<String, Sequencer>();
     private final ArrayBlockingQueue<Sequencer> sequencerPool =
             new ArrayBlockingQueue<Sequencer>(12);
@@ -36,6 +44,8 @@ public class ArpFilterDevice extends AmptDevice {
     private boolean generateSequencers = true;
     private ChordType chordType = ChordType.MAJOR;
     private NoteValue noteValue = NoteValue.EIGHTH_NOTE;
+    private int arpType = ASCEND_DESCEND;
+    private int[] randomNotes = new int[7];
 
     public ArpFilterDevice() {
         super(DEVICE_NAME, DEVICE_DESCRIPTION);
@@ -60,6 +70,10 @@ public class ArpFilterDevice extends AmptDevice {
         this.chordType = chordType;
     }
 
+    public void setArpType(int arpType) {
+        this.arpType = arpType;
+    }
+
     @Override
     public void initDevice() {
         //when put in a thread this will continually generate a sequencer that is as
@@ -82,16 +96,27 @@ public class ArpFilterDevice extends AmptDevice {
                         for (final Transmitter transmitter : transmitters)
                             transmitter.close();
 
-                        //this receiver acts as a shim between the sequencer and
+                        //this receiver acts as a gatekeeper between the sequencer and
                         //the destination devices - it removes any messages that are
                         //not either a note on or note off
                         sequencer.getTransmitter().setReceiver(new Receiver() {
                             @Override
                             public void send(MidiMessage message, long timeStamp) {
                                 if (message.getStatus() >= 128 &&
-                                        message.getStatus() <= 159)
+                                        message.getStatus() <= 159) {
 
+                                    if (arpType == RANDOM) {
+                                        int index = ((int) (Math.random() * 6)) + 1;
+                                        ShortMessage sMsg = (ShortMessage)message;
+                                        try {
+                                            sMsg.setMessage(sMsg.getCommand(), sMsg.getChannel(), randomNotes[index], sMsg.getData2());
+                                        } catch (InvalidMidiDataException e) {
+                                            e.printStackTrace();
+                                        }
+                                        message = sMsg;
+                                    }
                                     sendNow(message);
+                                }
                             }
 
                             @Override
@@ -160,19 +185,57 @@ public class ArpFilterDevice extends AmptDevice {
                     int tone = sMsg.getData1();
                     int velocity = sMsg.getData2();
 
-                    //build the arpeggio
                     SequenceBuilder sb = new SequenceBuilder(Sequence.PPQ, 480);
-                    sb.addNote(noteValue, channel, tone, velocity);
-                    sb.addNote(noteValue, channel, tone +
-                            chordType.getThirdInterval(), velocity);
-                    sb.addNote(noteValue, channel, tone +
-                            chordType.getFifthInterval(), velocity);
-                    sb.addNote(noteValue, channel, tone + 12, velocity);
-                    sb.addNote(noteValue, channel, tone +
-                            chordType.getFifthInterval(), velocity);
-                    sb.addNote(noteValue, channel, tone +
-                            chordType.getThirdInterval(), velocity);
-
+                    if (arpType == ASCEND_DESCEND) {
+                        sb.addNote(noteValue, channel, tone, velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                chordType.getThirdInterval(), velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                chordType.getFifthInterval(), velocity);
+                        sb.addNote(noteValue, channel, tone + 12, velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                chordType.getFifthInterval(), velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                chordType.getThirdInterval(), velocity);
+                    }
+                    if (arpType == DESCEND_ASCEND) {
+                        sb.addNote(noteValue, channel, tone, velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                (chordType.getFifthInterval() - 12), velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                (chordType.getThirdInterval() - 12), velocity);
+                        sb.addNote(noteValue, channel, tone - 12, velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                (chordType.getThirdInterval() - 12), velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                (chordType.getFifthInterval() - 12), velocity);
+                    }
+                    if (arpType == DESCEND) {
+                        sb.addNote(noteValue, channel, tone, velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                (chordType.getFifthInterval() - 12), velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                (chordType.getThirdInterval() - 12), velocity);
+                        sb.addNote(noteValue, channel, tone - 12, velocity);
+                    }
+                    if (arpType == ASCEND) {
+                        sb.addNote(noteValue, channel, tone, velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                chordType.getThirdInterval(), velocity);
+                        sb.addNote(noteValue, channel, tone +
+                                chordType.getFifthInterval(), velocity);
+                        sb.addNote(noteValue, channel, tone + 12, velocity);
+                    }
+                    if (arpType == RANDOM) {
+                        sb.addNote(noteValue, channel, tone, velocity);
+                        randomNotes[0] = tone;
+                        randomNotes[1] = tone + chordType.getThirdInterval();
+                        randomNotes[2] = tone + chordType.getFifthInterval();
+                        randomNotes[3] = tone + chordType.getThirdInterval() - 12;
+                        randomNotes[4] = tone + chordType.getFifthInterval() - 12;
+                        randomNotes[5] = tone + 12;
+                        randomNotes[6] = tone - 12;
+                    }
                     //start arpeggio playing and put it in hash map
                     arpeggios.put(key, playArpeggio(sb.getSequence()));
                 }

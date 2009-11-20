@@ -24,6 +24,7 @@ public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
 
     private JComboBox chordTypeComboBox;
     private JComboBox noteValueComboBox;
+    private JComboBox arpTypeComboBox;
 
     public ArpFilterBox(ArpFilterDevice device) throws MidiUnavailableException {
         
@@ -45,6 +46,17 @@ public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(Color.GREEN);
+
+        arpTypeComboBox = new JComboBox(ArpFilterDevice.arpTypes);
+        arpTypeComboBox.setSelectedIndex(ArpFilterDevice.ASCEND_DESCEND);
+        device.setArpType(ArpFilterDevice.ASCEND_DESCEND);
+        arpTypeComboBox.addActionListener(this);
+        arpTypeComboBox.setBorder(new TitledBorder(new LineBorder(Color.WHITE),
+                "Chord Type", TitledBorder.DEFAULT_JUSTIFICATION,
+                TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
+        arpTypeComboBox.setBackground(Color.GREEN);
+        arpTypeComboBox.setForeground(Color.WHITE);
+        centerPanel.add(arpTypeComboBox);
 
         Vector<ChordType> chordTypes = new Vector<ChordType>();
         for(ChordType chordType : ChordType.values())
@@ -86,6 +98,10 @@ public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
         if (e.getSource().equals(noteValueComboBox)) {
             ArpFilterDevice arp = (ArpFilterDevice) midiDevice;
             arp.setNoteValue((NoteValue)noteValueComboBox.getSelectedItem());
+        }
+        if (e.getSource().equals(arpTypeComboBox)) {
+            ArpFilterDevice arp = (ArpFilterDevice) midiDevice;
+            arp.setArpType(arpTypeComboBox.getSelectedIndex());
         }
     }
 }
