@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * Arrow.java
  *
  * Created on Nov 18, 2009, 9:56:06 AM
@@ -16,6 +11,9 @@ import java.awt.Graphics;
 import javax.swing.JLabel;
 
 /**
+ *
+ * An arrow for putting in a midiDeviceBox to show that the box has
+ * receivers or transmitters.
  *
  * @author Christopher
  */
