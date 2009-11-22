@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -129,27 +127,29 @@ public class AmptConsolePane extends JTextPane {
         AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
                 StyleConstants.Foreground, color);
 
-
         Document doc = getDocument();
 
-        if(doc.getLength() > DOC_MAX_SIZE) {
-            try {
-                doc.remove(0, DOC_TRIM_SIZE);
-            } catch (BadLocationException ex) {
-                // this *shouldn't* happen, but...
-                append("AmptConsolePane: Unable to trim document."
-                        + ex.getMessage());
+        // since multiple thread can be writing this console, we need to
+        // synchronize on this document
+        synchronized(doc) {
+
+            if(doc.getLength() > DOC_MAX_SIZE) {
+                try {
+                    doc.remove(0, DOC_TRIM_SIZE);
+                } catch (BadLocationException ex) {
+                    // do nothing
+                }
             }
+
+            // move caret to end of document
+            setCaretPosition(doc.getLength());
+
+            // set style attribute for new text
+            setCharacterAttributes(aset, false);
+
+            // insert text at caret
+            replaceSelection(msg);
         }
-
-        // move caret to end of document
-        setCaretPosition(doc.getLength());
-
-        // set style attribute for new text
-        setCharacterAttributes(aset, false);
-
-        // insert text at caret
-        replaceSelection(msg);
     }
 
     /**
