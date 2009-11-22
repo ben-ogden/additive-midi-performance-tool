@@ -5,6 +5,7 @@ import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -78,8 +79,20 @@ public class AmptConsolePane extends JTextPane {
                     public void mouseReleased(MouseEvent e) {
                         maybeShowPopup(e);
                     }
-                });
+                }
+        ); // addMouseListener
 
+    } // default constructor
+
+    /**
+     * Overriden to disable keyboard input on the text area.
+     *
+     * @param e
+     */
+    @Override
+    protected void processKeyEvent(KeyEvent e) {
+        // do nothing
+        return;
     }
 
     /**
