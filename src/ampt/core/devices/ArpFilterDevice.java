@@ -3,9 +3,11 @@ package ampt.core.devices;
 import ampt.midi.note.SequenceBuilder;
 import ampt.midi.chord.ChordType;
 import ampt.midi.note.NoteValue;
+import java.util.Collections;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
@@ -19,8 +21,11 @@ import javax.sound.midi.Transmitter;
 /**
  * This device plays an arpeggio based on the note played.
  *
- * TODO - currently the arpeggio is fixed and arbitrary - need to provide options to
- * play proper arpeggios
+ * History: 11/22/09   Ben    Synchronized sequencer map. Added null check
+ *                            before stopping/closing sequencer since another
+ *                            note off event could have already removed it. No
+ *                            longer creates a new sequence if one exists for
+ *                            a given key.
  *
  * @author Robert
  */
@@ -37,7 +42,9 @@ public class ArpFilterDevice extends AmptDevice {
     public final static String[] arpTypes = {"Ascend", "Descend", "Ascend and Descend",
             "Descend and Ascend", "Random"};
 
-    private final HashMap<String, Sequencer> arpeggios = new HashMap<String, Sequencer>();
+    private final Map<String, Sequencer> arpeggios = 
+            Collections.synchronizedMap(new HashMap<String, Sequencer>());
+
     private final ArrayBlockingQueue<Sequencer> sequencerPool =
             new ArrayBlockingQueue<Sequencer>(12);
     private Runnable sequenceGenerator;
@@ -166,21 +173,28 @@ public class ArpFilterDevice extends AmptDevice {
         public void filter(MidiMessage message, long timeStamp) {
 
             if (message instanceof ShortMessage) {
+
                 ShortMessage sMsg = (ShortMessage) message;
                 String key = sMsg.getChannel() + ":" + sMsg.getData1();
 
-                //first check for key released
-                if ((sMsg.getCommand() == ShortMessage.NOTE_OFF) || (sMsg.getCommand() ==
-                        ShortMessage.NOTE_ON && sMsg.getData2() == 0)) {
+                // first check for key released - could be NOTE_OFF or NOTE_ON
+                // with velocity == 0.
+                if (sMsg.getCommand() == ShortMessage.NOTE_OFF ||
+                    (sMsg.getCommand() == ShortMessage.NOTE_ON && sMsg.getData2() == 0)) {
 
-                    //find the arpeggio and stop it
+                    //find the arpeggio and stop it, but only if it exists in map
                     Sequencer sqr = arpeggios.remove(key);
-                    sqr.stop();
-                    sqr.close();
+                    if(null != sqr) {
+                        sqr.stop();
+                        sqr.close();
+                    } // else fail silently
+
                 }
 
-                //check for key pressed
-                else if(sMsg.getCommand() == ShortMessage.NOTE_ON) {
+                // check for key pressed but only create new sequence if one
+                // does not already exist for this key
+                else if(sMsg.getCommand() == ShortMessage.NOTE_ON &&
+                        !arpeggios.containsKey(key)) {
                     int channel = sMsg.getChannel();
                     int tone = sMsg.getData1();
                     int velocity = sMsg.getData2();
