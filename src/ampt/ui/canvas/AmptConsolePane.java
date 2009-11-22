@@ -11,8 +11,12 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -27,6 +31,14 @@ public class AmptConsolePane extends JTextPane {
 
     // default text color
     private static final Color DEFAULT_COLOR = Color.DARK_GRAY;
+
+    // maximum document size for the console pane (in characters)
+    //    32,000 = 400 x 80 character lines
+    private static final int DOC_MAX_SIZE = 32000;
+
+    // number of chars to cut as document reaches max size
+    //    1600 = 20 x 80 char lines
+    private static final int DOC_TRIM_SIZE = 800;
 
     /**
      * Create a new AmptConsolePane.
@@ -117,8 +129,21 @@ public class AmptConsolePane extends JTextPane {
         AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
                 StyleConstants.Foreground, color);
 
+
+        Document doc = getDocument();
+
+        if(doc.getLength() > DOC_MAX_SIZE) {
+            try {
+                doc.remove(0, DOC_TRIM_SIZE);
+            } catch (BadLocationException ex) {
+                // this *shouldn't* happen, but...
+                append("AmptConsolePane: Unable to trim document."
+                        + ex.getMessage());
+            }
+        }
+
         // move caret to end of document
-        setCaretPosition(getDocument().getLength());
+        setCaretPosition(doc.getLength());
 
         // set style attribute for new text
         setCharacterAttributes(aset, false);
