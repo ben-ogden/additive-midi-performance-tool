@@ -104,7 +104,6 @@ public class MainWindow extends JFrame {
         splitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         splitPane.setResizeWeight(0.5);
         splitPane.setToolTipText("");
-        splitPane.setLastDividerLocation(-1);
         splitPane.setOneTouchExpandable(true);
         splitPane.setPreferredSize(new java.awt.Dimension(800, 600));
 
@@ -143,11 +142,11 @@ public class MainWindow extends JFrame {
         theActualCanvasPanel.setLayout(theActualCanvasPanelLayout);
         theActualCanvasPanelLayout.setHorizontalGroup(
             theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 358, Short.MAX_VALUE)
+            .addGap(0, 362, Short.MAX_VALUE)
         );
         theActualCanvasPanelLayout.setVerticalGroup(
             theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 288, Short.MAX_VALUE)
+            .addGap(0, 406, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout canvasPanelLayout = new javax.swing.GroupLayout(canvasPanel);
@@ -174,24 +173,24 @@ public class MainWindow extends JFrame {
         filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
         filterPropertiesPanel1Layout.setHorizontalGroup(
             filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 171, Short.MAX_VALUE)
+            .addGap(0, 175, Short.MAX_VALUE)
         );
         filterPropertiesPanel1Layout.setVerticalGroup(
             filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 221, Short.MAX_VALUE)
+            .addGap(0, 337, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
         propertiesPanel.setLayout(propertiesPanelLayout);
         propertiesPanelLayout.setHorizontalGroup(
             propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+            .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
             .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         propertiesPanelLayout.setVerticalGroup(
             propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(propertiesPanelLayout.createSequentialGroup()
-                .addComponent(metronomePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(metronomePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -209,7 +208,7 @@ public class MainWindow extends JFrame {
         );
         topPaneLayout.setVerticalGroup(
             topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolbarPane, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+            .addComponent(toolbarPane, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
             .addComponent(propertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -218,7 +217,7 @@ public class MainWindow extends JFrame {
 
         bottomPane.setPreferredSize(new java.awt.Dimension(800, 150));
 
-        midiConsoleLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        midiConsoleLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         midiConsoleLabel.setText("MIDI Console");
         midiConsoleLabel.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
 
@@ -228,7 +227,7 @@ public class MainWindow extends JFrame {
         consoleScrollPane.setFocusable(false);
 
         consolePane.setBorder(null);
-        consolePane.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        consolePane.setFont(new java.awt.Font("Monospaced", 0, 12));
         consolePane.setForeground(new java.awt.Color(51, 51, 51));
         consolePane.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
         consolePane.setMargin(new java.awt.Insets(10, 10, 10, 10));
@@ -241,7 +240,7 @@ public class MainWindow extends JFrame {
             .addGroup(bottomPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(bottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
+                    .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
                     .addComponent(midiConsoleLabel))
                 .addContainerGap())
         );
@@ -251,7 +250,7 @@ public class MainWindow extends JFrame {
                 .addContainerGap()
                 .addComponent(midiConsoleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -289,7 +288,7 @@ public class MainWindow extends JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 772, Short.MAX_VALUE)
+                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
