@@ -67,7 +67,6 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
         }
 
         try {
-
             // create a new AmptMidiDevice
             return (MidiDevice) amptDeviceClass.newInstance();
 
@@ -79,4 +78,23 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
 
     }
 
+    /**
+     * Indicates whether AmptMidiDeviceProvider supports the device represented
+     * by the specified device info object.
+     *
+     * @param info an info object that describes the device for which support
+     *        is queried
+     * @return <code>true</code> if the specified device is supported,
+     * otherwise <code>false</code>
+     */
+    @Override
+    public boolean isDeviceSupported(MidiDevice.Info info) {
+
+        // if the Info is an AmptDeviceInfo, then we support it
+        if(info.getClass().equals(AmptDeviceInfo.class)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
