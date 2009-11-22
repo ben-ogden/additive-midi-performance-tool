@@ -460,14 +460,18 @@ public abstract class AmptDevice implements AmptMidiDevice {
 
             // debug the midi message if debug is enabled
             if (_midiDebugEnabled) {
-                _logger.print(_deviceInfo.getName());
-                _logger.print(": ");
+
+                StringBuilder logMsg = new StringBuilder();
+                logMsg.append(_deviceInfo.getName());
+                logMsg.append(": ");
                 byte[] msgBytes = msg.getMessage(); // length of array returned not guaranteed to match the actual message length
                 for (int i = 0; i < msg.getLength(); i++) {
-                    _logger.print((int) (msgBytes[i] & 0xFF));
-                    _logger.print(' ');
+                    logMsg.append((int) (msgBytes[i] & 0xFF));
+                    logMsg.append(' ');
                 }
-                _logger.println();
+                logMsg.append('\n');
+                _logger.print(logMsg);
+                 
             }
 
             // delegate to the implementing filter
