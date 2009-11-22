@@ -58,6 +58,7 @@ public class ChordFilterBox extends MidiDeviceBox implements ActionListener{
         chordTypesComboBox.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Chord Type", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
         chordTypesComboBox.setBackground(Color.BLUE);
         chordTypesComboBox.setForeground(Color.WHITE);
+        chordTypesComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerPanel.add(chordTypesComboBox);
 
         Vector<ChordInversion> chordInversions = new Vector<ChordInversion>();
@@ -71,6 +72,7 @@ public class ChordFilterBox extends MidiDeviceBox implements ActionListener{
         chordInversionsComboBox.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Chord Inversion", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
         chordInversionsComboBox.setBackground(Color.BLUE);
         chordInversionsComboBox.setForeground(Color.WHITE);
+        chordInversionsComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerPanel.add(chordInversionsComboBox);
 
         this.add(centerPanel, BorderLayout.CENTER);

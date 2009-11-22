@@ -56,6 +56,7 @@ public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
                 TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
         arpTypeComboBox.setBackground(Color.GREEN);
         arpTypeComboBox.setForeground(Color.WHITE);
+        arpTypeComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerPanel.add(arpTypeComboBox);
 
         Vector<ChordType> chordTypes = new Vector<ChordType>();
@@ -70,6 +71,7 @@ public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
                 TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
         chordTypeComboBox.setBackground(Color.GREEN);
         chordTypeComboBox.setForeground(Color.WHITE);
+        chordTypeComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerPanel.add(chordTypeComboBox);
 
         Vector<NoteValue> noteValues = new Vector<NoteValue>();
@@ -84,6 +86,7 @@ public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
                 TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
         noteValueComboBox.setBackground(Color.GREEN);
         noteValueComboBox.setForeground(Color.WHITE);
+        noteValueComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerPanel.add(noteValueComboBox);
 
         this.add(centerPanel, BorderLayout.CENTER);

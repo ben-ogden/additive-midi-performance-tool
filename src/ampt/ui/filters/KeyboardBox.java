@@ -87,6 +87,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         device.setChannel(channels[0]);
         channelComboBox.addActionListener(this);
         channelComboBox.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Chan."));
+        channelComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerEastPanel.add(channelComboBox);
 
         Integer[] octaves = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -96,6 +97,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         device.setOctave(octaves[5]);
         octaveComboBox.addActionListener(this);
         octaveComboBox.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Octave"));
+        octaveComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerEastPanel.add(octaveComboBox);
 
         eastPanel.add(centerEastPanel, BorderLayout.CENTER);
