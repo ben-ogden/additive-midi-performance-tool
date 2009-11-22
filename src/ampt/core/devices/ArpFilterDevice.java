@@ -27,6 +27,11 @@ import javax.sound.midi.Transmitter;
  *                            longer creates a new sequence if one exists for
  *                            a given key.
  *
+ *          11/22/09   Chirs  Random note generation.  Added checks for note
+ *                            fixing note off events, or note on events with
+ *                            a velocity of zero, so the correct note would
+ *                            be turned off instead of a random one.
+ *
  * @author Robert
  */
 public class ArpFilterDevice extends AmptDevice {
@@ -107,6 +112,9 @@ public class ArpFilterDevice extends AmptDevice {
                         //the destination devices - it removes any messages that are
                         //not either a note on or note off
                         sequencer.getTransmitter().setReceiver(new Receiver() {
+                            
+                            private int previousNoteOn = -1;
+
                             @Override
                             public void send(MidiMessage message, long timeStamp) {
                                 if (message.getStatus() >= 128 &&
@@ -115,11 +123,24 @@ public class ArpFilterDevice extends AmptDevice {
                                     if (arpType == RANDOM) {
                                         int index = ((int) (Math.random() * 6)) + 1;
                                         ShortMessage sMsg = (ShortMessage)message;
-                                        try {
-                                            sMsg.setMessage(sMsg.getCommand(), sMsg.getChannel(), randomNotes[index], sMsg.getData2());
-                                        } catch (InvalidMidiDataException e) {
-                                            e.printStackTrace();
+                                        System.out.println(sMsg.getCommand());
+                                        if(sMsg.getCommand() == ShortMessage.NOTE_ON && sMsg.getData2() != 0){
+                                            try {
+                                                sMsg.setMessage(sMsg.getCommand(), sMsg.getChannel(), randomNotes[index], sMsg.getData2());
+                                                previousNoteOn = randomNotes[index];
+                                            } catch (InvalidMidiDataException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else if (sMsg.getCommand() == ShortMessage.NOTE_OFF || (sMsg.getCommand() == ShortMessage.NOTE_ON && sMsg.getData2() == 0)){
+                                            if(previousNoteOn != -1){
+                                                try {
+                                                    sMsg.setMessage(sMsg.getCommand(), sMsg.getChannel(), previousNoteOn, sMsg.getData2());
+                                                } catch (InvalidMidiDataException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
                                         }
+
                                         message = sMsg;
                                     }
                                     sendNow(message);
