@@ -5,12 +5,14 @@ import ampt.midi.chord.ChordType;
 import ampt.midi.note.NoteValue;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -90,6 +92,30 @@ public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
         centerPanel.add(noteValueComboBox);
 
         this.add(centerPanel, BorderLayout.CENTER);
+
+        if (hasReceiver()) {
+            JPanel westPanel = new JPanel();
+            westPanel.setBackground(Color.GREEN);
+            westPanel.setLayout(new GridLayout(2, 1));
+            westPanel.add(new JLabel());
+            BoxArrow boxArrow = new BoxArrow();
+            boxArrow.setColor(Color.WHITE);
+            westPanel.add(boxArrow);
+            this.add(westPanel, BorderLayout.WEST);
+        }
+
+        if (hasTransmitter()) {
+            JPanel eastPanel = new JPanel();
+            eastPanel.setBackground(Color.GREEN);
+            eastPanel.setLayout(new GridLayout(2, 1));
+            eastPanel.add(new JLabel());
+            BoxArrow boxArrow = new BoxArrow();
+            boxArrow.setColor(Color.WHITE);
+            eastPanel.add(boxArrow);
+            this.add(eastPanel, BorderLayout.EAST);
+        }
+
+
     }
 
     @Override
