@@ -70,13 +70,20 @@ public class CanvasPanel extends javax.swing.JPanel {
             MidiDeviceBox box = (MidiDeviceBox) c;
             midiDeviceBoxes.add(box);
             final JPopupMenu popupMenu = new JPopupMenu();
-            if (box.hasTransmitter()) {
-                JMenuItem addConnectionMenuItem = new JMenuItem("Add Filter Connection");
-                addConnectionMenuItem.addActionListener(new AddConnectionActionListener(box, this));
-                popupMenu.add(addConnectionMenuItem);
+            JMenuItem addConnectionMenuItem = new JMenuItem("Add Filter Connection");
+            addConnectionMenuItem.addActionListener(new AddConnectionActionListener(box, this));
+            popupMenu.add(addConnectionMenuItem);
+            if (box.hasTransmitter() == false) {
+                addConnectionMenuItem.setEnabled(false);
             }
             this.add(popupMenu);
             final JMenu removeConnectionMenu = new JMenu("Remove Filter Connection");
+            removeConnectionMenu.setEnabled(false);
+            popupMenu.add(removeConnectionMenu);
+            popupMenu.add(new JSeparator());
+            JMenuItem deleteBoxMenuItem = new JMenuItem("Remove MIDI Device");
+            deleteBoxMenuItem.addActionListener(new RemoveBoxActionListener(box, this));
+            popupMenu.add(deleteBoxMenuItem);
             final CanvasPanel thisPanel = this;
             MouseListener popupListener = new MouseAdapter() {
 
@@ -108,12 +115,12 @@ public class CanvasPanel extends javax.swing.JPanel {
                                 hasConnections = true;
                             }
                         }
-                        // if there are connections, add the menu
+                        // if there are connections, enable the menu
                         if (hasConnections) {
-                            popupMenu.add(removeConnectionMenu);
-                        } // if there are no connections, remove the menu
+                            removeConnectionMenu.setEnabled(true);
+                        } // if there are no connections, disable the menu
                         else {
-                            popupMenu.remove(removeConnectionMenu);
+                            removeConnectionMenu.setEnabled(false);
                         }
                         popupMenu.show(e.getComponent(),
                                 e.getX(), e.getY());
@@ -137,14 +144,13 @@ public class CanvasPanel extends javax.swing.JPanel {
     public void remove(Component comp) {
         if (comp instanceof MidiDeviceBox) {
             MidiDeviceBox box = (MidiDeviceBox) comp;
-            for (MidiDeviceConnection conn : midiDeviceConnections) {
+            for (MidiDeviceConnection conn : midiDeviceConnections.toArray(new MidiDeviceConnection[0])) {
                 if (conn.getTo().equals(box) || conn.getFrom().equals(box)) {
                     this.remove(conn);
                 }
             }
             
-            //TODO ?
-            //box.closeDevice();
+            box.closeDevice();
 
             midiDeviceBoxes.remove(box);
             super.remove(comp);
@@ -163,6 +169,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         } else {
             super.remove(comp);
         }
+        this.repaint();
     }
 
     @Override
