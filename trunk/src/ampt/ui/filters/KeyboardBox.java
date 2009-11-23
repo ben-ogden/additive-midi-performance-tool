@@ -111,17 +111,29 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
             eastPanel.add(eastEastPanel, BorderLayout.EAST);
         }
 
-//        if(hasReceiver()){
-//            JPanel westPanel = new JPanel();
-//            westPanel.setBackground(Color.CYAN);
-//            westPanel.setLayout(new GridLayout(2,1));
-//            westPanel.add(new JLabel());
-//            westPanel.add(new BoxArrow());
-//            this.add(westPanel, BorderLayout.WEST);
-//        }
+        if(hasReceiver()){
+            JPanel westPanel = new JPanel();
+            westPanel.setBackground(Color.CYAN);
+            westPanel.setLayout(new GridLayout(2,1));
+            westPanel.add(new JLabel());
+            westPanel.add(new BoxArrow());
+            this.add(westPanel, BorderLayout.WEST);
+        }
 
         this.add(eastPanel, BorderLayout.EAST);
     }
+
+    /**
+     * Override this method to return false, so connections to
+     * a keyboard box cannot be made.
+     * @return false
+     */
+    @Override
+    public boolean hasReceiver() {
+        return false;
+    }
+
+
 
     /**
      * Listener for velocity slider
