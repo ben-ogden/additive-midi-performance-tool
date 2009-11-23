@@ -110,7 +110,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
 
         // close any open receivers
         synchronized(_receivers) {
-            for (Receiver r : _receivers) {
+            for (Receiver r : _receivers.toArray(new Receiver[0])) {
                 r.close();
             }
             _receivers.clear();
@@ -118,7 +118,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
 
         // close any open transmitters
         synchronized(_transmitters) {
-            for (Transmitter t : _transmitters) {
+            for (Transmitter t : _transmitters.toArray(new Transmitter[0])) {
                 t.close();
             }
             _transmitters.clear();
