@@ -92,6 +92,7 @@ public class MainWindow extends JFrame {
         consolePane = new ampt.ui.canvas.AmptConsolePane();
         amptMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         viewMenu = new javax.swing.JMenu();
 
@@ -259,6 +260,15 @@ public class MainWindow extends JFrame {
         amptMenuBar.setPreferredSize(new java.awt.Dimension(800, 21));
 
         fileMenu.setText("File");
+
+        jMenuItem1.setText("Exit");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem1);
+
         amptMenuBar.add(fileMenu);
 
         editMenu.setText("Edit");
@@ -301,6 +311,10 @@ public class MainWindow extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -408,6 +422,7 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel1;
+    private javax.swing.JMenuItem jMenuItem1;
     private ampt.ui.canvas.MetronomePanel metronomePanel1;
     private javax.swing.JLabel midiConsoleLabel;
     private javax.swing.JPanel propertiesPanel;
