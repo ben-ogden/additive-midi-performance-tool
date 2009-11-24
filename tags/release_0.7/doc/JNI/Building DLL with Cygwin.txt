@@ -1,0 +1,1 @@
+$ gcc -mno-cygwin -I/cygdrive/j/Program\ Files/Java/jdk1.6.0_16/include -I/cygdrive/j/Program\ Files/Java/jdk1.6.0_16/include/win32 -Wl,--add-stdcall-alias -shared -o AmptWinClock.dll AmptWinClock.cpp
