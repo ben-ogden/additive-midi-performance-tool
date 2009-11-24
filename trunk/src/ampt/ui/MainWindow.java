@@ -146,16 +146,17 @@ public class MainWindow extends JFrame {
 
         theActualCanvasPanel.setBackground(new java.awt.Color(255, 255, 255));
         theActualCanvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        theActualCanvasPanel.setPreferredSize(new java.awt.Dimension(1000, 1000));
 
         javax.swing.GroupLayout theActualCanvasPanelLayout = new javax.swing.GroupLayout(theActualCanvasPanel);
         theActualCanvasPanel.setLayout(theActualCanvasPanelLayout);
         theActualCanvasPanelLayout.setHorizontalGroup(
             theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 355, Short.MAX_VALUE)
+            .addGap(0, 996, Short.MAX_VALUE)
         );
         theActualCanvasPanelLayout.setVerticalGroup(
             theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGap(0, 996, Short.MAX_VALUE)
         );
 
         canvasScrollPane.setViewportView(theActualCanvasPanel);
