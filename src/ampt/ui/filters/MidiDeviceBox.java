@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.sound.midi.MidiDevice;
@@ -185,12 +186,22 @@ public class MidiDeviceBox extends JPanel {
             int deltaY = e.getY() - firstPointOnBox.y;
             int y = box.getLocation().y + deltaY;
 
-            x = x < 0 ? 0 : (x > box.getParent().getWidth() - box.getWidth() ? box.getParent().getWidth() - box.getWidth() : x);
-            y = y < 0 ? 0 : (y > box.getParent().getHeight() - box.getHeight() ? box.getParent().getHeight() - box.getHeight() : y);
+            x = x < 0 ? 0 : x;
+            y = y < 0 ? 0 : y;
+
+            if((box.getParent().getWidth() < x + box.getWidth()) || (box.getParent().getHeight() < y + box.getHeight())){
+                int panelX = x + box.getWidth() < box.getParent().getWidth() ? box.getParent().getWidth() : x + box.getWidth();
+                int panelY = y + box.getHeight() < box.getParent().getHeight() ? box.getParent().getHeight() : y + box.getHeight();
+                box.getParent().setPreferredSize(new Dimension(panelX, panelY));
+
+                ((JPanel)box.getParent()).revalidate();
+            }
+
+            
 
             box.setLocation(x, y);
             box.getParent().repaint();
-
+            box.scrollRectToVisible(new Rectangle(box.getSize()));
         }
 
         @Override
