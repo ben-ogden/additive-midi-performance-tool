@@ -26,8 +26,8 @@ public class BlackKey extends KeyboardKey {
      *
      * @param note
      *            The note that this key represents
-     * @param channel
-     *            The channel to send MIDI messages on
+     * @param keyboardReceiver
+     *            The receiver to send MIDI messages
      */
     public BlackKey(int note, Receiver keyboardReceiver) {
         super(note, keyboardReceiver);
@@ -43,8 +43,8 @@ public class BlackKey extends KeyboardKey {
      *            The note that this key represents
      * @param keyBinding
      *            The key to bind this button to
-     * @param channel
-     *            The channel to send MIDI messages on
+     * @param keyboardReceiver
+     *            The receiver to send MIDI messages
      */
     public BlackKey(int note, char keyBinding, Receiver keyboardReceiver) {
         super(note, keyBinding, keyboardReceiver);

@@ -42,7 +42,7 @@ public class MidiDeviceBox extends JPanel {
     /**
      * Create the Box, and associate it with the correct MidiDevice.
      *
-     * @param deviceInfo
+     * @param device the sMidiDevice backing this box
      */
     public MidiDeviceBox(MidiDevice device) throws MidiUnavailableException {
 

@@ -134,7 +134,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * Connect a transmitter (output) from this MidiDevice to a receiver (input)
      * of the given MidiDevice.
      *
-     * @param device the MidiDevice to connect to
+     * @param anotherDevice the MidiDevice to connect to
      * @throws MidiUnavailableException if the connection cannot be made due to
      *                    either of the devices not being open or if there are
      *                    no additional transmitters or receivers to make the
@@ -363,7 +363,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * Sends a list of MidiMessages immediately to all Transmitters registered
      * with this AMPT device.
      *
-     * @param midiMessage the MidiMessage to send
+     * @param midiMessages the MidiMessages to send
      */
     protected void sendNow(List<MidiMessage> midiMessages) {
 
@@ -388,7 +388,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * that need to control output to specific transmitters.
      *
      * @param midiMessage the MidiMessage to send
-     * @param receiver the Receiver to whic
+     * @param transmitter where to send the message
      */
     protected void sendNow(final MidiMessage midiMessage, Transmitter transmitter) {
 

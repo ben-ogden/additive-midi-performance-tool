@@ -34,8 +34,8 @@ public class KeyboardPanel extends JPanel {
      * Constructs the keyboard, adding each key. Sets the channel to send the
      * MIDI messages on.
      *
-     * @param channel
-     *            The channel to send the MIDI messages on
+     * @param keyboardDevice
+     *            The device backing this keyboard panel
      */
     public KeyboardPanel(KeyboardDevice keyboardDevice) throws MidiUnavailableException {
 
