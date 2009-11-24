@@ -123,7 +123,6 @@ public class ArpFilterDevice extends AmptDevice {
                                     if (arpType == RANDOM) {
                                         int index = ((int) (Math.random() * 6)) + 1;
                                         ShortMessage sMsg = (ShortMessage)message;
-                                        System.out.println(sMsg.getCommand());
                                         if(sMsg.getCommand() == ShortMessage.NOTE_ON && sMsg.getData2() != 0){
                                             try {
                                                 sMsg.setMessage(sMsg.getCommand(), sMsg.getChannel(), randomNotes[index], sMsg.getData2());
