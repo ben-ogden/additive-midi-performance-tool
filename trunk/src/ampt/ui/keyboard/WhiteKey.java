@@ -38,8 +38,8 @@ public class WhiteKey extends KeyboardKey {
      *            Right
      * @param note
      *            The note that this key represents
-     * @param channel
-     *            The channel to send MIDI messages on
+     * @param receiver
+     *            The receiver to send MIDI messages
      */
     public WhiteKey(KeyType keyType, int note, Receiver receiver) {
         super(note, receiver);
@@ -59,8 +59,8 @@ public class WhiteKey extends KeyboardKey {
      *            The note that this key represents
      * @param keyBinding
      *            The key to associate with this button
-     * @param channel
-     *            The channel to send MIDI messages on
+     * @param receiver
+     *            The receiver to send MIDI messages
      */
     public WhiteKey(KeyType keyType, int note, char keyBinding, Receiver receiver) {
         super(note, keyBinding, receiver);

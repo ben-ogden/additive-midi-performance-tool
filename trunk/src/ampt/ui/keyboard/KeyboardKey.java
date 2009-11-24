@@ -39,8 +39,8 @@ public abstract class KeyboardKey extends JComponent implements MouseListener {
      *
      * @param note
      *            The note that this key represents
-     * @param channel
-     *            The channel to send MIDI messages on.
+     * @param keyboardReceiver
+     *            The receiver to send MIDI messages
      */
     public KeyboardKey(final int note, Receiver keyboardReceiver) {
         super();
@@ -57,8 +57,8 @@ public abstract class KeyboardKey extends JComponent implements MouseListener {
      *            The note that this key represents
      * @param keyBinding
      *            The key to bind this button to
-     * @param channel
-     *            The channel to send MIDI messages on
+     * @param keyboardReceiver
+     *            The receiver to send MIDI messages
      */
     public KeyboardKey(final int note, char keyBinding, Receiver keyboardReceiver) {
 
@@ -98,8 +98,9 @@ public abstract class KeyboardKey extends JComponent implements MouseListener {
     }
 
     /**
-     * returns the note this key represents
-     * @return
+     * Returns the note this key represents
+     *
+     * @return the note value
      */
     public int getNote() {
         return note;
