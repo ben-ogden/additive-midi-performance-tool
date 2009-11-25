@@ -37,7 +37,7 @@ public class KeyboardPanel extends JPanel {
      * @param keyboardDevice
      *            The device backing this keyboard panel
      */
-    public KeyboardPanel(KeyboardDevice keyboardDevice) throws MidiUnavailableException {
+    public KeyboardPanel(KeyboardDevice keyboardDevice, boolean extended) throws MidiUnavailableException {
 
         super();
 
@@ -54,54 +54,57 @@ public class KeyboardPanel extends JPanel {
 
         // instantiate each key
         WhiteKey cKey = new WhiteKey(KeyType.Left, 0, 'q', keyboardReceiver);
-        keys.add(cKey);
         BlackKey cSharpKey = new BlackKey(1, '2', keyboardReceiver);
-        keys.add(cSharpKey);
         WhiteKey dKey = new WhiteKey(KeyType.Center, 2, 'w', keyboardReceiver);
-        keys.add(dKey);
         BlackKey dSharpKey = new BlackKey(3, '3', keyboardReceiver);
-        keys.add(dSharpKey);
         WhiteKey eKey = new WhiteKey(KeyType.Right, 4, 'e', keyboardReceiver);
-        keys.add(eKey);
         WhiteKey fKey = new WhiteKey(KeyType.Left, 5, 'r', keyboardReceiver);
-        keys.add(fKey);
         BlackKey fSharpKey = new BlackKey(6, '5', keyboardReceiver);
-        keys.add(fSharpKey);
         WhiteKey gKey = new WhiteKey(KeyType.Center, 7, 't', keyboardReceiver);
-        keys.add(gKey);
         BlackKey gSharpKey = new BlackKey(8, '6', keyboardReceiver);
-        keys.add(gSharpKey);
         WhiteKey aKey = new WhiteKey(KeyType.Center, 9, 'y', keyboardReceiver);
-        keys.add(aKey);
         BlackKey aSharpKey = new BlackKey(10, '7', keyboardReceiver);
-        keys.add(aSharpKey);
         WhiteKey bKey = new WhiteKey(KeyType.Right, 11, 'u', keyboardReceiver);
-        keys.add(bKey);
         WhiteKey cUpperKey = new WhiteKey(KeyType.Left, 12, 'v', keyboardReceiver);
-        keys.add(cUpperKey);
         BlackKey cSharpUpperKey = new BlackKey(13, 'g', keyboardReceiver);
-        keys.add(cSharpUpperKey);
         WhiteKey dUpperKey = new WhiteKey(KeyType.Center, 14, 'b', keyboardReceiver);
-        keys.add(dUpperKey);
         BlackKey dSharpUpperKey = new BlackKey(15, 'h', keyboardReceiver);
-        keys.add(dSharpUpperKey);
         WhiteKey eUpperKey = new WhiteKey(KeyType.Right, 16, 'n', keyboardReceiver);
-        keys.add(eUpperKey);
         WhiteKey fUpperKey = new WhiteKey(KeyType.Left, 17, 'm', keyboardReceiver);
-        keys.add(fUpperKey);
         BlackKey fSharpUpperKey = new BlackKey(18, 'k', keyboardReceiver);
-        keys.add(fSharpUpperKey);
         WhiteKey gUpperKey = new WhiteKey(KeyType.Center, 19, ',', keyboardReceiver);
-        keys.add(gUpperKey);
         BlackKey gSharpUpperKey = new BlackKey(20, 'l', keyboardReceiver);
-        keys.add(gSharpUpperKey);
         WhiteKey aUpperKey = new WhiteKey(KeyType.Center, 21, '.', keyboardReceiver);
-        keys.add(aUpperKey);
         BlackKey aSharpUpperKey = new BlackKey(22, ';', keyboardReceiver);
-        keys.add(aSharpUpperKey);
         WhiteKey bUpperKey = new WhiteKey(KeyType.Right, 23, '/', keyboardReceiver);
-        keys.add(bUpperKey);
 
+        // add the keys to the Vector
+        keys.add(cKey);
+        keys.add(cSharpKey);
+        keys.add(dKey);
+        keys.add(dSharpKey);
+        keys.add(eKey);
+        keys.add(fKey);
+        keys.add(fSharpKey);
+        keys.add(gKey);
+        keys.add(gSharpKey);
+        keys.add(aKey);
+        keys.add(aSharpKey);
+        keys.add(bKey);
+        if (extended) {
+            keys.add(cUpperKey);
+            keys.add(cSharpUpperKey);
+            keys.add(dUpperKey);
+            keys.add(dSharpUpperKey);
+            keys.add(eUpperKey);
+            keys.add(fUpperKey);
+            keys.add(fSharpUpperKey);
+            keys.add(gUpperKey);
+            keys.add(gSharpUpperKey);
+            keys.add(aUpperKey);
+            keys.add(aSharpUpperKey);
+            keys.add(bUpperKey);
+        }
         // set the location of each key
         int xPos = 0;
         cKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
@@ -128,30 +131,32 @@ public class KeyboardPanel extends JPanel {
         xPos += WhiteKey.KEY_WIDTH;
         bKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
         xPos += WhiteKey.KEY_WIDTH;
-        cUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
-        cSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
-                BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
-        xPos += WhiteKey.KEY_WIDTH;
-        dUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
-        dSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
-                BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
-        xPos += WhiteKey.KEY_WIDTH;
-        eUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
-        xPos += WhiteKey.KEY_WIDTH;
-        fUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
-        fSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
-                BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
-        xPos += WhiteKey.KEY_WIDTH;
-        gUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
-        gSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
-                BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
-        xPos += WhiteKey.KEY_WIDTH;
-        aUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
-        aSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
-                BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
-        xPos += WhiteKey.KEY_WIDTH;
-        bUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
-        xPos += WhiteKey.KEY_WIDTH;
+        if (extended) {
+            cUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
+            cSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
+                    BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
+            xPos += WhiteKey.KEY_WIDTH;
+            dUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
+            dSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
+                    BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
+            xPos += WhiteKey.KEY_WIDTH;
+            eUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
+            xPos += WhiteKey.KEY_WIDTH;
+            fUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
+            fSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
+                    BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
+            xPos += WhiteKey.KEY_WIDTH;
+            gUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
+            gSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
+                    BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
+            xPos += WhiteKey.KEY_WIDTH;
+            aUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
+            aSharpUpperKey.setBounds(xPos + 3 * WhiteKey.KEY_WIDTH / 4, 0,
+                    BlackKey.KEY_WIDTH, BlackKey.KEY_HEIGHT);
+            xPos += WhiteKey.KEY_WIDTH;
+            bUpperKey.setBounds(xPos, 0, WhiteKey.KEY_WIDTH, WhiteKey.KEY_HEIGHT);
+            xPos += WhiteKey.KEY_WIDTH;
+        }
 
 
         // add they keys to the layered panel, specifing the depth so the key is
@@ -168,24 +173,28 @@ public class KeyboardPanel extends JPanel {
         keyboard.add(aKey, 1);
         keyboard.add(aSharpKey, 0);
         keyboard.add(bKey, 1);
-        keyboard.add(cUpperKey, 1);
-        keyboard.add(cSharpUpperKey, 0);
-        keyboard.add(dUpperKey, 1);
-        keyboard.add(dSharpUpperKey, 0);
-        keyboard.add(eUpperKey, 1);
-        keyboard.add(fUpperKey, 1);
-        keyboard.add(fSharpUpperKey, 0);
-        keyboard.add(gUpperKey, 1);
-        keyboard.add(gSharpUpperKey, 0);
-        keyboard.add(aUpperKey, 1);
-        keyboard.add(aSharpUpperKey, 0);
-        keyboard.add(bUpperKey, 1);
+        if (extended) {
+            keyboard.add(cUpperKey, 1);
+            keyboard.add(cSharpUpperKey, 0);
+            keyboard.add(dUpperKey, 1);
+            keyboard.add(dSharpUpperKey, 0);
+            keyboard.add(eUpperKey, 1);
+            keyboard.add(fUpperKey, 1);
+            keyboard.add(fSharpUpperKey, 0);
+            keyboard.add(gUpperKey, 1);
+            keyboard.add(gSharpUpperKey, 0);
+            keyboard.add(aUpperKey, 1);
+            keyboard.add(aSharpUpperKey, 0);
+            keyboard.add(bUpperKey, 1);
+        }
 
 
         // set the preferred size of the keyboard
-        keyboard.setPreferredSize(new Dimension(WhiteKey.KEY_WIDTH * 14,
-                WhiteKey.KEY_HEIGHT));
-
+        if (extended) {
+            keyboard.setPreferredSize(new Dimension(WhiteKey.KEY_WIDTH * 14, WhiteKey.KEY_HEIGHT));
+        } else {
+            keyboard.setPreferredSize(new Dimension(WhiteKey.KEY_WIDTH * 7, WhiteKey.KEY_HEIGHT));
+        }
         // add the keyboard to this panel
         this.add(keyboard, BorderLayout.CENTER);
 

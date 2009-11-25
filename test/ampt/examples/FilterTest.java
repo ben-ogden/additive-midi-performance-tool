@@ -125,7 +125,7 @@ public class FilterTest extends JFrame{
          */
 
         keyboardDevice = new KeyboardDevice();
-        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice);
+        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice, false);
         mainPanel.add(keyboard, BorderLayout.SOUTH);
         
         this.add(mainPanel);

@@ -13,7 +13,7 @@ public class KeyboardWithFlutter extends JFrame {
     public KeyboardWithFlutter() throws MidiUnavailableException {
         this.setTitle("Keyboard with Filters Test");
         KeyboardDevice keyboardDevice = new KeyboardDevice();
-        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice);
+        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice, false);
         FlutterFilter filter = new FlutterFilter();
         this.add(keyboard);
         try {

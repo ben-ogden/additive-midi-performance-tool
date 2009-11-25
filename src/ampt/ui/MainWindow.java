@@ -128,9 +128,21 @@ public class MainWindow extends JFrame {
             }
 
             MidiDeviceButton button = new MidiDeviceButton(deviceInfo);
+            if(deviceInfo.getName().equals(new KeyboardDevice().getDeviceInfo().getName())){
+                MidiDeviceButton extendedButton = new MidiDeviceButton(deviceInfo);
+                extendedButton.setText("Extended " + extendedButton.getText());
+                extendedButton.setToolTipText("Extened " + extendedButton.getToolTipText());
+                toolbarPane.add(extendedButton);
+                extendedButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt){
+                        buttonHandler(evt);
+                    }
+                });
+            }
+
             toolbarPane.add(button);
-            button.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
                     buttonHandler(evt);
                 }
             });
@@ -384,7 +396,11 @@ public class MainWindow extends JFrame {
                             KeyboardDevice keyboard = (KeyboardDevice) device;
                             keyboard.setLogger(consolePane.getPrintStream(Color.CYAN));
                             keyboard.setMidiDebugEnabled(true);
-                            box = new KeyboardBox(keyboard);
+                            if(deviceButton.getText().matches(".*[eE]xtended.*")){
+                                box = new KeyboardBox(keyboard, true);
+                            }else {
+                                box = new KeyboardBox(keyboard, false);
+                            }
                         } else if (device instanceof ChordFilterDevice) {
                             ChordFilterDevice chordDevice = (ChordFilterDevice) device;
                             chordDevice.setLogger(consolePane.getPrintStream(Color.BLUE));
