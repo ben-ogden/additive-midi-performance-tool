@@ -16,7 +16,6 @@ import ampt.ui.filters.MidiDeviceBox;
 import ampt.ui.filters.NoteViewerBox;
 import ampt.ui.filters.ArpFilterBox;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,7 +47,8 @@ public class MainWindow extends JFrame {
      * To exclude a MidiDevice from the toolbar, add the device to the list
      * below.
      */
-    private List<String> excludedDevices = Arrays.asList("Microsoft MIDI Mapper");
+    private List<String> excludedDevices = Arrays.asList("Microsoft MIDI Mapper",
+            "Real Time Sequencer");
     
     /*
      * This is used for listening for the user clicking on the canvas panel so
