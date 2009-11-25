@@ -157,6 +157,8 @@ public class MainWindow extends JFrame {
         canvasScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         canvasScrollPane.setAutoscrolls(true);
         canvasScrollPane.setPreferredSize(new java.awt.Dimension(2002, 2002));
+        canvasScrollPane.setColumnHeaderView(new CanvasRuler(Orientation.Horizontal));
+        canvasScrollPane.setRowHeaderView(new CanvasRuler(Orientation.Vertical));
 
         theActualCanvasPanel.setBackground(new java.awt.Color(255, 255, 255));
         theActualCanvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());

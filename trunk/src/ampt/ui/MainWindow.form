@@ -185,6 +185,9 @@
                       <Dimension value="[2002, 2002]"/>
                     </Property>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="canvasScrollPane.setColumnHeaderView(new CanvasRuler(Orientation.Horizontal));&#xa;canvasScrollPane.setRowHeaderView(new CanvasRuler(Orientation.Vertical));"/>
+                  </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
