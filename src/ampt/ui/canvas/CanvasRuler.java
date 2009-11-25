@@ -56,15 +56,13 @@ public class CanvasRuler extends JComponent{
         protected void paintComponent(Graphics g) {
         Rectangle drawHere = g.getClipBounds();
 
-        // Fill clipping area with dirty brown/orange.
-//        g.setColor(new Color(230, 163, 4));
-        // Fill clipping area with gray
-        g.setColor(Color.LIGHT_GRAY);
+        // Fill clipping area with white
+        g.setColor(Color.WHITE);
         g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
 
-        // Do the ruler labels in a small font that's black.
+        // Do the ruler labels in a small font that's light gray.
         g.setFont(new Font("SansSerif", Font.PLAIN, 8));
-        g.setColor(Color.black);
+        g.setColor(Color.LIGHT_GRAY);
 
         // Some vars we need.
         int end = 0;
