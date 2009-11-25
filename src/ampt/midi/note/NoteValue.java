@@ -8,23 +8,34 @@ import javax.sound.midi.Sequence;
  * @author Robert Szewczyk
  */
 public enum NoteValue {
-    SIXTYFOURTH_NOTE(16F),
-    THIRTYSECOND_NOTE(8F),
-    SIXTEENTH_NOTE(4F),
-    EIGHTH_NOTE(2F),
-    QUARTER_NOTE(1F),
-    HALF_NOTE(.5F),
-    WHOLE_NOTE(.25F);
+    SIXTYFOURTH_NOTE(16F, "Sixty-Fourth"),
+    THIRTYSECOND_NOTE(8F, "Thirty-Second"),
+    SIXTEENTH_NOTE(4F, "Sixteenth"),
+    EIGHTH_NOTE(2F, "Eighth"),
+    QUARTER_NOTE(1F, "Quarter"),
+    HALF_NOTE(.5F, "Half"),
+    WHOLE_NOTE(.25F, "Whole");
 
-    float notesPerBeat;
+    float _notesPerBeat;
+    String _name;
 
-    NoteValue(float notesPerBeat) {
-        this.notesPerBeat = notesPerBeat;
+    NoteValue(float notesPerBeat, String name) {
+        _notesPerBeat = notesPerBeat;
+        _name = name;
+    }
+
+    public float getNotesPerBeat() {
+        return _notesPerBeat;
+    }
+
+    @Override
+    public String toString() {
+        return _name;
     }
 
     public static long getTickLength(NoteValue value, float divisionType, int resolution) {
         if (divisionType == Sequence.PPQ)
-            return (long)(resolution / value.notesPerBeat);
+            return (long)(resolution / value._notesPerBeat);
         if (divisionType == Sequence.SMPTE_24)
             throw new UnsupportedOperationException("SMPTE Timing Not Yet Supported");
         if (divisionType == Sequence.SMPTE_25)

@@ -14,9 +14,7 @@ import javax.sound.midi.spi.MidiDeviceProvider;
 public class AmptMidiDeviceProvider extends MidiDeviceProvider{
 
     /*
-     * Synchronized, sorted set since multiple threads may be acting on the
-     * device provider and since we want devices to always appear in the same
-     * order.
+     * List of supported AMPT devices.
      */
     private List<Info> deviceList;
 
@@ -35,6 +33,7 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
         deviceList.add(new KeyboardDevice().getDeviceInfo());
         deviceList.add(new NoteViewerDevice().getDeviceInfo());
         deviceList.add(new ArpFilterDevice().getDeviceInfo());
+        deviceList.add(new EchoFilterDevice().getDeviceInfo());
 
     }
 
