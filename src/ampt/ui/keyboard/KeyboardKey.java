@@ -67,7 +67,21 @@ public abstract class KeyboardKey extends JComponent implements MouseListener {
         this.keyBinding = keyBinding;
 
         InputMap inputMap = this.getInputMap(WHEN_IN_FOCUSED_WINDOW);
-        char upperKeyBinding = Character.toUpperCase(keyBinding);
+        String upperKeyBinding = String.valueOf(Character.toUpperCase(keyBinding));
+        switch(keyBinding){
+            case ';':
+                upperKeyBinding = "SEMICOLON";
+                break;
+            case ',':
+                upperKeyBinding = "COMMA";
+                break;
+            case '.':
+                upperKeyBinding = "PERIOD";
+                break;
+            case '/':
+                upperKeyBinding = "SLASH";
+                break;
+        }
         inputMap.put(KeyStroke.getKeyStroke("pressed " + upperKeyBinding),
                 "pressed");
         inputMap.put(KeyStroke.getKeyStroke("released " + upperKeyBinding),
