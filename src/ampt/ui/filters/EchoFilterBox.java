@@ -6,6 +6,7 @@
 package ampt.ui.filters;
 
 import ampt.core.devices.EchoFilterDevice;
+import ampt.midi.note.Decay;
 import ampt.midi.note.NoteValue;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,7 +38,7 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
     private static final Color FILTER_FGCOLOR = Color.WHITE;
 
     private JComboBox intervalComboBox;
-
+    private JComboBox decayComboBox;
     private JSlider durationSlider;
 
 
@@ -65,14 +66,21 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
         // create duration slider
         durationSlider = createDurationSlider();
         centerPanel.add(durationSlider);
+        durationSlider.setValue(5);
+        device.setDuration(5);
 
         // create note interval combo box
         intervalComboBox = createIntervalBox();
-        centerPanel.add(intervalComboBox);
-
-
         // set default values
         intervalComboBox.setSelectedItem(NoteValue.EIGHTH_NOTE);
+        device.setInterval(NoteValue.EIGHTH_NOTE);
+        centerPanel.add(intervalComboBox);
+
+        // create decay combo box
+        decayComboBox = createDecayBox();
+        decayComboBox.setSelectedItem(Decay.LINEAR);
+        device.setDecay(Decay.LINEAR);
+        centerPanel.add(decayComboBox);
 
         this.add(centerPanel, BorderLayout.CENTER);
 
@@ -126,7 +134,7 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
 
     private JSlider createDurationSlider() {
 
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 20, 3);
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 20, 0);
 
         slider.setMajorTickSpacing(10);
         slider.setMinorTickSpacing(1);
@@ -148,14 +156,42 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
         return slider;
     }
 
+    /*
+     * Create the Decay combo box
+     */
+    private JComboBox createDecayBox() {
+
+        Vector<Decay> decayOptions = new Vector<Decay>();
+        for(Decay d : Decay.values()) {
+            decayOptions.add(d);
+        }
+
+        JComboBox box = new JComboBox(decayOptions);
+        box.setBorder(new TitledBorder(new LineBorder(FILTER_FGCOLOR),
+                "Decay", TitledBorder.DEFAULT_JUSTIFICATION,
+                TitledBorder.DEFAULT_POSITION, null, FILTER_FGCOLOR));
+        box.setBackground(FILTER_BGCOLOR);
+        box.setForeground(FILTER_FGCOLOR);
+        // disable key handler
+        box.setKeySelectionManager(new EmptyKeySelectionManager());
+        // set actionlistener
+        box.addActionListener(this);
+
+        return box;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        // set the interval from combo box
+        // action for interval from combo box
         if(e.getSource().equals(intervalComboBox)) {
             EchoFilterDevice device = (EchoFilterDevice) midiDevice;
             device.setInterval((NoteValue)intervalComboBox.getSelectedItem());
+        }
+        // action for decay combo box
+        else if (e.getSource().equals(decayComboBox)) {
+            EchoFilterDevice device = (EchoFilterDevice) midiDevice;
+            device.setDecay((Decay)decayComboBox.getSelectedItem());
         }
 
     }
@@ -164,6 +200,8 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
     public void stateChanged(ChangeEvent e) {
 
         JSlider source = (JSlider)e.getSource();
+
+        // only process state change if slider is not moving
         if (!source.getValueIsAdjusting()) {
 
             int duration = (int)source.getValue();
