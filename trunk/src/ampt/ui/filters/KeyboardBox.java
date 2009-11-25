@@ -38,7 +38,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
      * Constructor to create the box.
      * @param device
      */
-    public KeyboardBox(KeyboardDevice device) throws MidiUnavailableException {
+    public KeyboardBox(KeyboardDevice device, boolean extended) throws MidiUnavailableException {
 
         super(device);
         
@@ -54,7 +54,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
 
         // Make the center panel contain the keyboard
         JPanel centerPanel = new JPanel();
-        KeyboardPanel keyboardPanel = new KeyboardPanel(device);
+        KeyboardPanel keyboardPanel = new KeyboardPanel(device, extended);
         keyboardPanel.setBackground(Color.CYAN);
         centerPanel.add(keyboardPanel);
         centerPanel.setBackground(Color.CYAN);

@@ -20,7 +20,7 @@ public class KeyboardTest extends JFrame {
     public KeyboardTest() throws MidiUnavailableException {
         this.setTitle("Keyboard Test");
         KeyboardDevice keyboardDevice = new KeyboardDevice();
-        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice);
+        KeyboardPanel keyboard = new KeyboardPanel(keyboardDevice, false);
         this.add(keyboard);
         try {
             Synthesizer synth = MidiSystem.getSynthesizer();
