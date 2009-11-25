@@ -186,22 +186,24 @@ public class MidiDeviceBox extends JPanel {
             int deltaY = e.getY() - firstPointOnBox.y;
             int y = box.getLocation().y + deltaY;
 
-            x = x < 0 ? 0 : x;
-            y = y < 0 ? 0 : y;
+            x = x < 0 ? 0 : ((x + box.getWidth()) > box.getParent().getWidth() ? box.getParent().getWidth() - box.getWidth() : x);
+            y = y < 0 ? 0 : ((y + box.getHeight()) > box.getParent().getHeight() ? box.getParent().getHeight() - box.getHeight() : y);
 
-            if((box.getParent().getWidth() < x + box.getWidth()) || (box.getParent().getHeight() < y + box.getHeight())){
-                int panelX = x + box.getWidth() < box.getParent().getWidth() ? box.getParent().getWidth() : x + box.getWidth();
-                int panelY = y + box.getHeight() < box.getParent().getHeight() ? box.getParent().getHeight() : y + box.getHeight();
-                box.getParent().setPreferredSize(new Dimension(panelX, panelY));
-
-                ((JPanel)box.getParent()).revalidate();
-            }
+            // This was for changing the size of the canvas
+//            if((box.getParent().getWidth() < x + box.getWidth()) || (box.getParent().getHeight() < y + box.getHeight())){
+//                int panelX = x + box.getWidth() < box.getParent().getWidth() ? box.getParent().getWidth() : x + box.getWidth();
+//                int panelY = y + box.getHeight() < box.getParent().getHeight() ? box.getParent().getHeight() : y + box.getHeight();
+//                box.getParent().setPreferredSize(new Dimension(panelX, panelY));
+//
+//                ((JPanel)box.getParent()).revalidate();
+//            }
 
             
-
+            Rectangle visibleRectangle = box.getVisibleRect();
             box.setLocation(x, y);
             box.getParent().repaint();
-            box.scrollRectToVisible(new Rectangle(box.getSize()));
+
+            box.scrollRectToVisible(visibleRectangle);
         }
 
         @Override

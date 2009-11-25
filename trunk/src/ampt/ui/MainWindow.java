@@ -9,6 +9,8 @@ import ampt.core.devices.ChordFilterDevice;
 import ampt.core.devices.KeyboardDevice;
 import ampt.core.devices.NoteViewerDevice;
 import ampt.core.devices.ArpFilterDevice;
+import ampt.ui.canvas.CanvasRuler;
+import ampt.ui.canvas.CanvasRuler.Orientation;
 import ampt.ui.canvas.MidiDeviceButton;
 import ampt.ui.filters.ChordFilterBox;
 import ampt.ui.filters.KeyboardBox;
@@ -158,17 +160,19 @@ public class MainWindow extends JFrame {
 
         theActualCanvasPanel.setBackground(new java.awt.Color(255, 255, 255));
         theActualCanvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        theActualCanvasPanel.setPreferredSize(new java.awt.Dimension(1000, 1000));
+        theActualCanvasPanel.setMaximumSize(new java.awt.Dimension(3200, 3200));
+        theActualCanvasPanel.setMinimumSize(new java.awt.Dimension(3200, 3200));
+        theActualCanvasPanel.setPreferredSize(new java.awt.Dimension(3200, 3200));
 
         javax.swing.GroupLayout theActualCanvasPanelLayout = new javax.swing.GroupLayout(theActualCanvasPanel);
         theActualCanvasPanel.setLayout(theActualCanvasPanelLayout);
         theActualCanvasPanelLayout.setHorizontalGroup(
             theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 996, Short.MAX_VALUE)
+            .addGap(0, 3196, Short.MAX_VALUE)
         );
         theActualCanvasPanelLayout.setVerticalGroup(
             theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 996, Short.MAX_VALUE)
+            .addGap(0, 3196, Short.MAX_VALUE)
         );
 
         canvasScrollPane.setViewportView(theActualCanvasPanel);
