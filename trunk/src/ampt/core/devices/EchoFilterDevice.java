@@ -1,5 +1,6 @@
 package ampt.core.devices;
 
+import ampt.midi.note.Decay;
 import ampt.midi.note.NoteValue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -19,13 +20,14 @@ public class EchoFilterDevice extends AmptDevice {
     private static final String DEVICE_NAME = "Echo Filter";
     private static final String DEVICE_DESCRIPTION = "Echoes incoming notes";
 
-    //TODO - add decay options: linear, logarithmic, exponential
-
     // the number of times to repeat the note
     private int _duration;
 
     // the distance between notes
     private NoteValue _interval;
+
+    // how the velocity of repeated notes changes over time
+    private Decay _decay;
 
 
     //TODO move this to new class AmptScheduledDevice if this works
@@ -43,10 +45,20 @@ public class EchoFilterDevice extends AmptDevice {
         _duration = 4;
     }
 
+    /**
+     * Get the echo duration, which is the number of times to repeat the note.
+     *
+     * @return the duration
+     */
     public int getDuration() {
         return _duration;
     }
 
+    /**
+     * Set the echo duration, which is the number of times to repeat the note.
+     *
+     * @param duration
+     */
     public void setDuration(int duration) {
         if(duration < 0) {
             throw new IllegalArgumentException(
@@ -55,12 +67,42 @@ public class EchoFilterDevice extends AmptDevice {
         this._duration = duration;
     }
 
+    /**
+     *  Get the interval between between repeated notes
+     *
+     * @return the echo interval
+     */
     public NoteValue getInterval() {
         return _interval;
     }
 
+    /**
+     * Set the interval between between repeated notes
+     *
+     * @param interval
+     */
     public void setInterval(NoteValue interval) {
         this._interval = interval;
+    }
+
+    /**
+     * Get the decay, which is how the velocity of repeated notes changes over
+     * time.
+     *
+     * @return the decay
+     */
+    public Decay getDecay() {
+        return _decay;
+    }
+
+    /**
+     * Set the decay, which is how the velocity of repeated notes changes over
+     * time.
+     *
+     * @param decay
+     */
+    public void setDecay(Decay decay) {
+        _decay = decay;
     }
 
     @Override
@@ -96,7 +138,10 @@ public class EchoFilterDevice extends AmptDevice {
             // send all messages received immediately
             sendNow(message);
 
-            // schedule the repeated notes
+            // schedule the repeated notes if duration is greater than zero
+            if(_duration < 1) {
+                return;
+            }
 
             // TODO - make this global
             float tempo = 120; // BPM
@@ -109,24 +154,77 @@ public class EchoFilterDevice extends AmptDevice {
             int note = msg.getData1();
             int velocity = msg.getData2();
 
-            int decay = velocity / _duration;
+            int[] velocities = calculateDecay(velocity);
 
-            for(int i = 1; i <= _duration; i++) {
-
+            // schedule each note
+            for(int i = 0; i < _duration; i++) {
                 ShortMessage schedNote = new ShortMessage();
-                schedNote.setMessage(command, channel, note, velocity);
-
-                velocity -= decay;
-
+                schedNote.setMessage(command, channel, note, velocities[i]);
                 executor.schedule(
                     new EchoNoteTask(schedNote),
-                    (long) milliDelay * i,
+                    (long) milliDelay * (i+1),
                     TimeUnit.MILLISECONDS);
             }
 
         }
 
+        /*
+         * Build array of note velocities, decaying over time
+         *
+         * TODO this should be optimized
+         */
+        private int[] calculateDecay(int velocity) {
 
+            int[] decayedVelocities = new int[_duration];
+
+            if (Decay.NONE.equals(_decay)) {
+                for(int i = 0; i < _duration; i++) {
+                    decayedVelocities[i] = velocity;
+                }
+            } else if (Decay.LINEAR.equals(_decay)) {
+                int decayAmt = velocity / _duration;
+                for(int i = 0; i < _duration; i++) {
+                    decayedVelocities[i] = velocity;
+                    velocity -= decayAmt;
+                }
+            }
+            else if (Decay.EXPONENTIAL.equals(_decay)) {
+
+                // y = 1 / 2 ^ (rd)
+
+                int r = 1; // decay factor - this value could be another user option
+                double increment = 1.0 / _duration;
+                double d;
+                double v = velocity;
+                for(int i = 1; i <= _duration; i++) {
+                    d = i * increment;
+                    v *= (1 / (Math.pow(2, (r * d))));
+                    decayedVelocities[i-1] = (int) v;
+                }
+            }
+            else if (Decay.LOGARITHMIC.equals(_decay)) {
+
+                // y = 0.5 * log(-rd+1)+1
+                
+                double increment = 1.0 / _duration;
+                double d;
+                double r = 0.5; // decay factor
+                double v = velocity;
+                for(int i = 1; i <= _duration; i++) {
+                    d = i * increment;
+                    v *= (0.5 * Math.log1p(-1 * d) + 1);
+                    if(v < 0) {
+                        v = 0;
+                    }
+                    decayedVelocities[i-1] = (int) v;
+                }
+            }
+            return decayedVelocities;
+        }
+
+        /**
+         * Each note is a scheduled task.
+         */
         class EchoNoteTask implements Runnable {
 
             private MidiMessage _message;
@@ -139,10 +237,8 @@ public class EchoFilterDevice extends AmptDevice {
             public void run() {
                 sendNow(_message);
             }
-
         }
-
         
-    }
+    } // EchoFilterReceiver
 
 }
