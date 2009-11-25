@@ -27,10 +27,13 @@ import javax.sound.midi.Transmitter;
  *                            longer creates a new sequence if one exists for
  *                            a given key.
  *
- *          11/22/09   Chirs  Random note generation.  Added checks for note
+ *          11/22/09   Chris  Random note generation.  Added checks for note
  *                            fixing note off events, or note on events with
  *                            a velocity of zero, so the correct note would
  *                            be turned off instead of a random one.
+ *
+ *          11/25/09   Ben    Only forward messages to sendNow if they are not
+ *                            going to be part of the arpeggio.
  *
  * @author Robert
  */
@@ -272,11 +275,14 @@ public class ArpFilterDevice extends AmptDevice {
                     }
                     //start arpeggio playing and put it in hash map
                     arpeggios.put(key, playArpeggio(sb.getSequence()));
+                } else {
+                    // forward on any short messages that aren't note on or off
+                    sendNow(message);
                 }
+            } else {
+                // forward on any messages received that aren't short message
+                sendNow(message);
             }
-
-            //forward on any messages received
-            sendNow(message);
         }
     }
 }
