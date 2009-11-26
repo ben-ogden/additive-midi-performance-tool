@@ -7,17 +7,21 @@ package ampt.midi.chord;
  */
 public enum ChordInversion {
 
-    ROOT_POSITION(0, 0, 0),
-    FIRST_INVERSION(12, 0, 0),
-    SECOND_INVERSION(12, 12, 0);
-    private int rootInterval;
-    private int thirdInterval;
-    private int fifthInterval;
+    ROOT_POSITION(0, 0, 0, "Root Position"),
+    FIRST_INVERSION(12, 0, 0, "First Inversion"),
+    SECOND_INVERSION(12, 12, 0, "Second Inversion");
 
-    ChordInversion(int rootInterval, int thirdInterval, int fifthInterval) {
+    private final int rootInterval;
+    private final int thirdInterval;
+    private final int fifthInterval;
+    private final String name;
+
+    ChordInversion(int rootInterval, int thirdInterval, int fifthInterval, 
+            String name) {
         this.rootInterval = rootInterval;
         this.thirdInterval = thirdInterval;
         this.fifthInterval = fifthInterval;
+        this.name = name;
     }
 
     public int getRootInterval() {
@@ -34,7 +38,7 @@ public enum ChordInversion {
 
     @Override
     public String toString() {
-        return super.toString().replaceAll("_", " ");
+        return name;
     }
 
 
