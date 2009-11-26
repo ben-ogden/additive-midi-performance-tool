@@ -99,7 +99,7 @@ public class MainWindow extends JFrame {
         consolePane = new ampt.ui.canvas.AmptConsolePane();
         amptMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         viewMenu = new javax.swing.JMenu();
 
@@ -166,7 +166,6 @@ public class MainWindow extends JFrame {
         theActualCanvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         theActualCanvasPanel.setMaximumSize(new java.awt.Dimension(3200, 3200));
         theActualCanvasPanel.setMinimumSize(new java.awt.Dimension(3200, 3200));
-        theActualCanvasPanel.setPreferredSize(new java.awt.Dimension(3200, 3200));
 
         javax.swing.GroupLayout theActualCanvasPanelLayout = new javax.swing.GroupLayout(theActualCanvasPanel);
         theActualCanvasPanel.setLayout(theActualCanvasPanelLayout);
@@ -185,11 +184,11 @@ public class MainWindow extends JFrame {
         canvasPanel.setLayout(canvasPanelLayout);
         canvasPanelLayout.setHorizontalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
         );
         canvasPanelLayout.setVerticalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
         );
 
         metronomePanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
@@ -200,11 +199,11 @@ public class MainWindow extends JFrame {
         filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
         filterPropertiesPanel1Layout.setHorizontalGroup(
             filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 175, Short.MAX_VALUE)
+            .addGap(0, 179, Short.MAX_VALUE)
         );
         filterPropertiesPanel1Layout.setVerticalGroup(
             filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 334, Short.MAX_VALUE)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
@@ -285,21 +284,25 @@ public class MainWindow extends JFrame {
 
         amptMenuBar.setPreferredSize(new java.awt.Dimension(800, 21));
 
+        fileMenu.setMnemonic('f');
         fileMenu.setText("File");
 
-        jMenuItem1.setText("Exit");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        exitMenuItem.setMnemonic('x');
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                exitMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem1);
+        fileMenu.add(exitMenuItem);
 
         amptMenuBar.add(fileMenu);
 
+        editMenu.setMnemonic('e');
         editMenu.setText("Edit");
         amptMenuBar.add(editMenu);
 
+        viewMenu.setMnemonic('v');
         viewMenu.setText("View");
 
         for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -338,9 +341,13 @@ public class MainWindow extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+
+        // clean up
+        theActualCanvasPanel.closeAllDevices();
+
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_exitMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -456,9 +463,9 @@ public class MainWindow extends JFrame {
     private ampt.ui.canvas.AmptConsolePane consolePane;
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel1;
-    private javax.swing.JMenuItem jMenuItem1;
     private ampt.ui.canvas.MetronomePanel metronomePanel1;
     private javax.swing.JLabel midiConsoleLabel;
     private javax.swing.JPanel propertiesPanel;
