@@ -14,8 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -40,6 +38,15 @@ public class CanvasPanel extends javax.swing.JPanel {
         this.setLayout(null);
         midiDeviceBoxes = new Vector<MidiDeviceBox>();
         midiDeviceConnections = new Vector<MidiDeviceConnection>();
+    }
+
+    /**
+     * Closes all devices on the canvas.
+     */
+    public void closeAllDevices() {
+        for(MidiDeviceBox box : midiDeviceBoxes) {
+            box.closeDevice();
+        }
     }
 
     /** This method is called from within the constructor to
