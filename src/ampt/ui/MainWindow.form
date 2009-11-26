@@ -170,12 +170,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="canvasScrollPane" alignment="1" pref="382" max="32767" attributes="0"/>
+                      <Component id="canvasScrollPane" alignment="1" pref="374" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="canvasScrollPane" alignment="1" pref="422" max="32767" attributes="0"/>
+                      <Component id="canvasScrollPane" alignment="1" pref="418" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -190,7 +190,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="canvasScrollPane.setColumnHeaderView(new CanvasRuler(Orientation.Horizontal));&#xa;canvasScrollPane.setRowHeaderView(new CanvasRuler(Orientation.Vertical));"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="canvasScrollPane.setColumnHeaderView(new CanvasRuler(Orientation.Horizontal));&#xa;canvasScrollPane.setRowHeaderView(new CanvasRuler(Orientation.Vertical));&#xa;canvasScrollPane.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, new CanvasCorner());&#xa;canvasScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new CanvasCorner());&#xa;canvasScrollPane.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, new CanvasCorner());"/>
                   </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
@@ -235,7 +235,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="metronomePanel1" alignment="0" pref="191" max="32767" attributes="1"/>
+                      <Component id="metronomePanel1" alignment="0" pref="195" max="32767" attributes="1"/>
                       <Component id="filterPropertiesPanel1" alignment="0" max="32767" attributes="1"/>
                   </Group>
                 </DimensionLayout>
@@ -276,7 +276,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="338" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="334" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>

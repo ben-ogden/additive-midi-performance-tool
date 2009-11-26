@@ -10,6 +10,7 @@ import ampt.core.devices.KeyboardDevice;
 import ampt.core.devices.NoteViewerDevice;
 import ampt.core.devices.ArpFilterDevice;
 import ampt.core.devices.EchoFilterDevice;
+import ampt.ui.canvas.CanvasCorner;
 import ampt.ui.canvas.CanvasRuler;
 import ampt.ui.canvas.CanvasRuler.Orientation;
 import ampt.ui.canvas.MidiDeviceButton;
@@ -37,6 +38,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JOptionPane;
+import javax.swing.ScrollPaneConstants;
 
 /**
  * This is the main window for the GUI.  It contains a split pane, in which the
@@ -161,6 +163,9 @@ public class MainWindow extends JFrame {
         canvasScrollPane.setPreferredSize(new java.awt.Dimension(2002, 2002));
         canvasScrollPane.setColumnHeaderView(new CanvasRuler(Orientation.Horizontal));
         canvasScrollPane.setRowHeaderView(new CanvasRuler(Orientation.Vertical));
+        canvasScrollPane.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, new CanvasCorner());
+        canvasScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new CanvasCorner());
+        canvasScrollPane.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, new CanvasCorner());
 
         theActualCanvasPanel.setBackground(new java.awt.Color(255, 255, 255));
         theActualCanvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -184,11 +189,11 @@ public class MainWindow extends JFrame {
         canvasPanel.setLayout(canvasPanelLayout);
         canvasPanelLayout.setHorizontalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
         );
         canvasPanelLayout.setVerticalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
         );
 
         metronomePanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
@@ -203,14 +208,14 @@ public class MainWindow extends JFrame {
         );
         filterPropertiesPanel1Layout.setVerticalGroup(
             filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 338, Short.MAX_VALUE)
+            .addGap(0, 334, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
         propertiesPanel.setLayout(propertiesPanelLayout);
         propertiesPanelLayout.setHorizontalGroup(
             propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+            .addComponent(metronomePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
             .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         propertiesPanelLayout.setVerticalGroup(
