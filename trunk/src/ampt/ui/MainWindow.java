@@ -20,6 +20,7 @@ import ampt.ui.filters.MidiDeviceBox;
 import ampt.ui.filters.NoteViewerBox;
 import ampt.ui.filters.ArpFilterBox;
 import ampt.ui.filters.EchoFilterBox;
+import ampt.ui.filters.SynthesizerBox;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -32,6 +33,7 @@ import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
@@ -441,6 +443,9 @@ public class MainWindow extends JFrame {
                             echoDevice.setLogger(consolePane.getPrintStream(Color.MAGENTA));
                             echoDevice.setMidiDebugEnabled(true);
                             box = new EchoFilterBox(echoDevice);
+                        } else if (device instanceof Synthesizer){
+                            Synthesizer synthDevice = (Synthesizer) device;
+                            box = new SynthesizerBox(synthDevice);
                         } else {
                             box = new MidiDeviceBox(device);
                         }
