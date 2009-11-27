@@ -41,8 +41,9 @@ public class EchoFilterDevice extends AmptDevice {
     public EchoFilterDevice() {
         super(DEVICE_NAME, DEVICE_DESCRIPTION);
 
-        _interval = NoteValue.EIGHTH_NOTE;
-        _duration = 4;
+        _interval = NoteValue.QUARTER_NOTE;
+        _decay = Decay.LINEAR;
+        _duration = 5;
     }
 
     /**
