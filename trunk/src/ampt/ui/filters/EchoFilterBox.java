@@ -92,6 +92,7 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
 
         durationPanel.add(durationSlider);
         centerPanel.add(durationPanel);
+        // set default duration
         durationSlider.setValue(5);
         device.setDuration(5);
 
@@ -107,8 +108,8 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
         // create note interval combo box
         intervalComboBox = createIntervalBox();
         // set default values
-        intervalComboBox.setSelectedItem(NoteValue.EIGHTH_NOTE);
-        device.setInterval(NoteValue.EIGHTH_NOTE);
+        intervalComboBox.setSelectedItem(NoteValue.QUARTER_NOTE);
+        device.setInterval(NoteValue.QUARTER_NOTE);
 
         JPanel intPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         intPanel.setBackground(FILTER_BGCOLOR);
