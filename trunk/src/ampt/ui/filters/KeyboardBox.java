@@ -83,9 +83,9 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         Integer[] channels = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         channelComboBox = new JComboBox(channels);
         channelComboBox.setBackground(Color.CYAN);
-        channelComboBox.setSelectedIndex(0);
-        device.setChannel(channels[0]);
         channelComboBox.addActionListener(this);
+        channelComboBox.setSelectedIndex(0);
+//        device.setChannel(channels[0]);
         channelComboBox.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Chan."));
         channelComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerEastPanel.add(channelComboBox);
@@ -93,9 +93,9 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         Integer[] octaves = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         octaveComboBox = new JComboBox(octaves);
         octaveComboBox.setBackground(Color.CYAN);
-        octaveComboBox.setSelectedIndex(5);
-        device.setOctave(octaves[5]);
         octaveComboBox.addActionListener(this);
+        octaveComboBox.setSelectedIndex(5);
+//        device.setOctave(octaves[5]);
         octaveComboBox.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Octave"));
         octaveComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerEastPanel.add(octaveComboBox);
