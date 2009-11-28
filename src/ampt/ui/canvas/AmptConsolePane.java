@@ -1,5 +1,6 @@
 package ampt.ui.canvas;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -20,8 +21,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
 /**
- * An example of a JTextPane that supports appended writes and styled
- * output.
+ * The AMPTConsolePane provides styled logging for AMPT devices.
  *
  * @author Ben
  */
@@ -47,6 +47,9 @@ public class AmptConsolePane extends JTextPane {
 
         // hide the caret
         setCaretColor(getBackground());
+
+        // to disable keyboard input
+        this.setFocusable(false);
 
         /*
          * Lister for the popup menu
@@ -93,17 +96,6 @@ public class AmptConsolePane extends JTextPane {
         ); // addMouseListener
 
     } // default constructor
-
-    /**
-     * Overriden to disable keyboard input on the text area.
-     *
-     * @param e
-     */
-    @Override
-    protected void processKeyEvent(KeyEvent e) {
-        // do nothing
-        return;
-    }
 
     /**
      * Append text to the console.
