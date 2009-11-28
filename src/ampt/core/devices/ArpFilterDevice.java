@@ -37,7 +37,7 @@ import javax.sound.midi.Transmitter;
  *
  * @author Robert
  */
-public class ArpFilterDevice extends AmptDevice {
+public class ArpFilterDevice extends TimedDevice {
 
     public final static String DEVICE_NAME = "Arpeggiator";
     public final static String DEVICE_DESCRIPTION = "An arpeggiator for use with AMPT";
@@ -178,6 +178,7 @@ public class ArpFilterDevice extends AmptDevice {
         try {
             sequencer = sequencerPool.take();
             sequencer.setSequence(sequence);
+            sequencer.setTempoInBPM(_tempo);
             sequencer.setLoopEndPoint(sequence.getTickLength());
             sequencer.start();
         } catch (InterruptedException e) {

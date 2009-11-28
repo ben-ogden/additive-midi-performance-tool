@@ -22,7 +22,7 @@ public abstract class TimedDevice extends AmptDevice {
     private ScheduledExecutorService _executor;
 
     // the tempo, in BPM
-    protected float _tempo = 120;
+    protected float _tempo = 100;
 
     /**
      * Create a new TimedDevice. The default thread pool size is used.
