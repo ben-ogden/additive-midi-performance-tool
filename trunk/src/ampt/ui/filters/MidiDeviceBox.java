@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.PrintStream;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiUnavailableException;
@@ -18,14 +19,14 @@ import javax.swing.JPanel;
  * This class is a box that is drawn on the canvas panel.  The box represents
  * a MidiDevice.
  *
- * TODO need a way to remove box from canvas. that method should also close the
- * midiDevice
- *
  * @author Christopher Redding
  */
 public class MidiDeviceBox extends JPanel {
 
     protected MidiDevice midiDevice;
+
+    // A file or interactive log to which boxes can send debug or error messages.
+    private PrintStream logger;
 
     //TODO - maybe keep track of number of transmitters and receivers instead of
     //       if have any... also, this could change during runtime so perhaps
@@ -46,9 +47,21 @@ public class MidiDeviceBox extends JPanel {
      * @param device the sMidiDevice backing this box
      */
     public MidiDeviceBox(MidiDevice device) throws MidiUnavailableException {
+        this(device, null);
+    }
+
+    /**
+     * Create the Box, and associate it with the correct MidiDevice. The caller
+     * also provides a PrintStream for the box to use for logging.
+     *
+     * @param device the sMidiDevice backing this box
+     * @param logger a PrintStream to write log messages
+     */
+    public MidiDeviceBox(MidiDevice device, PrintStream logger) throws MidiUnavailableException {
 
         this.midiDevice = device;
-
+        this.logger = logger;
+        
         // open the device once it is placed on the canvas
         midiDevice.open();
 
@@ -76,7 +89,6 @@ public class MidiDeviceBox extends JPanel {
         MyMouseAdapter mouseAdapter = new MyMouseAdapter(this);
         this.addMouseListener(mouseAdapter);
         this.addMouseMotionListener(mouseAdapter);
-
     }
 
     public void closeDevice(){
@@ -96,8 +108,6 @@ public class MidiDeviceBox extends JPanel {
      * @throws MidiUnavailableException
      */
     public void connectTo(MidiDeviceBox anotherDevice) throws MidiUnavailableException {
-        //TODO - i would prefer if we could call AmptDevice.connectTo, but not all
-        //       devices are AmptDevices.
         midiDevice.getTransmitter().setReceiver(anotherDevice.midiDevice.getReceiver());
     }
 
@@ -164,6 +174,26 @@ public class MidiDeviceBox extends JPanel {
         }
 
         g.setColor(color);
+    }
+
+    /**
+     * Set the OutputStream for this Box.
+     *
+     * @param out
+     */
+    public void setLogger(PrintStream out) {
+        logger = out;
+    }
+
+    /**
+     * Write a message to the logger associated with this box.
+     *
+     * @param msgToLog
+     */
+    protected void log(String msgToLog) {
+        if(null != logger && null != msgToLog) {
+            logger.println(msgToLog);
+        }
     }
 
     /**

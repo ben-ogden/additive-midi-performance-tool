@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -26,11 +27,9 @@ public class NoteViewerBox extends MidiDeviceBox {
     /**
      * Use a sorted map which maps the channel number to the set of notes that
      * are on for that channel.
-     * 
-     * NOTE: The map should be synchronized so we can have concurrent access.
      */
     SortedMap<Integer, SortedSet<Integer>> notes;
-//    SortedSet<Integer> notes;
+
     private static final int staffX1 = 20;
     private static final int staffX2 = 80;
     private static final int ledgerX1 = 54;
@@ -75,7 +74,11 @@ public class NoteViewerBox extends MidiDeviceBox {
     private Image trebleClefImage;
 
     public NoteViewerBox(NoteViewerDevice device) throws MidiUnavailableException {
-        super(device);
+        this(device, null);
+    }
+
+    public NoteViewerBox(NoteViewerDevice device, PrintStream logger) throws MidiUnavailableException {
+        super(device, logger);
 
         device.addNoteViewerBox(this);
 
@@ -99,14 +102,14 @@ public class NoteViewerBox extends MidiDeviceBox {
         try {
             InputStream bassInStream = this.getClass().getClassLoader().getResourceAsStream("images/bassclef.jpg");
             bassClefImage = ImageIO.read(bassInStream);
-        } catch (IOException ex) {
-            //TODO log error or throw exception?
+        } catch (Exception ex) {
+            log("Unable to load image: " + ex.getMessage());
         }
         try {
             InputStream trebleInStream = this.getClass().getClassLoader().getResourceAsStream("images/trebleclef.jpg");
             trebleClefImage = ImageIO.read(trebleInStream);
-        } catch (IOException ex) {
-            //TODO log error or throw exception?
+        } catch (Exception ex) {
+            log("Unable to load image: " + ex.getMessage());
         }
 
 
@@ -158,11 +161,6 @@ public class NoteViewerBox extends MidiDeviceBox {
             lineCount++;
             bassStaffY += lineSpacing;
         }
-
-
-
-
-
 
 
         int topNote = middleCNoteNum;
