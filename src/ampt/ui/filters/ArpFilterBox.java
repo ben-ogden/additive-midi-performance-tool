@@ -54,7 +54,7 @@ public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
         device.setArpType(ArpFilterDevice.ASCEND_DESCEND);
         arpTypeComboBox.addActionListener(this);
         arpTypeComboBox.setBorder(new TitledBorder(new LineBorder(Color.WHITE),
-                "Chord Type", TitledBorder.DEFAULT_JUSTIFICATION,
+                "Motion", TitledBorder.DEFAULT_JUSTIFICATION,
                 TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
         arpTypeComboBox.setBackground(Color.GREEN);
         arpTypeComboBox.setForeground(Color.WHITE);
