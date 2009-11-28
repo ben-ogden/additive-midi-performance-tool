@@ -71,7 +71,6 @@ public class MainWindow extends JFrame {
     /** Creates new form MainWindow */
     public MainWindow() {
         initComponents();
-        //TODO - is the best way to start maximized?
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         
     }
@@ -432,7 +431,7 @@ public class MainWindow extends JFrame {
                             NoteViewerDevice noteViewerDevice = (NoteViewerDevice) device;
                             noteViewerDevice.setLogger(consolePane.getPrintStream(Color.RED));
                             noteViewerDevice.setMidiDebugEnabled(true);
-                            box = new NoteViewerBox(noteViewerDevice);
+                            box = new NoteViewerBox(noteViewerDevice, consolePane.getPrintStream());
                         } else if (device instanceof ArpFilterDevice){
                             ArpFilterDevice arpFilterDevice = (ArpFilterDevice) device;
                             arpFilterDevice.setLogger(consolePane.getPrintStream(Color.GREEN));
@@ -442,7 +441,7 @@ public class MainWindow extends JFrame {
                             EchoFilterDevice echoDevice = (EchoFilterDevice) device;
                             echoDevice.setLogger(consolePane.getPrintStream(Color.MAGENTA));
                             echoDevice.setMidiDebugEnabled(true);
-                            box = new EchoFilterBox(echoDevice);
+                            box = new EchoFilterBox(echoDevice, consolePane.getPrintStream());
                         } else if (device instanceof Synthesizer){
                             Synthesizer synthDevice = (Synthesizer) device;
                             box = new SynthesizerBox(synthDevice);
@@ -455,9 +454,11 @@ public class MainWindow extends JFrame {
                         box.validate();
                         theActualCanvasPanel.repaint();
                     } catch (MidiUnavailableException ex) {
-
+                        // send message to console pane and show alert
+                        final String msg = "Unable to add device to canvas. ";
+                        consolePane.append(msg + ex.getMessage() + "\n");
                         JOptionPane.showMessageDialog(null,
-                                "Unable to add device  to canvas. " + ex.getLocalizedMessage(),
+                                "Unable to add device  to canvas.",
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }

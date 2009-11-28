@@ -9,8 +9,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.sound.midi.MidiUnavailableException;
@@ -63,8 +63,19 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
      * @throws MidiUnavailableException if the device cannot be opened
      */
     public EchoFilterBox(EchoFilterDevice device) throws MidiUnavailableException {
+        this(device, null);
+    }
 
-        super(device);
+    /**
+     * Create a new EchoFilterBox.
+     *
+     * @param device the EchoFilterDevice backing this box
+     * @param logger the PrintStream where this box can write log messages
+     * @throws MidiUnavailableException if the device cannot be opened
+     */
+    public EchoFilterBox(EchoFilterDevice device, PrintStream logger) throws MidiUnavailableException {
+
+        super(device, logger);
 
         this.setPreferredSize(null);
         overridePaintComponent = false;
@@ -309,8 +320,8 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
         ImageIcon icon = null;
         try {
             icon = new ImageIcon(ImageIO.read(inStream));
-        } catch (IOException ex) {
-            // do nothing
+        } catch (Exception ex) {
+            log("Unable to load image: " + ex.getMessage());
         }
         return icon;
     }
