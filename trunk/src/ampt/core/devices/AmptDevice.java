@@ -509,8 +509,9 @@ public abstract class AmptDevice implements AmptMidiDevice {
         @Override
         public void setReceiver(Receiver receiver) {
 
-            //TODO Should this close the existing receiver if replacing?
-            // _receiver.close();
+            if(null != _receiver) {
+                _receiver.close();
+            }
 
             _receiver = receiver;
         }
@@ -534,10 +535,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
          */
         @Override
         public void close() {
-
-            //TODO Should this close the receiver?
-            // _receiver.close();
-
+            _receiver.close();
             _transmitters.remove(this);
         }
     } // class AmptTransmitter
