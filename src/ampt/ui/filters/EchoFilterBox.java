@@ -5,9 +5,7 @@ import ampt.midi.note.Decay;
 import ampt.midi.note.NoteValue;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,13 +19,11 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -39,7 +35,7 @@ import javax.swing.event.ChangeListener;
  * 
  * @author Ben
  */
-public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
+public class EchoFilterBox extends AmptMidiDeviceBox implements ActionListener,
         ChangeListener {
 
     private static final Color FILTER_BGCOLOR = Color.BLACK;

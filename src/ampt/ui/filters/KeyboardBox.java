@@ -22,7 +22,7 @@ import javax.swing.event.ChangeListener;
  * 
  * @author Christopher
  */
-public class KeyboardBox extends MidiDeviceBox implements ChangeListener, ActionListener{
+public class KeyboardBox extends AmptMidiDeviceBox implements ChangeListener, ActionListener {
 
     private static final int VELOCITY_MIN = 0;
     private static final int VELOCITY_MAX = 127;
