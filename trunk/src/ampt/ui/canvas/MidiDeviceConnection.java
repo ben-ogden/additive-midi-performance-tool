@@ -10,8 +10,6 @@ import javax.swing.JComponent;
  * This class represents a connection between two MidiDevices.  It is drawn
  * on the canvas panel as a line.
  *
- * TODO: Add arrows!
- *
  * @author Christopher
  */
 public class MidiDeviceConnection extends JComponent {
@@ -41,6 +39,14 @@ public class MidiDeviceConnection extends JComponent {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + (this._from != null ? this._from.hashCode() : 0);
+        hash = 79 * hash + (this._to != null ? this._to.hashCode() : 0);
+        return hash;
     }
 
 
