@@ -1,5 +1,6 @@
 package ampt.core.devices;
 
+import java.io.PrintStream;
 import javax.sound.midi.MidiDevice;
 
 /**
@@ -9,6 +10,10 @@ import javax.sound.midi.MidiDevice;
  */
 public interface AmptMidiDevice extends MidiDevice {
 
+    public boolean isMidiDebugEnabled();
 
+    public void setMidiDebugEnabled(boolean midiDebug) ;
+    
+    public void setLogger(PrintStream out);
 
 }

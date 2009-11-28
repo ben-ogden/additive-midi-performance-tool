@@ -306,6 +306,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      *
      * @param out
      */
+    @Override
     public void setLogger(PrintStream out) {
         _logger = out;
     }
@@ -314,7 +315,8 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * @return true if MIDI debugging is enabled for incomming MIDI messages on
      *         this device, otherwise false
      */
-    public boolean getMidiDebugEnabled() {
+    @Override
+    public boolean isMidiDebugEnabled() {
         return _midiDebugEnabled;
     }
     
@@ -323,6 +325,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
      * 
      * @param midiDebug true to enable MIDI debugging, otherwise false
      */
+    @Override
     public void setMidiDebugEnabled(boolean midiDebug) {
         _midiDebugEnabled = midiDebug;
     }
