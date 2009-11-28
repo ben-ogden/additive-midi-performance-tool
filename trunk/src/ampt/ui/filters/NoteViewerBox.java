@@ -78,6 +78,7 @@ public class NoteViewerBox extends MidiDeviceBox {
     }
 
     public NoteViewerBox(NoteViewerDevice device, PrintStream logger) throws MidiUnavailableException {
+
         super(device, logger);
 
         device.addNoteViewerBox(this);
@@ -95,7 +96,7 @@ public class NoteViewerBox extends MidiDeviceBox {
         this.setPreferredSize(new Dimension(100, 250));
         this.setBackground(Color.WHITE);
         this.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Viewer", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP));
-        this.setLayout(null);
+        //this.setLayout(null);
 
 
 
@@ -240,18 +241,18 @@ public class NoteViewerBox extends MidiDeviceBox {
 
 
         //Draw arrows for connections
-        int yPos = this.getHeight() / 2;
-        int xMax = this.getWidth() - 3;
-        if (hasTransmitter()) {
-            g.drawLine(xMax - 7, yPos, xMax, yPos);
-            g.drawLine(xMax - 3, yPos - 3, xMax, yPos);
-            g.drawLine(xMax - 3, yPos + 3, xMax, yPos);
-        }
-        if (hasReceiver()) {
-            g.drawLine(3, yPos, 10, yPos);
-            g.drawLine(7, yPos - 3, 10, yPos);
-            g.drawLine(7, yPos + 3, 10, yPos);
-        }
+//        int yPos = this.getHeight() / 2;
+//        int xMax = this.getWidth() - 3;
+//        if (hasTransmitter()) {
+//            g.drawLine(xMax - 7, yPos, xMax, yPos);
+//            g.drawLine(xMax - 3, yPos - 3, xMax, yPos);
+//            g.drawLine(xMax - 3, yPos + 3, xMax, yPos);
+//        }
+//        if (hasReceiver()) {
+//            g.drawLine(3, yPos, 10, yPos);
+//            g.drawLine(7, yPos - 3, 10, yPos);
+//            g.drawLine(7, yPos + 3, 10, yPos);
+//        }
 
         g.setColor(oldColor);
     }

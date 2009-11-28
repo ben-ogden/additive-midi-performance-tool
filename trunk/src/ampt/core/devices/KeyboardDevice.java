@@ -1,7 +1,5 @@
 package ampt.core.devices;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
