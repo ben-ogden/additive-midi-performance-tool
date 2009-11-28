@@ -2,9 +2,6 @@ package ampt.core.devices;
 
 import ampt.midi.note.Decay;
 import ampt.midi.note.NoteValue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiUnavailableException;
@@ -12,13 +9,18 @@ import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
 /**
+ * EchoFilterDevice is a TimedDevice that repeats MIDI messages received at a
+ * given interval and decay. Currently, the class will echo all midi messages
+ * received. This means that overlapping note off messages may truncate other
+ * notes played on the same key. This may change in the future to a user
+ * preference.
  *
  * @author Ben
  */
-public class EchoFilterDevice extends AmptDevice {
+public class EchoFilterDevice extends TimedDevice {
 
     private static final String DEVICE_NAME = "Echo Filter";
-    private static final String DEVICE_DESCRIPTION = "Echoes incoming notes";
+    private static final String DEVICE_DESCRIPTION = "Repeats incoming notes";
 
     // the number of times to repeat the note
     private int _duration;
@@ -29,11 +31,6 @@ public class EchoFilterDevice extends AmptDevice {
     // how the velocity of repeated notes changes over time
     private Decay _decay;
 
-
-    //TODO move this to new class AmptScheduledDevice if this works
-    //TODO is this the best pool size?
-    private ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(10);
-
     /**
      * Create a new EchoFilterDevice
      *
@@ -41,7 +38,7 @@ public class EchoFilterDevice extends AmptDevice {
     public EchoFilterDevice() {
         super(DEVICE_NAME, DEVICE_DESCRIPTION);
 
-        _interval = NoteValue.QUARTER_NOTE;
+        _interval = NoteValue.HALF_NOTE;
         _decay = Decay.LINEAR;
         _duration = 5;
     }
@@ -139,15 +136,12 @@ public class EchoFilterDevice extends AmptDevice {
             // send all messages received immediately
             sendNow(message);
 
-            // schedule the repeated notes if duration is greater than zero
+            // schedule the repeated notes only if duration is greater than zero
             if(_duration < 1) {
                 return;
             }
 
-            // TODO - make this global
-            float tempo = 120; // BPM
-            
-            float milliDelay = (60000 / (tempo * _interval.getNotesPerBeat()));
+            float milliDelay = (60000 / (_tempo * _interval.getNotesPerBeat()));
 
             ShortMessage msg = (ShortMessage) message;
             int command = msg.getCommand();
@@ -155,24 +149,25 @@ public class EchoFilterDevice extends AmptDevice {
             int note = msg.getData1();
             int velocity = msg.getData2();
 
-            int[] velocities = calculateDecay(velocity);
+            int[] velocities;
+            if(ShortMessage.NOTE_ON == command) {
+                velocities = calculateDecay(velocity);
+            } else {
+                velocities = new int[_duration];
+            }
 
             // schedule each note
             for(int i = 0; i < _duration; i++) {
                 ShortMessage schedNote = new ShortMessage();
                 schedNote.setMessage(command, channel, note, velocities[i]);
-                executor.schedule(
-                    new EchoNoteTask(schedNote),
-                    (long) milliDelay * (i+1),
-                    TimeUnit.MILLISECONDS);
+                sendLater(schedNote, (long) milliDelay * (i+1));
             }
-
         }
 
         /*
          * Build array of note velocities, decaying over time
          *
-         * TODO this should be optimized
+         * TODO this should be refined/optimized
          */
         private int[] calculateDecay(int velocity) {
 
@@ -223,22 +218,6 @@ public class EchoFilterDevice extends AmptDevice {
             return decayedVelocities;
         }
 
-        /**
-         * Each note is a scheduled task.
-         */
-        class EchoNoteTask implements Runnable {
-
-            private MidiMessage _message;
-            
-            EchoNoteTask(MidiMessage message) {
-                _message = message;
-            }
-
-            @Override
-            public void run() {
-                sendNow(_message);
-            }
-        }
         
     } // EchoFilterReceiver
 

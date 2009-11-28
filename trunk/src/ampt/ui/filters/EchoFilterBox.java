@@ -108,8 +108,8 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
         // create note interval combo box
         intervalComboBox = createIntervalBox();
         // set default values
-        intervalComboBox.setSelectedItem(NoteValue.QUARTER_NOTE);
-        device.setInterval(NoteValue.QUARTER_NOTE);
+        intervalComboBox.setSelectedItem(NoteValue.HALF_NOTE);
+        device.setInterval(NoteValue.HALF_NOTE);
 
         JPanel intPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         intPanel.setBackground(FILTER_BGCOLOR);
