@@ -47,8 +47,8 @@ public class ArpFilterDevice extends AmptDevice {
     public final static int ASCEND_DESCEND = 2;
     public final static int DESCEND_ASCEND = 3;
     public final static int RANDOM = 4;
-    public final static String[] arpTypes = {"Ascend", "Descend", "Ascend and Descend",
-            "Descend and Ascend", "Random"};
+    public final static String[] arpTypes = {"Up", "Down", "Up and Down",
+            "Down and Up", "Random"};
 
     private final Map<String, Sequencer> arpeggios = 
             Collections.synchronizedMap(new HashMap<String, Sequencer>());
