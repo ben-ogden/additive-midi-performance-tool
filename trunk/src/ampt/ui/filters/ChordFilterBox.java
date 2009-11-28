@@ -20,7 +20,7 @@ import javax.swing.border.TitledBorder;
  *
  * @author Christopher
  */
-public class ChordFilterBox extends MidiDeviceBox implements ActionListener{
+public class ChordFilterBox extends AmptMidiDeviceBox implements ActionListener{
 
     private JComboBox chordTypesComboBox;
     private JComboBox chordInversionsComboBox;

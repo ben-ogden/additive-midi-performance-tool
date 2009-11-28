@@ -1,29 +1,19 @@
 package ampt.ui.filters;
 
-import ampt.core.devices.AmptDevice;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.PrintStream;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 /**
  * This class is a box that is drawn on the canvas panel.  The box represents
@@ -34,9 +24,6 @@ import javax.swing.border.EmptyBorder;
 public class MidiDeviceBox extends JPanel {
 
     protected MidiDevice midiDevice;
-
-    // A file or interactive log to which boxes can send debug or error messages.
-    private PrintStream logger;
 
     //TODO - maybe keep track of number of transmitters and receivers instead of
     //       if have any... also, this could change during runtime so perhaps
@@ -52,8 +39,8 @@ public class MidiDeviceBox extends JPanel {
     private static int PREFERRED_WIDTH = 71;
     
     // default colors for a box
-    private static final Color DEFAULT_BG_COLOR = Color.WHITE;
-    private static final Color DEFAULT_FG_COLOR = Color.BLACK;
+    protected static final Color DEFAULT_BG_COLOR = Color.WHITE;
+    protected static final Color DEFAULT_FG_COLOR = Color.BLACK;
 
     /**
      * Create the Box, and associate it with the correct MidiDevice.
@@ -61,19 +48,7 @@ public class MidiDeviceBox extends JPanel {
      * @param device the sMidiDevice backing this box
      */
     public MidiDeviceBox(MidiDevice device) throws MidiUnavailableException {
-        this(device, null, DEFAULT_BG_COLOR, DEFAULT_FG_COLOR);
-    }
-
-    /**
-     * Create the Box, and associate it with the correct MidiDevice. The caller
-     * also provides a PrintStream for the box to use for logging. Default
-     * colors are used.
-     *
-     * @param device the sMidiDevice backing this box
-     * @param logger a PrintStream to write log messages
-     */
-    public MidiDeviceBox(MidiDevice device, PrintStream logger) throws MidiUnavailableException {
-        this(device, logger, DEFAULT_BG_COLOR, DEFAULT_FG_COLOR);
+        this(device, DEFAULT_BG_COLOR, DEFAULT_FG_COLOR);
     }
         
     /**
@@ -82,15 +57,13 @@ public class MidiDeviceBox extends JPanel {
      * the desired colors to use.
      *
      * @param device the sMidiDevice backing this box
-     * @param logger a PrintStream to write log messages
      * @param bgcolor the background color for the box
      * @param fgcolor the foreground color for the box
      */
-    public MidiDeviceBox(MidiDevice device, PrintStream logger, Color bgcolor,
-            Color fgcolor) throws MidiUnavailableException {
+    public MidiDeviceBox(MidiDevice device, Color bgcolor, Color fgcolor)
+            throws MidiUnavailableException {
 
         this.midiDevice = device;
-        this.logger = logger;
 
         // open the device once it is placed on the canvas
         midiDevice.open();
@@ -125,63 +98,7 @@ public class MidiDeviceBox extends JPanel {
         this.setBackground(bgcolor);
         this.setForeground(fgcolor);
 
-        // TODO - move custom code to a subclass of MidiDeviceBox that AMPT
-        // device boxes inherit from
-        if (midiDevice instanceof AmptDevice) {
-
-            // setup arrows
-            if (hasReceiver()) {
-                JPanel westPanel = new JPanel();
-                westPanel.setBackground(bgcolor);
-                westPanel.setLayout(new GridLayout(2, 1));
-                westPanel.add(new JLabel());
-                BoxArrow boxArrow = new BoxArrow();
-                boxArrow.setColor(fgcolor);
-                westPanel.add(boxArrow);
-                this.add(westPanel, BorderLayout.WEST);
-            }
-
-            if (hasTransmitter()) {
-                JPanel eastPanel = new JPanel();
-                eastPanel.setBackground(bgcolor);
-                eastPanel.setLayout(new GridLayout(2, 1));
-                eastPanel.add(new JLabel());
-                BoxArrow boxArrow = new BoxArrow();
-                boxArrow.setColor(fgcolor);
-                eastPanel.add(boxArrow);
-                this.add(eastPanel, BorderLayout.EAST);
-            }
-
-
-            // setup debug checkbox
-            JCheckBox debugCheckBox = new JCheckBox("Debug");
-            debugCheckBox.setBackground(bgcolor);
-            debugCheckBox.setForeground(fgcolor);
-            debugCheckBox.setFont(new Font("SansSerif", Font.PLAIN, 10));
-            debugCheckBox.setSelected(true);
-            debugCheckBox.setHorizontalAlignment(JCheckBox.RIGHT);
-            debugCheckBox.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-            debugCheckBox.setBorder(new EmptyBorder(0, 0, 0, 10));
-
-            // add listener for checkbox to enable/disable debugging
-            debugCheckBox.addItemListener(new ItemListener() {
-
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-                    AmptDevice device = (AmptDevice) midiDevice;
-                    if (ItemEvent.SELECTED == e.getStateChange()) {
-                        device.setMidiDebugEnabled(true);
-                    } else {
-                        device.setMidiDebugEnabled(false);
-                    }
-                }
-            });
-
-            this.add(debugCheckBox, BorderLayout.SOUTH);
-            
-        } // if (midiDevice instanceof AmptDevice)
-
-    }
+    } // constructor
 
 
     public void closeDevice(){
@@ -239,7 +156,7 @@ public class MidiDeviceBox extends JPanel {
         }
 
         Color color = g.getColor();
-        g.setColor(Color.BLACK);
+        g.setColor(DEFAULT_FG_COLOR);
 
         // Draw the box
         g.drawRect(0, 0, 70, 70);
@@ -267,26 +184,6 @@ public class MidiDeviceBox extends JPanel {
         }
 
         g.setColor(color);
-    }
-
-    /**
-     * Set the OutputStream for this Box.
-     *
-     * @param out
-     */
-    public void setLogger(PrintStream out) {
-        logger = out;
-    }
-
-    /**
-     * Write a message to the logger associated with this box.
-     *
-     * @param msgToLog
-     */
-    protected void log(String msgToLog) {
-        if(null != logger && null != msgToLog) {
-            logger.println(msgToLog);
-        }
     }
 
     /**

@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Collections;
@@ -22,7 +21,7 @@ import javax.swing.border.TitledBorder;
  *
  * @author Christopher
  */
-public class NoteViewerBox extends MidiDeviceBox {
+public class NoteViewerBox extends AmptMidiDeviceBox {
 
     /**
      * Use a sorted map which maps the channel number to the set of notes that

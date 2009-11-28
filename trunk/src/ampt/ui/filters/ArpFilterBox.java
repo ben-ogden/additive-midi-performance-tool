@@ -20,7 +20,7 @@ import javax.swing.border.TitledBorder;
  * 
  * @author Rob
  */
-public class ArpFilterBox extends MidiDeviceBox implements ActionListener {
+public class ArpFilterBox extends AmptMidiDeviceBox implements ActionListener {
 
     private JComboBox chordTypeComboBox;
     private JComboBox noteValueComboBox;
