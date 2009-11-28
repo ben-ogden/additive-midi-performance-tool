@@ -5,7 +5,9 @@ import ampt.midi.note.Decay;
 import ampt.midi.note.NoteValue;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,11 +21,13 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -75,13 +79,11 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
      */
     public EchoFilterBox(EchoFilterDevice device, PrintStream logger) throws MidiUnavailableException {
 
-        super(device, logger);
+        super(device, logger, FILTER_BGCOLOR, FILTER_FGCOLOR);
 
         this.setPreferredSize(null);
         overridePaintComponent = false;
 
-        this.setBackground(FILTER_BGCOLOR);
-        this.setLayout(new BorderLayout());
         this.setBorder(new TitledBorder(new LineBorder(FILTER_FGCOLOR),
                                         "Echo Filter",
                                         TitledBorder.DEFAULT_JUSTIFICATION,
@@ -133,29 +135,6 @@ public class EchoFilterBox extends MidiDeviceBox implements ActionListener,
 
         centerPanel.add(innerCenterPanel);
         this.add(centerPanel, BorderLayout.CENTER);
-
-        if(hasReceiver()){
-            JPanel westPanel = new JPanel();
-            westPanel.setBackground(FILTER_BGCOLOR);
-            westPanel.setLayout(new GridLayout(2,1));
-            westPanel.add(new JLabel());
-            BoxArrow boxArrow = new BoxArrow();
-            boxArrow.setColor(FILTER_FGCOLOR);
-            westPanel.add(boxArrow);
-            this.add(westPanel, BorderLayout.WEST);
-        }
-
-        if(hasTransmitter()){
-            JPanel eastPanel = new JPanel();
-            eastPanel.setBackground(FILTER_BGCOLOR);
-            eastPanel.setLayout(new GridLayout(2,1));
-            eastPanel.add(new JLabel());
-            BoxArrow boxArrow = new BoxArrow();
-            boxArrow.setColor(FILTER_FGCOLOR);
-            eastPanel.add(boxArrow);
-            this.add(eastPanel, BorderLayout.EAST);
-        }
-
     }
 
     /*

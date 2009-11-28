@@ -4,13 +4,11 @@ import ampt.core.devices.KeyboardDevice;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.LineBorder;
@@ -40,7 +38,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
      */
     public KeyboardBox(KeyboardDevice device, boolean extended) throws MidiUnavailableException {
 
-        super(device);
+        super(device, null, Color.CYAN, Color.BLACK);
         
         // We need to change the preferred size to null since it was changed in
         // MidiDeviceBox.  This way, the components will determine the size of 
@@ -48,9 +46,9 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         this.setPreferredSize(null);
         overridePaintComponent = false;
 
-        this.setLayout(new BorderLayout());
         this.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Software Keyboard", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP));
-        this.setBackground(Color.CYAN);
+
+        JPanel innerPanel = new JPanel(new BorderLayout());
 
         // Make the center panel contain the keyboard
         JPanel centerPanel = new JPanel();
@@ -58,9 +56,7 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         keyboardPanel.setBackground(Color.CYAN);
         centerPanel.add(keyboardPanel);
         centerPanel.setBackground(Color.CYAN);
-        this.add(centerPanel, BorderLayout.CENTER);
-
-
+        innerPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Make a south panel to contain the velocity slider
         JPanel southPanel = new JPanel();
@@ -71,12 +67,9 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         velocitySlider.addChangeListener(this);
         velocitySlider.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Velocity"));
         southPanel.add(velocitySlider);
-        this.add(southPanel, BorderLayout.SOUTH);
+        innerPanel.add(southPanel, BorderLayout.SOUTH);
 
         // Make an east panel to contain the channel and octave selecters
-        JPanel eastPanel = new JPanel();
-        eastPanel.setBackground(Color.CYAN);
-        eastPanel.setLayout(new BorderLayout());
         JPanel centerEastPanel = new JPanel();
         centerEastPanel.setBackground(Color.CYAN);
         centerEastPanel.setLayout(new BoxLayout(centerEastPanel, BoxLayout.Y_AXIS));
@@ -100,27 +93,9 @@ public class KeyboardBox extends MidiDeviceBox implements ChangeListener, Action
         octaveComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerEastPanel.add(octaveComboBox);
 
-        eastPanel.add(centerEastPanel, BorderLayout.CENTER);
+        innerPanel.add(centerEastPanel, BorderLayout.EAST);
 
-        if(hasTransmitter()){
-            JPanel eastEastPanel = new JPanel();
-            eastEastPanel.setBackground(Color.CYAN);
-            eastEastPanel.setLayout(new GridLayout(2,1));
-            eastEastPanel.add(new JLabel());
-            eastEastPanel.add(new BoxArrow());
-            eastPanel.add(eastEastPanel, BorderLayout.EAST);
-        }
-
-        if(hasReceiver()){
-            JPanel westPanel = new JPanel();
-            westPanel.setBackground(Color.CYAN);
-            westPanel.setLayout(new GridLayout(2,1));
-            westPanel.add(new JLabel());
-            westPanel.add(new BoxArrow());
-            this.add(westPanel, BorderLayout.WEST);
-        }
-
-        this.add(eastPanel, BorderLayout.EAST);
+        this.add(innerPanel, BorderLayout.CENTER);
     }
 
     /**

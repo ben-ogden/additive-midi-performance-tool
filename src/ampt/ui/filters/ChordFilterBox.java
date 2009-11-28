@@ -6,14 +6,12 @@ import ampt.midi.chord.ChordType;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -29,7 +27,7 @@ public class ChordFilterBox extends MidiDeviceBox implements ActionListener{
 
     public ChordFilterBox(ChordFilterDevice device) throws MidiUnavailableException{
         
-        super(device);
+        super(device, null, Color.BLUE, Color.WHITE);
 
         // Needed to override preferred size to be set by the components inside
         // this box
@@ -38,9 +36,8 @@ public class ChordFilterBox extends MidiDeviceBox implements ActionListener{
         // JPanel and not MidiDeviceBox
         overridePaintComponent = false;
 
-        this.setBackground(Color.BLUE);
-        this.setLayout(new BorderLayout());
-        this.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Chord Filter", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP, null, Color.WHITE));
+        this.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Chord Filter",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP, null, Color.WHITE));
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
@@ -76,29 +73,6 @@ public class ChordFilterBox extends MidiDeviceBox implements ActionListener{
         centerPanel.add(chordInversionsComboBox);
 
         this.add(centerPanel, BorderLayout.CENTER);
-
-        if(hasReceiver()){
-            JPanel westPanel = new JPanel();
-            westPanel.setBackground(Color.BLUE);
-            westPanel.setLayout(new GridLayout(2,1));
-            westPanel.add(new JLabel());
-            BoxArrow boxArrow = new BoxArrow();
-            boxArrow.setColor(Color.WHITE);
-            westPanel.add(boxArrow);
-            this.add(westPanel, BorderLayout.WEST);
-        }
-
-        if(hasTransmitter()){
-            JPanel eastPanel = new JPanel();
-            eastPanel.setBackground(Color.BLUE);
-            eastPanel.setLayout(new GridLayout(2,1));
-            eastPanel.add(new JLabel());
-            BoxArrow boxArrow = new BoxArrow();
-            boxArrow.setColor(Color.WHITE);
-            eastPanel.add(boxArrow);
-            this.add(eastPanel, BorderLayout.EAST);
-        }
-
     }
 
     @Override
