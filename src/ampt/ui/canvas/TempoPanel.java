@@ -23,8 +23,8 @@ public class TempoPanel extends javax.swing.JPanel {
     // listeners for tempo changes
     private EventListenerList _tempoListeners = new EventListenerList();
 
-    // tempo * 10 (temporary workaround for issue with spinner)
-    private long _currentTempo;
+    // this is equal to tempo * 10 (temporary workaround for issue with spinner)
+    private long _currentTempo = 1000; // 100.0
 
     /** Creates new form TempoPanel */
     public TempoPanel() {
@@ -54,6 +54,8 @@ public class TempoPanel extends javax.swing.JPanel {
      */
     public void addTempoListener(TempoListener l) {
         _tempoListeners.add(TempoListener.class, l);
+        // initialize device when added
+        l.tempoChanged(createTempoEvent());
     }
 
     /**
@@ -69,10 +71,9 @@ public class TempoPanel extends javax.swing.JPanel {
     // notification on this event type.  The event instance
     // is lazily created using the parameters passed into
     // the fire method.
-    protected void fireTempoChange(float newTempo) {
+    protected void fireTempoChange() {
 
-        TempoEvent tempoEvent =
-                new TempoEvent(this, TempoEvent.TEMPO_CHANGE, newTempo);
+        TempoEvent tempoEvent = createTempoEvent();
 
         // Guaranteed to return a non-null array
         Object[] listeners = _tempoListeners.getListenerList();
@@ -84,6 +85,11 @@ public class TempoPanel extends javax.swing.JPanel {
                 ((TempoListener) listeners[i+1]).tempoChanged(tempoEvent);
             }
         }
+    }
+
+    private TempoEvent createTempoEvent() {
+       float newTempo = _currentTempo / 10.0F;
+       return new TempoEvent(this, TempoEvent.TEMPO_CHANGE, newTempo);
     }
 
     /** This method is called from within the constructor to
@@ -145,10 +151,9 @@ public class TempoPanel extends javax.swing.JPanel {
 
         // only fire events if the tempo really changed
         if(t != _currentTempo) {
-            float newTempo = t / 10.0F;
-            // notify listeners
-            fireTempoChange(newTempo);
             _currentTempo = t;
+            // notify listeners
+            fireTempoChange();
         }
     }//GEN-LAST:event_tempoSpinnerStateChanged
     // Variables declaration - do not modify//GEN-BEGIN:variables
