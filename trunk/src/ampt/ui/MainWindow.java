@@ -10,6 +10,7 @@ import ampt.core.devices.ChordFilterDevice;
 import ampt.core.devices.KeyboardDevice;
 import ampt.core.devices.NoteViewerDevice;
 import ampt.core.devices.ArpFilterDevice;
+import ampt.core.devices.ArpeggiatorFilterDevice;
 import ampt.core.devices.EchoFilterDevice;
 import ampt.core.devices.TimedDevice;
 import ampt.ui.canvas.CanvasCorner;
@@ -22,6 +23,7 @@ import ampt.ui.filters.KeyboardBox;
 import ampt.ui.filters.MidiDeviceBox;
 import ampt.ui.filters.NoteViewerBox;
 import ampt.ui.filters.ArpFilterBox;
+import ampt.ui.filters.ArpeggiatorFilterBox;
 import ampt.ui.filters.EchoFilterBox;
 import ampt.ui.filters.SynthesizerBox;
 import java.awt.Color;
@@ -488,6 +490,11 @@ public class MainWindow extends JFrame {
             ArpFilterDevice arpFilterDevice = (ArpFilterDevice) device;
             arpFilterDevice.setLogger(consolePane.getPrintStream(Color.GREEN));
             box = new ArpFilterBox(arpFilterDevice);
+        } else if (device instanceof ArpeggiatorFilterDevice) {
+            ArpeggiatorFilterDevice arpeggiatorDevice = (ArpeggiatorFilterDevice) device;
+            arpeggiatorDevice.setLogger(consolePane.getPrintStream(Color.ORANGE));
+            arpeggiatorDevice.setMidiDebugEnabled(true);
+            box = new ArpeggiatorFilterBox(arpeggiatorDevice);
         } else if (device instanceof EchoFilterDevice) {
             EchoFilterDevice echoDevice = (EchoFilterDevice) device;
             echoDevice.setLogger(consolePane.getPrintStream(Color.MAGENTA));
