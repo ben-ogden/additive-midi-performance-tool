@@ -47,4 +47,8 @@ public enum NoteValue {
 
         throw new IllegalArgumentException("Division Type is Not Legal");
     }
+
+    public static long getTickLength(NoteValue value, int resolution) {
+        return (long) (resolution / value._notesPerBeat);
+    }
 }
