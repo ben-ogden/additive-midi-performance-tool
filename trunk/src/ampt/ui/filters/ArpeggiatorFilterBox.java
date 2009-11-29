@@ -48,6 +48,7 @@ public class ArpeggiatorFilterBox extends AmptMidiDeviceBox implements ActionLis
         arpTypeComboBox.addItem("Down");
         arpTypeComboBox.addItem("Up and Down");
         arpTypeComboBox.addItem("Down and Up");
+        arpTypeComboBox.addItem("Random");
         arpTypeComboBox.setSelectedIndex(Arpeggio.ASCEND_DESCEND);
         device.setMotion(Arpeggio.ASCEND_DESCEND);
         arpTypeComboBox.addActionListener(this);
