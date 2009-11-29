@@ -29,12 +29,15 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
         /*
          * Register all AMPT devices here with the device name and device Class
          */
+        deviceList.add(new ArpFilterDevice().getDeviceInfo());
+        deviceList.add(new ArpeggiatorFilterDevice().getDeviceInfo());
         deviceList.add(new ChordFilterDevice().getDeviceInfo());
+        deviceList.add(new EchoFilterDevice().getDeviceInfo());
         deviceList.add(new KeyboardDevice().getDeviceInfo());
         deviceList.add(new NoteViewerDevice().getDeviceInfo());
-        deviceList.add(new ArpFilterDevice().getDeviceInfo());
-        deviceList.add(new EchoFilterDevice().getDeviceInfo());
-        deviceList.add(new ArpeggiatorFilterDevice().getDeviceInfo());
+        deviceList.add(new PanoramaDevice().getDeviceInfo());
+        
+        
     }
 
     /**

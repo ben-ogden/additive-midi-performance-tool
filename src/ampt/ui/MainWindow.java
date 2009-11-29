@@ -12,6 +12,7 @@ import ampt.core.devices.NoteViewerDevice;
 import ampt.core.devices.ArpFilterDevice;
 import ampt.core.devices.ArpeggiatorFilterDevice;
 import ampt.core.devices.EchoFilterDevice;
+import ampt.core.devices.PanoramaDevice;
 import ampt.core.devices.TimedDevice;
 import ampt.ui.canvas.CanvasCorner;
 import ampt.ui.canvas.CanvasRuler;
@@ -25,6 +26,7 @@ import ampt.ui.filters.NoteViewerBox;
 import ampt.ui.filters.ArpFilterBox;
 import ampt.ui.filters.ArpeggiatorFilterBox;
 import ampt.ui.filters.EchoFilterBox;
+import ampt.ui.filters.PanoramaDeviceBox;
 import ampt.ui.filters.SynthesizerBox;
 import java.awt.Color;
 import java.awt.Point;
@@ -499,6 +501,13 @@ public class MainWindow extends JFrame {
             EchoFilterDevice echoDevice = (EchoFilterDevice) device;
             echoDevice.setLogger(consolePane.getPrintStream(Color.MAGENTA));
             box = new EchoFilterBox(echoDevice, consolePane.getPrintStream());
+        } else if (device instanceof PanoramaDevice) {
+            PanoramaDevice panDevice = (PanoramaDevice) device;
+            panDevice.setLogger(consolePane.getPrintStream(Color.YELLOW));
+            box = new PanoramaDeviceBox(panDevice);
+        } else {
+            consolePane.append(String.format("Unable to load device! Class:%s\n",
+                    device.getClass().getName()));
         }
 
         // register timed devices as tempo listeners
