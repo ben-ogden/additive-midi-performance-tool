@@ -39,7 +39,7 @@ import javax.sound.midi.Transmitter;
  */
 public class ArpFilterDevice extends TimedDevice {
 
-    public final static String DEVICE_NAME = "Arpeggiator";
+    public final static String DEVICE_NAME = "Arp";
     public final static String DEVICE_DESCRIPTION = "An arpeggiator for use with AMPT";
 
     public final static int ASCEND = 0;
