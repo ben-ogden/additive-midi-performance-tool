@@ -130,7 +130,7 @@ public class MainWindow extends JFrame {
         topPane.setMinimumSize(new java.awt.Dimension(200, 200));
         topPane.setPreferredSize(new java.awt.Dimension(800, 450));
 
-        toolbarPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas Toolbar"));
+        toolbarPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Canvas Toolbar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         toolbarPane.setFloatable(false);
         toolbarPane.setOrientation(1);
         toolbarPane.setRollover(true);
@@ -165,7 +165,7 @@ public class MainWindow extends JFrame {
 
         }
 
-        canvasPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Canvas"));
+        canvasPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 0, 3, 0));
 
         canvasScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         canvasScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -199,18 +199,18 @@ public class MainWindow extends JFrame {
         canvasPanel.setLayout(canvasPanelLayout);
         canvasPanelLayout.setHorizontalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
         );
         canvasPanelLayout.setVerticalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
         );
 
-        metronomePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
+        metronomePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Metronome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         metronomePanel.setMinimumSize(new java.awt.Dimension(0, 0));
         metronomePanel.setPreferredSize(new java.awt.Dimension(200, 80));
 
-        filterPropertiesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
+        filterPropertiesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filter Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         filterPropertiesPanel.setPreferredSize(new java.awt.Dimension(200, 250));
 
         javax.swing.GroupLayout filterPropertiesPanelLayout = new javax.swing.GroupLayout(filterPropertiesPanel);
@@ -221,7 +221,7 @@ public class MainWindow extends JFrame {
         );
         filterPropertiesPanelLayout.setVerticalGroup(
             filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGap(0, 253, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
@@ -242,7 +242,7 @@ public class MainWindow extends JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filterPropertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))
+                .addComponent(filterPropertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout topPaneLayout = new javax.swing.GroupLayout(topPane);
@@ -267,7 +267,7 @@ public class MainWindow extends JFrame {
 
         bottomPane.setPreferredSize(new java.awt.Dimension(800, 150));
 
-        midiConsoleLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        midiConsoleLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         midiConsoleLabel.setText("MIDI Console");
         midiConsoleLabel.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
 
@@ -300,7 +300,7 @@ public class MainWindow extends JFrame {
                 .addContainerGap()
                 .addComponent(midiConsoleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

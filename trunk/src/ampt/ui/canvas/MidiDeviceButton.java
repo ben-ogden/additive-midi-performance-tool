@@ -1,5 +1,6 @@
 package ampt.ui.canvas;
 
+import java.awt.Font;
 import javax.sound.midi.MidiDevice.Info;
 import javax.swing.JButton;
 
@@ -24,6 +25,9 @@ public class MidiDeviceButton extends JButton {
         } else {
             this.setToolTipText(deviceInfo.getName());
         }
+
+        this.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
     }
 
     public Info getDeviceInfo(){
