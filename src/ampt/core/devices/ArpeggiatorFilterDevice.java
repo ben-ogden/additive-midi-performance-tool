@@ -8,7 +8,7 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 /**
  * 
@@ -21,8 +21,7 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
 
     
 
-    private final ConcurrentHashMap<String, Boolean> _arpeggios
-            = new ConcurrentHashMap<String, Boolean>();
+    private final HashMap<String, Boolean> _arpeggios = new HashMap<String, Boolean>();
 
 
     private int _motion = Arpeggio.ASCEND_DESCEND;
@@ -105,7 +104,11 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
 
                         //if _key is mapped to a flag, then set that flag to
                         //false.
-                        _arpeggios.remove(key);
+                        synchronized(ArpeggiatorFilterDevice.this) {
+                            Boolean flag = _arpeggios.remove(key);
+                            flag = false;
+                            _arpeggios.put(key, flag);
+                        }
 
                     } else {
 
@@ -113,17 +116,26 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
                         if (command == ShortMessage.NOTE_ON) {
                             float noteFactor;
                             int[] intervals;
+                            ArpeggioTask arpTask;
                             synchronized(ArpeggiatorFilterDevice.this) {
-                                noteFactor = 60000 / _noteValue.getNotesPerBeat();
-                                intervals = _arp.getIntervals();
-                            }
-                            
-                            ArpeggioTask arpTask = new ArpeggioTask(key, intervals, channel, velocity, tone, noteFactor);
-                            _arpeggios.putIfAbsent(key, true);
-                            execute(arpTask);
+                                if (!_arpeggios.containsKey(key)) {
+                                    _arpeggios.put(key, true);
+                                    noteFactor = 60000 / _noteValue.getNotesPerBeat();
+                                    intervals = _arp.getIntervals();
+                                    arpTask = new ArpeggioTask(key, intervals, channel, velocity, tone, noteFactor);
 
-                            //send the original note
-                            sendNow(sMsg);
+                                    execute(arpTask);
+                                } else if (!_arpeggios.get(key)) {
+                                    Boolean flag =_arpeggios.remove(key);
+                                    flag = true;
+                                    _arpeggios.put(key, flag);
+                                    noteFactor = 60000 / _noteValue.getNotesPerBeat();
+                                    intervals = _arp.getIntervals();
+                                    arpTask = new ArpeggioTask(key, intervals, channel, velocity, tone, noteFactor);
+
+                                    execute(arpTask);
+                                }
+                            }
                         }
                     }
                 } else
@@ -167,18 +179,19 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
 
             //Play the first Note
             try {
-                   sMsg.setMessage(ShortMessage.NOTE_ON,
-                                   _channel,
-                                   _tone + _intervals[0],
-                                   _velocity);
-                   sendNow(sMsg);
-               } catch (InvalidMidiDataException e) {
-                   e.printStackTrace();
-               }
+                sMsg.setMessage(ShortMessage.NOTE_ON,
+                                _channel,
+                                _tone + _intervals[0],
+                                _velocity);
+                sendNow(sMsg);
+
+            } catch (InvalidMidiDataException e) {
+                e.printStackTrace();
+            }
 
             int noteCount = 0;
             long nextNote = System.currentTimeMillis() + (long) (_noteFactor / _tempo);
-            while (_arpeggios.get(_key) == true) {
+            while (_arpeggios.get(_key)) {
                 if(System.currentTimeMillis() >= nextNote) {
                     try {
                         sMsg.setMessage(ShortMessage.NOTE_OFF,
@@ -197,7 +210,7 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
                     } catch (InvalidMidiDataException e) {
                         e.printStackTrace();
                     }
-                    
+
                     nextNote = nextNote + (long) (_noteFactor / _tempo);
                 }
 
@@ -208,13 +221,12 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
                }
             }
 
-            //Shut off the last note
             try {
-               sMsg.setMessage(ShortMessage.NOTE_OFF,
-                               _channel,
-                               _tone + _intervals[noteCount % _intervals.length],
-                               _velocity);
-               sendNow(sMsg);
+                sMsg.setMessage(ShortMessage.NOTE_OFF,
+                                _channel,
+                                _tone + _intervals[noteCount % _intervals.length],
+                                _velocity);
+                sendNow(sMsg);
             } catch (InvalidMidiDataException e) {
                 e.printStackTrace();
             }
