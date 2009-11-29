@@ -5,15 +5,18 @@
  */
 package ampt.ui;
 
+import ampt.core.devices.AmptMidiDevice;
 import ampt.core.devices.ChordFilterDevice;
 import ampt.core.devices.KeyboardDevice;
 import ampt.core.devices.NoteViewerDevice;
 import ampt.core.devices.ArpFilterDevice;
 import ampt.core.devices.EchoFilterDevice;
+import ampt.core.devices.TimedDevice;
 import ampt.ui.canvas.CanvasCorner;
 import ampt.ui.canvas.CanvasRuler;
 import ampt.ui.canvas.CanvasRuler.Orientation;
 import ampt.ui.canvas.MidiDeviceButton;
+import ampt.ui.filters.AmptMidiDeviceBox;
 import ampt.ui.filters.ChordFilterBox;
 import ampt.ui.filters.KeyboardBox;
 import ampt.ui.filters.MidiDeviceBox;
@@ -71,8 +74,13 @@ public class MainWindow extends JFrame {
     /** Creates new form MainWindow */
     public MainWindow() {
         initComponents();
+
+        // register the console pane as a tempo listener
+        tempoPanel.addTempoListener(consolePane);
+        // register the metronome pane as a tempo listener
+        tempoPanel.addTempoListener(metronomePanel);
+
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
     }
 
     /** This method is called from within the constructor to
@@ -94,8 +102,9 @@ public class MainWindow extends JFrame {
         canvasScrollPane = new javax.swing.JScrollPane();
         theActualCanvasPanel = new ampt.ui.canvas.CanvasPanel();
         propertiesPanel = new javax.swing.JPanel();
-        metronomePanel1 = new ampt.ui.canvas.MetronomePanel();
-        filterPropertiesPanel1 = new ampt.ui.canvas.FilterPropertiesPanel();
+        metronomePanel = new ampt.ui.canvas.MetronomePanel();
+        filterPropertiesPanel = new ampt.ui.canvas.FilterPropertiesPanel();
+        tempoPanel = new ampt.ui.canvas.TempoPanel();
         bottomPane = new javax.swing.JPanel();
         midiConsoleLabel = new javax.swing.JLabel();
         consoleScrollPane = new javax.swing.JScrollPane();
@@ -190,41 +199,50 @@ public class MainWindow extends JFrame {
         canvasPanel.setLayout(canvasPanelLayout);
         canvasPanelLayout.setHorizontalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
         );
         canvasPanelLayout.setVerticalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
         );
 
-        metronomePanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
+        metronomePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Metronome"));
+        metronomePanel.setMinimumSize(new java.awt.Dimension(0, 0));
+        metronomePanel.setPreferredSize(new java.awt.Dimension(200, 80));
 
-        filterPropertiesPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
+        filterPropertiesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter Properties"));
+        filterPropertiesPanel.setPreferredSize(new java.awt.Dimension(200, 250));
 
-        javax.swing.GroupLayout filterPropertiesPanel1Layout = new javax.swing.GroupLayout(filterPropertiesPanel1);
-        filterPropertiesPanel1.setLayout(filterPropertiesPanel1Layout);
-        filterPropertiesPanel1Layout.setHorizontalGroup(
-            filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 203, Short.MAX_VALUE)
+        javax.swing.GroupLayout filterPropertiesPanelLayout = new javax.swing.GroupLayout(filterPropertiesPanel);
+        filterPropertiesPanel.setLayout(filterPropertiesPanelLayout);
+        filterPropertiesPanelLayout.setHorizontalGroup(
+            filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 195, Short.MAX_VALUE)
         );
-        filterPropertiesPanel1Layout.setVerticalGroup(
-            filterPropertiesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
+        filterPropertiesPanelLayout.setVerticalGroup(
+            filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 279, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
         propertiesPanel.setLayout(propertiesPanelLayout);
         propertiesPanelLayout.setHorizontalGroup(
             propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(metronomePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, propertiesPanelLayout.createSequentialGroup()
+                .addGroup(propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(filterPropertiesPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                    .addComponent(tempoPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                    .addComponent(metronomePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
+                .addContainerGap())
         );
         propertiesPanelLayout.setVerticalGroup(
             propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(propertiesPanelLayout.createSequentialGroup()
-                .addComponent(metronomePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filterPropertiesPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(filterPropertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout topPaneLayout = new javax.swing.GroupLayout(topPane);
@@ -408,51 +426,27 @@ public class MainWindow extends JFrame {
                 Point point = e.getPoint();
                 if (source instanceof MidiDeviceButton) {
                     try {
-                        MidiDeviceButton deviceButton = (MidiDeviceButton) source;
 
+                        MidiDeviceButton deviceButton = (MidiDeviceButton) source;
                         MidiDevice device = MidiSystem.getMidiDevice(deviceButton.getDeviceInfo());
 
                         MidiDeviceBox box = null;
-                        if (device instanceof KeyboardDevice) {
-                            KeyboardDevice keyboard = (KeyboardDevice) device;
-                            keyboard.setLogger(consolePane.getPrintStream(Color.CYAN));
-                            keyboard.setMidiDebugEnabled(true);
-                            if(deviceButton.getText().matches(".*[eE]xtended.*")){
-                                box = new KeyboardBox(keyboard, true);
-                            }else {
-                                box = new KeyboardBox(keyboard, false);
-                            }
-                        } else if (device instanceof ChordFilterDevice) {
-                            ChordFilterDevice chordDevice = (ChordFilterDevice) device;
-                            chordDevice.setLogger(consolePane.getPrintStream(Color.BLUE));
-                            chordDevice.setMidiDebugEnabled(true);
-                            box = new ChordFilterBox(chordDevice);
-                        } else if (device instanceof NoteViewerDevice) {
-                            NoteViewerDevice noteViewerDevice = (NoteViewerDevice) device;
-                            noteViewerDevice.setLogger(consolePane.getPrintStream(Color.RED));
-                            noteViewerDevice.setMidiDebugEnabled(true);
-                            box = new NoteViewerBox(noteViewerDevice, consolePane.getPrintStream());
-                        } else if (device instanceof ArpFilterDevice){
-                            ArpFilterDevice arpFilterDevice = (ArpFilterDevice) device;
-                            arpFilterDevice.setLogger(consolePane.getPrintStream(Color.GREEN));
-                            arpFilterDevice.setMidiDebugEnabled(true);
-                            box = new ArpFilterBox(arpFilterDevice);
-                        } else if (device instanceof EchoFilterDevice) {
-                            EchoFilterDevice echoDevice = (EchoFilterDevice) device;
-                            echoDevice.setLogger(consolePane.getPrintStream(Color.MAGENTA));
-                            echoDevice.setMidiDebugEnabled(true);
-                            box = new EchoFilterBox(echoDevice, consolePane.getPrintStream());
-                        } else if (device instanceof Synthesizer){
-                            Synthesizer synthDevice = (Synthesizer) device;
-                            box = new SynthesizerBox(synthDevice);
+
+                        if (device instanceof AmptMidiDevice) {
+                            box = addAmptMidiDeviceBox((AmptMidiDevice) device,
+                                    deviceButton);
+                        } else if (device instanceof Synthesizer) {
+                            box = new SynthesizerBox((Synthesizer) device);
                         } else {
                             box = new MidiDeviceBox(device);
                         }
+
                         theActualCanvasPanel.add(box);
                         box.setLocation(point);
                         box.setSize(box.getPreferredSize());
                         box.validate();
                         theActualCanvasPanel.repaint();
+
                     } catch (MidiUnavailableException ex) {
                         // send message to console pane and show alert
                         final String msg = "Unable to add device to canvas. ";
@@ -466,6 +460,49 @@ public class MainWindow extends JFrame {
         };
         theActualCanvasPanel.addMouseListener(canvasButtonMouseAdapter);
     }
+
+    private MidiDeviceBox addAmptMidiDeviceBox(AmptMidiDevice device,
+            MidiDeviceButton deviceButton) throws MidiUnavailableException {
+
+        AmptMidiDeviceBox box = null;
+
+        device.setMidiDebugEnabled(true);
+
+        if (device instanceof KeyboardDevice) {
+            KeyboardDevice keyboard = (KeyboardDevice) device;
+            keyboard.setLogger(consolePane.getPrintStream(Color.CYAN));
+            if (deviceButton.getText().matches(".*[eE]xtended.*")) {
+                box = new KeyboardBox(keyboard, true);
+            } else {
+                box = new KeyboardBox(keyboard, false);
+            }
+        } else if (device instanceof ChordFilterDevice) {
+            ChordFilterDevice chordDevice = (ChordFilterDevice) device;
+            chordDevice.setLogger(consolePane.getPrintStream(Color.BLUE));
+            box = new ChordFilterBox(chordDevice);
+        } else if (device instanceof NoteViewerDevice) {
+            NoteViewerDevice noteViewerDevice = (NoteViewerDevice) device;
+            noteViewerDevice.setLogger(consolePane.getPrintStream(Color.RED));
+            box = new NoteViewerBox(noteViewerDevice, consolePane.getPrintStream());
+        } else if (device instanceof ArpFilterDevice) {
+            ArpFilterDevice arpFilterDevice = (ArpFilterDevice) device;
+            arpFilterDevice.setLogger(consolePane.getPrintStream(Color.GREEN));
+            box = new ArpFilterBox(arpFilterDevice);
+        } else if (device instanceof EchoFilterDevice) {
+            EchoFilterDevice echoDevice = (EchoFilterDevice) device;
+            echoDevice.setLogger(consolePane.getPrintStream(Color.MAGENTA));
+            box = new EchoFilterBox(echoDevice, consolePane.getPrintStream());
+        }
+
+        // register timed devices as tempo listeners
+        if (device instanceof TimedDevice) {
+            tempoPanel.addTempoListener(box);
+        }
+
+        return box;
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar amptMenuBar;
     private javax.swing.JPanel bottomPane;
@@ -476,11 +513,12 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel1;
-    private ampt.ui.canvas.MetronomePanel metronomePanel1;
+    private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel;
+    private ampt.ui.canvas.MetronomePanel metronomePanel;
     private javax.swing.JLabel midiConsoleLabel;
     private javax.swing.JPanel propertiesPanel;
     private javax.swing.JSplitPane splitPane;
+    private ampt.ui.canvas.TempoPanel tempoPanel;
     private ampt.ui.canvas.CanvasPanel theActualCanvasPanel;
     private ampt.ui.canvas.CanvasToolbar toolbarPane;
     private javax.swing.JPanel topPane;

@@ -13,8 +13,17 @@ import java.awt.geom.*;
  */
 public class AnimatedMetronome extends JPanel implements Runnable {
 
+    // number of animation frames
+    private static final int NUM_FRAMES = 20;
+    private static final int FRAME_INTERVAL = 60 / NUM_FRAMES;
+
     private final AtomicBoolean started = new AtomicBoolean(false);
-    private final AtomicInteger tempo = new AtomicInteger(60);
+
+    //TODO - tempo needs to be float
+    //private final AtomicInteger tempo = new AtomicInteger(60);
+
+    private long tempoInterval = (long) (1000000000 / (100.0F / FRAME_INTERVAL));
+
     private final AtomicInteger position = new AtomicInteger(1);
 
     public AnimatedMetronome() {
@@ -23,8 +32,9 @@ public class AnimatedMetronome extends JPanel implements Runnable {
     /*
      * @param tempo the desired tempo
      */
-    public void setTempo(int tempo) {
-        (this.tempo).set(tempo);
+    public void setTempo(float tempo) {
+        //this.tempo.set(tempo);
+        tempoInterval = (long) (1000000000.0F / (tempo / FRAME_INTERVAL));
     }
 
     /*
@@ -82,7 +92,8 @@ public class AnimatedMetronome extends JPanel implements Runnable {
      */
     @Override
     public void run() {
-        long nextTick = System.nanoTime() + (1000000000 / (tempo.get() / 3));
+        // long nextTick = (long) (System.nanoTime() + (1000000000.0F / (tempo / 3.0F)));
+        long nextTick = (long) (System.nanoTime() + tempoInterval);
         while (started.get()) {
             try {
                 Thread.sleep(0, 1);
@@ -94,7 +105,7 @@ public class AnimatedMetronome extends JPanel implements Runnable {
                 else
                     position.incrementAndGet();
                 repaint();
-                nextTick += (1000000000 / (tempo.get() / 3));
+                nextTick += tempoInterval;
             }
         }
     }
