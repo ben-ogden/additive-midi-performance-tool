@@ -173,7 +173,7 @@ public class AmptConsolePane extends JTextPane implements TempoListener {
      */
     @Override
     public void tempoChanged(TempoEvent event) {
-        append(String.format("Tempo changed to: %.1f BPM\n", event.getTempo()),
+        append(String.format("Tempo set to %.1f BPM\n", event.getTempo()),
                 TEMPO_COLOR);
     }
 
