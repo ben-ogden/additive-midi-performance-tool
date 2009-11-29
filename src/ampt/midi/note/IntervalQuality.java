@@ -93,9 +93,3 @@ public enum IntervalQuality {
         return type;
     }
 }
-class InvalidIntervalException extends Exception {
-
-    InvalidIntervalException(String message) {
-        super(message);
-    }
-}
