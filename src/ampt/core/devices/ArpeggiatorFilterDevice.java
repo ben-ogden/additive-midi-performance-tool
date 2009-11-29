@@ -164,6 +164,8 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
         @Override
         public void run() {
             ShortMessage sMsg = new ShortMessage();
+
+            //Play the first Note
             try {
                    sMsg.setMessage(ShortMessage.NOTE_ON,
                                    _channel,
@@ -199,21 +201,22 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
                     nextNote = nextNote + (long) (_noteFactor / _tempo);
                 }
 
-                try {
-                   sMsg.setMessage(ShortMessage.NOTE_OFF,
-                                   _channel,
-                                   _tone + _intervals[noteCount % _intervals.length],
-                                   _velocity);
-                   sendNow(sMsg);
-               } catch (InvalidMidiDataException e) {
-                   e.printStackTrace();
-               }
-
                try {
                    Thread.sleep(0, 1);
                } catch (InterruptedException e) {
                    e.printStackTrace();
                }
+            }
+
+            //Shut off the last note
+            try {
+               sMsg.setMessage(ShortMessage.NOTE_OFF,
+                               _channel,
+                               _tone + _intervals[noteCount % _intervals.length],
+                               _velocity);
+               sendNow(sMsg);
+            } catch (InvalidMidiDataException e) {
+                e.printStackTrace();
             }
         }
     }
