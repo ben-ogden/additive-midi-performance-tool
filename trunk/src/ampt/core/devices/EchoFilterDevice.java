@@ -169,12 +169,21 @@ public class EchoFilterDevice extends TimedDevice {
             for(int i = 0; i < _duration; i++) {
                 ShortMessage schedNote = new ShortMessage();
                 schedNote.setMessage(command, channel, note, velocities[i]);
-                sendLater(schedNote, (long) milliDelay * (i+1));
+
+// to mess w/ volume you need to store the prior volume and then restore it,
+// otherwise you end up basically disabling a channel
+//                ShortMessage schedVol = new ShortMessage();
+//                schedVol.setMessage(182, channel, 7, velocities[i]);
+
+                long delay = (long) milliDelay * (i+1);
+
+                sendLater(schedNote, delay);
+//                sendLater(schedVol, delay);
             }
         }
 
         /*
-         * Build array of note velocities, decaying over time
+         * Build array of note velocities/levels, decaying over time
          *
          * TODO this should be refined/optimized
          */
