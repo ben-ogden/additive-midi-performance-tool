@@ -178,6 +178,46 @@ public final class Arpeggio {
                 break;
 
             case RANDOM:
+                _intervals = new int[7];
+                _noteCount = 7;
+
+                try {
+                    _intervals[0] = IntervalQuality.PERFECT.unison();
+                    _intervals[1] = IntervalQuality.PERFECT.octave();
+                    _intervals[2] = IntervalQuality.PERFECT.unison() - 12;
+
+                    if (arpType == MAJOR) {
+                        _intervals[3] = IntervalQuality.MAJOR.third();
+                        _intervals[4] = IntervalQuality.PERFECT.fifth();
+                        _intervals[5] = IntervalQuality.MAJOR.third() - 12;
+                        _intervals[6] = IntervalQuality.PERFECT.fifth() - 12;
+                    }
+
+                    if (arpType == MINOR) {
+                        _intervals[3] = IntervalQuality.MINOR.third();
+                        _intervals[4] = IntervalQuality.PERFECT.fifth();
+                        _intervals[5] = IntervalQuality.MINOR.third() - 12;
+                        _intervals[6] = IntervalQuality.PERFECT.fifth() - 12;
+                    }
+
+                    if (arpType == AUGMENTED) {
+                        _intervals[3] = IntervalQuality.MAJOR.third();
+                        _intervals[4] = IntervalQuality.AUGMENTED.fifth();
+                        _intervals[5] = IntervalQuality.MAJOR.third() - 12;
+                        _intervals[6] = IntervalQuality.AUGMENTED.fifth() - 12;
+                    }
+
+                    if (arpType == DIMINISHED) {
+                        _intervals[3] = IntervalQuality.MINOR.third();
+                        _intervals[4] = IntervalQuality.DIMINISHED.fifth();
+                        _intervals[5] = IntervalQuality.MINOR.third() - 12;
+                        _intervals[6] = IntervalQuality.DIMINISHED.fifth() - 12;
+                    }
+
+                } catch (InvalidIntervalException e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 _intervals = null;
                 _noteCount = 0;

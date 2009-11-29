@@ -37,7 +37,7 @@ public class ArpFilterBox extends AmptMidiDeviceBox implements ActionListener {
         // JPanel and not MidiDeviceBox
         overridePaintComponent = false;
 
-        this.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Arpeggiator",
+        this.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Arp (Old Version)",
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP,
                 null, Color.WHITE));
 
