@@ -43,33 +43,21 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
     }
 
     public void setMotion(int motion) {
-        Collection<Boolean> arpsView = _arpeggios.values();
-
         synchronized(this) {
-            for (Boolean b : arpsView)
-                b = false;
             _motion = motion;
             _arp = Arpeggio.newArpeggio(_motion, _chordType, _noteValue);
         }
     }
 
     public void setNoteValue(NoteValue noteValue) {
-        Collection<Boolean> arpsView = _arpeggios.values();
-
         synchronized(this) {
-            for (Boolean b : arpsView)
-                b = false;
             _noteValue = noteValue;
             _arp = Arpeggio.newArpeggio(_motion, _chordType, _noteValue);
         }
     }
 
     public void setChordType(int chordType) {
-        Collection<Boolean> arpsView = _arpeggios.values();
-
         synchronized(this) {
-            for (Boolean b : arpsView)
-                b = false;
             _chordType = chordType;
             _arp = Arpeggio.newArpeggio(_motion, _chordType, _noteValue);
         }
