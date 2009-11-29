@@ -1,12 +1,12 @@
 package ampt.ui.canvas;
 
-import java.awt.AWTEvent;
+import ampt.ui.tempo.TempoEvent;
+import ampt.ui.tempo.TempoListener;
 import java.awt.Color;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -25,10 +25,11 @@ import javax.swing.text.StyleContext;
  *
  * @author Ben
  */
-public class AmptConsolePane extends JTextPane {
+public class AmptConsolePane extends JTextPane implements TempoListener {
 
     // default text color
     private static final Color DEFAULT_COLOR = Color.DARK_GRAY;
+    private static final Color TEMPO_COLOR = Color.RED;
 
     // maximum document size for the console pane (in characters)
     //    32,000 = 400 x 80 character lines
@@ -145,7 +146,8 @@ public class AmptConsolePane extends JTextPane {
     }
 
     /**
-     * Get an outputstream to write messages to this AmptConsolePane.
+     * Get an outputstream to write messages to this AmptConsolePane. The text
+     * will be printed in the specified color.
      *
      * @return a PrintStream
      */
@@ -154,8 +156,25 @@ public class AmptConsolePane extends JTextPane {
         return new PrintStream(new ConsoleOutputStream(color));
     }
 
+    /**
+     * Get an outputstream to write messages to this AmptConsolePane.
+     *
+     * @return a PrintStream
+     */
     public PrintStream getPrintStream() {
         return getPrintStream(DEFAULT_COLOR);
+    }
+
+    /**
+     * AmptConsolePane is a TempoListener. This method used to catch TempoEvent
+     * notifications and display them in the console.
+     *
+     * @param event a TempoEvent
+     */
+    @Override
+    public void tempoChanged(TempoEvent event) {
+        append(String.format("Tempo changed to: %.1f BPM\n", event.getTempo()),
+                TEMPO_COLOR);
     }
 
     /**
