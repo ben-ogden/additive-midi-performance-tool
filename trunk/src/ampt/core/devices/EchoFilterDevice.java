@@ -141,13 +141,22 @@ public class EchoFilterDevice extends TimedDevice {
                 return;
             }
 
-            float milliDelay = (60000 / (_tempo * _interval.getNotesPerBeat()));
+            // only repeat short messages
+            if(!(message instanceof ShortMessage)) {
+                return;
+            }
 
             ShortMessage msg = (ShortMessage) message;
             int command = msg.getCommand();
+            // only support note on/off, etc...
+            if(command < 128 || command > 224) {
+                return;
+            }
             int channel = msg.getChannel();
             int note = msg.getData1();
             int velocity = msg.getData2();
+
+            float milliDelay = (60000 / (_tempo * _interval.getNotesPerBeat()));
 
             int[] velocities;
             if(ShortMessage.NOTE_ON == command) {
