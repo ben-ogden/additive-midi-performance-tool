@@ -18,11 +18,14 @@ public abstract class TimedDevice extends AmptDevice {
     // the default size for thread pool
     private static final int DEFAULT_POOL_SIZE = 10;
 
+    //default tempo in BPM
+    public static final float DEFAULT_TEMPO = 100F;
+
     // the scheduler for this timed device
     private ScheduledExecutorService _executor;
 
     // the tempo, in BPM
-    protected float _tempo = 100;
+    protected float _tempo = DEFAULT_TEMPO;
 
     /**
      * Create a new TimedDevice. The default thread pool size is used.
@@ -76,6 +79,10 @@ public abstract class TimedDevice extends AmptDevice {
                 new TimedNoteTask(message),
                 milliDelay,
                 TimeUnit.MILLISECONDS);
+    }
+
+    protected void execute(Runnable command) {
+        _executor.execute(command);
     }
 
     /**
