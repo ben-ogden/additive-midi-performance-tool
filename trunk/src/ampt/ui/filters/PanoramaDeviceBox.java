@@ -71,8 +71,13 @@ public class PanoramaDeviceBox extends AmptMidiDeviceBox implements ChangeListen
         // set default duration
         _panSlider.setValue(64);
         device.setPan(64);
-        
+
         this.add(centerPanel, BorderLayout.CENTER);
+
+        // override the debug checkbox
+        JPanel emptyPanel = new JPanel();
+        emptyPanel.setBackground(FILTER_BGCOLOR);
+        this.add(emptyPanel, BorderLayout.SOUTH);
     }
 
     @Override
