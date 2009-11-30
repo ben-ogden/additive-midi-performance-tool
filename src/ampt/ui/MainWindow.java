@@ -488,11 +488,15 @@ public class MainWindow extends JFrame {
             NoteViewerDevice noteViewerDevice = (NoteViewerDevice) device;
             noteViewerDevice.setLogger(consolePane.getPrintStream(Color.RED));
             box = new NoteViewerBox(noteViewerDevice, consolePane.getPrintStream());
-        } else if (device instanceof ArpFilterDevice) {
+        }
+
+        /*else if (device instanceof ArpFilterDevice) {
             ArpFilterDevice arpFilterDevice = (ArpFilterDevice) device;
             arpFilterDevice.setLogger(consolePane.getPrintStream(Color.GREEN));
             box = new ArpFilterBox(arpFilterDevice);
-        } else if (device instanceof ArpeggiatorFilterDevice) {
+        }*/
+
+        else if (device instanceof ArpeggiatorFilterDevice) {
             ArpeggiatorFilterDevice arpeggiatorDevice = (ArpeggiatorFilterDevice) device;
             arpeggiatorDevice.setLogger(consolePane.getPrintStream(Color.ORANGE));
             arpeggiatorDevice.setMidiDebugEnabled(true);
