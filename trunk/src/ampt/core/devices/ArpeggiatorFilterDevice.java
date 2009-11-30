@@ -166,6 +166,8 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
         @Override
         public void run() {
             ShortMessage sMsg = new ShortMessage();
+
+            //noteCount is the current position in the interval array
             int noteCount;
 
             if (_random)

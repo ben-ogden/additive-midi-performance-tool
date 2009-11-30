@@ -6,19 +6,27 @@ package ampt.midi.note;
  */
 public final class Arpeggio {
 
+    //constants for the motion types
     public final static int ASCEND = 0;
     public final static int DESCEND = 1;
     public final static int ASCEND_DESCEND = 2;
     public final static int DESCEND_ASCEND = 3;
     public final static int RANDOM = 4;
 
+    //constants for the arpeggio type
     public final static int MAJOR = 0;
     public final static int MINOR = 1;
     public final static int AUGMENTED = 2;
     public final static int DIMINISHED = 3;
 
+    //array that stores the number of semitones from the root note for each
+    //interval in the arpeggio
     private final int[] _intervals;
+
+    //the value of the note used in the arpeggio
     private final NoteValue _noteValue;
+
+    //the number of notes in the arpeggio
     private final int _noteCount;
 
     private Arpeggio(int motion, int arpType, NoteValue noteValue) {
