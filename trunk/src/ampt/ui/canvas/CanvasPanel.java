@@ -8,6 +8,8 @@ package ampt.ui.canvas;
 import ampt.ui.filters.MidiDeviceBox;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -38,6 +40,9 @@ public class CanvasPanel extends javax.swing.JPanel {
         this.setLayout(null);
         midiDeviceBoxes = new Vector<MidiDeviceBox>();
         midiDeviceConnections = new Vector<MidiDeviceConnection>();
+        CanvasMotionMouseAdapter mouseAdapter = new CanvasMotionMouseAdapter(this);
+        this.addMouseListener(mouseAdapter);
+        this.addMouseMotionListener(mouseAdapter);
     }
 
     /**
@@ -283,4 +288,34 @@ public class CanvasPanel extends javax.swing.JPanel {
 
         }
     }
+
+    /**
+     * Mouse adapter that allows the canvas to be scrolled by clicking and dragging it.
+     */
+    private class CanvasMotionMouseAdapter extends MouseAdapter {
+
+        private Point firstPointOnCanvas = new Point(0, 0);
+        private CanvasPanel canvas;
+
+        public CanvasMotionMouseAdapter(CanvasPanel canvas) {
+            this.canvas = canvas;
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+
+            int deltaX = firstPointOnCanvas.x - e.getX();
+            int deltaY = firstPointOnCanvas.y - e.getY();
+
+            Rectangle initialVisibleRectangle = canvas.getVisibleRect();
+            Rectangle newVisibleRectangle = new Rectangle((int)initialVisibleRectangle.getX() + deltaX, (int)initialVisibleRectangle.getY() + deltaY, (int)initialVisibleRectangle.getWidth(), (int)initialVisibleRectangle.getHeight());
+            canvas.scrollRectToVisible(newVisibleRectangle);
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            firstPointOnCanvas = e.getPoint();
+        }
+    }
+
 }
