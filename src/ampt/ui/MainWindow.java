@@ -9,7 +9,6 @@ import ampt.core.devices.AmptMidiDevice;
 import ampt.core.devices.ChordFilterDevice;
 import ampt.core.devices.KeyboardDevice;
 import ampt.core.devices.NoteViewerDevice;
-import ampt.core.devices.ArpFilterDevice;
 import ampt.core.devices.ArpeggiatorFilterDevice;
 import ampt.core.devices.EchoFilterDevice;
 import ampt.core.devices.PanoramaDevice;
@@ -23,19 +22,24 @@ import ampt.ui.filters.ChordFilterBox;
 import ampt.ui.filters.KeyboardBox;
 import ampt.ui.filters.MidiDeviceBox;
 import ampt.ui.filters.NoteViewerBox;
-import ampt.ui.filters.ArpFilterBox;
 import ampt.ui.filters.ArpeggiatorFilterBox;
 import ampt.ui.filters.EchoFilterBox;
 import ampt.ui.filters.PanoramaDeviceBox;
 import ampt.ui.filters.SynthesizerBox;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
@@ -118,6 +122,8 @@ public class MainWindow extends JFrame {
         exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         viewMenu = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Additive MIDI Performance Tool");
@@ -221,11 +227,11 @@ public class MainWindow extends JFrame {
         filterPropertiesPanel.setLayout(filterPropertiesPanelLayout);
         filterPropertiesPanelLayout.setHorizontalGroup(
             filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 195, Short.MAX_VALUE)
+            .addGap(0, 191, Short.MAX_VALUE)
         );
         filterPropertiesPanelLayout.setVerticalGroup(
             filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 253, Short.MAX_VALUE)
+            .addGap(0, 250, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
@@ -347,6 +353,18 @@ public class MainWindow extends JFrame {
 
         amptMenuBar.add(viewMenu);
 
+        jMenu1.setText("Help");
+
+        jMenuItem1.setText("User's Guide");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userGuideHandler(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        amptMenuBar.add(jMenu1);
+
         setJMenuBar(amptMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -376,6 +394,17 @@ public class MainWindow extends JFrame {
 
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void userGuideHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userGuideHandler
+        try {
+            URI userGuideUri = new URI("http", "ampt.sourceforge.net", "/guide", null);
+            Desktop.getDesktop().browse(userGuideUri);
+        } catch (URISyntaxException ex){
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_userGuideHandler
 
     /**
      * @param args the command line arguments
@@ -534,6 +563,8 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
     private ampt.ui.canvas.MetronomePanel metronomePanel;
     private javax.swing.JLabel midiConsoleLabel;
     private javax.swing.JPanel propertiesPanel;

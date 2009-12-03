@@ -41,6 +41,21 @@
             <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {&#xa;    JMenuItem item = new JMenuItem(info.getName());&#xa;&#xa;    item.addActionListener(new ActionListener() {&#xa;        public void actionPerformed(ActionEvent evt) {&#xa;            viewMenuHandler(evt);&#xa;        }&#xa;    });&#xa;&#xa;    viewMenu.add(item);&#xa;}"/>
           </AuxValues>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Help"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="User&apos;s Guide"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="userGuideHandler"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>
@@ -294,12 +309,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="195" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="191" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="253" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="250" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
