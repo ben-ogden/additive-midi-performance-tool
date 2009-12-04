@@ -74,7 +74,7 @@ public class MainWindow extends JFrame {
     private List<String> excludedDevices = Arrays.asList("Microsoft MIDI Mapper",
             "Real Time Sequencer");
     
-    private AboutDialog aboutDialog;
+    private AboutDialog aboutDialog = new AboutDialog(this);;
 
 
     /*
@@ -118,7 +118,6 @@ public class MainWindow extends JFrame {
         theActualCanvasPanel = new ampt.ui.canvas.CanvasPanel();
         propertiesPanel = new javax.swing.JPanel();
         metronomePanel = new ampt.ui.canvas.MetronomePanel();
-        filterPropertiesPanel = new ampt.ui.canvas.FilterPropertiesPanel();
         tempoPanel = new ampt.ui.canvas.TempoPanel();
         bottomPane = new javax.swing.JPanel();
         midiConsoleLabel = new javax.swing.JLabel();
@@ -228,27 +227,12 @@ public class MainWindow extends JFrame {
         metronomePanel.setMinimumSize(new java.awt.Dimension(0, 0));
         metronomePanel.setPreferredSize(new java.awt.Dimension(200, 80));
 
-        filterPropertiesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filter Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
-        filterPropertiesPanel.setPreferredSize(new java.awt.Dimension(200, 250));
-
-        javax.swing.GroupLayout filterPropertiesPanelLayout = new javax.swing.GroupLayout(filterPropertiesPanel);
-        filterPropertiesPanel.setLayout(filterPropertiesPanelLayout);
-        filterPropertiesPanelLayout.setHorizontalGroup(
-            filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 195, Short.MAX_VALUE)
-        );
-        filterPropertiesPanelLayout.setVerticalGroup(
-            filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 253, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
         propertiesPanel.setLayout(propertiesPanelLayout);
         propertiesPanelLayout.setHorizontalGroup(
             propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, propertiesPanelLayout.createSequentialGroup()
                 .addGroup(propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(filterPropertiesPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                     .addComponent(tempoPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                     .addComponent(metronomePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
                 .addContainerGap())
@@ -259,8 +243,7 @@ public class MainWindow extends JFrame {
                 .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filterPropertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
+                .addContainerGap(287, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout topPaneLayout = new javax.swing.GroupLayout(topPane);
@@ -427,10 +410,6 @@ public class MainWindow extends JFrame {
      */
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
 
-        if(null == aboutDialog) {
-            aboutDialog = new AboutDialog(this);
-        }
-
         int x = this.getX() + this.getWidth() / 2 - aboutDialog.getWidth() / 2;
         int y = this.getY() + this.getHeight() / 2 - aboutDialog.getHeight() / 2;
 
@@ -467,14 +446,21 @@ public class MainWindow extends JFrame {
     }
 
     private void viewMenuHandler(ActionEvent event){
+
+        int windowState = this.getExtendedState();
+
         JMenuItem source = (JMenuItem) event.getSource();
         String lookAndFeelName = source.getText();
         for(LookAndFeelInfo info: UIManager.getInstalledLookAndFeels()){
             if(lookAndFeelName.equals(info.getName())){
                 try{
                     UIManager.setLookAndFeel(info.getClassName());
-                    SwingUtilities.updateComponentTreeUI(aboutDialog);
+                    
                     SwingUtilities.updateComponentTreeUI(this);
+
+                    SwingUtilities.updateComponentTreeUI(aboutDialog);
+                    aboutDialog.pack();
+
                     this.pack();
 
                 } catch (Exception ex){
@@ -482,6 +468,7 @@ public class MainWindow extends JFrame {
                 }
             }
         }
+        setExtendedState(windowState);
     }
 
     /**
@@ -611,7 +598,6 @@ public class MainWindow extends JFrame {
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel;
     private javax.swing.JMenuItem guideMenuItem;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JSeparator helpSeparator;
