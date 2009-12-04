@@ -37,8 +37,10 @@ import javax.swing.event.ChangeListener;
  */
 public class EchoFilterBox extends AmptMidiDeviceBox implements ActionListener,
         ChangeListener {
+	
+	private static final long serialVersionUID = 4789720265516761852L;
 
-    private static final Color FILTER_BGCOLOR = Color.BLACK;
+	private static final Color FILTER_BGCOLOR = Color.BLACK;
     private static final Color FILTER_FGCOLOR = Color.WHITE;
 
     private JComboBox intervalComboBox;
@@ -279,7 +281,7 @@ public class EchoFilterBox extends AmptMidiDeviceBox implements ActionListener,
         // only process state change if slider is not moving
         if (!source.getValueIsAdjusting()) {
 
-            int duration = (int)source.getValue();
+            int duration = source.getValue();
 
             EchoFilterDevice device = (EchoFilterDevice) midiDevice;
             device.setDuration(duration);

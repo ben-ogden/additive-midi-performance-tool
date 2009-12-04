@@ -24,7 +24,9 @@ import javax.swing.event.ChangeListener;
  */
 public class KeyboardBox extends AmptMidiDeviceBox implements ChangeListener, ActionListener {
 
-    private static final int VELOCITY_MIN = 0;
+	private static final long serialVersionUID = -4364177791056312767L;
+	
+	private static final int VELOCITY_MIN = 0;
     private static final int VELOCITY_MAX = 127;
     private static final int STARTING_VELOCITY = 64;
 

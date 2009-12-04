@@ -22,7 +22,9 @@ import javax.swing.border.TitledBorder;
  */
 public class ChordFilterBox extends AmptMidiDeviceBox implements ActionListener{
 
-    private JComboBox chordTypesComboBox;
+	private static final long serialVersionUID = -2784740246353685410L;
+	
+	private JComboBox chordTypesComboBox;
     private JComboBox chordInversionsComboBox;
 
     public ChordFilterBox(ChordFilterDevice device) throws MidiUnavailableException{

@@ -20,7 +20,10 @@ import javax.swing.border.TitledBorder;
  * @author Rob
  */
 public class ArpeggiatorFilterBox extends AmptMidiDeviceBox implements ActionListener {
-    private JComboBox chordTypeComboBox;
+
+	private static final long serialVersionUID = -230533765353151289L;
+	
+	private JComboBox chordTypeComboBox;
     private JComboBox noteValueComboBox;
     private JComboBox arpTypeComboBox;
 

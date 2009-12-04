@@ -222,7 +222,6 @@ public class EchoFilterDevice extends TimedDevice {
                 
                 double increment = 1.0 / _duration;
                 double d;
-                double r = 0.5; // decay factor
                 double v = velocity;
                 for(int i = 1; i <= _duration; i++) {
                     d = i * increment;

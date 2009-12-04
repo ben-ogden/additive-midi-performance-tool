@@ -14,7 +14,9 @@ import javax.swing.JComponent;
  */
 public class MidiDeviceConnection extends JComponent {
 
-    MidiDeviceBox _from, _to;
+	private static final long serialVersionUID = -6917512530683269151L;
+
+	MidiDeviceBox _from, _to;
 
     public MidiDeviceConnection(MidiDeviceBox from, MidiDeviceBox to) throws MidiUnavailableException {
         _from = from;

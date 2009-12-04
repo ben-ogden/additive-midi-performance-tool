@@ -19,7 +19,9 @@ import javax.swing.JComponent;
  */
 public class CanvasRuler extends JComponent{
 
-    public enum Orientation {Horizontal, Vertical};
+	private static final long serialVersionUID = 1420432483595138018L;
+
+	public enum Orientation {Horizontal, Vertical};
 
     private static final int INCH = Toolkit.getDefaultToolkit().getScreenResolution();
     public static final int SIZE = 20;
@@ -41,7 +43,7 @@ public class CanvasRuler extends JComponent{
     public CanvasRuler(Orientation orientation){
         super();
         this.orientation = orientation;
-        units = (int)((double)INCH / (double)2.54);
+        units = (int)((double)INCH / 2.54);
         increment = units;
 
         // we need to set the preferred size of the ruler.

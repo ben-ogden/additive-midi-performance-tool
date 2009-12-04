@@ -13,7 +13,9 @@ import java.awt.geom.*;
  */
 public class AnimatedMetronome extends JPanel implements Runnable {
 
-    // number of animation frames
+	private static final long serialVersionUID = 1827613575139130931L;
+	
+	// number of animation frames
     private static final int NUM_FRAMES = 20;
     private static final int FRAME_INTERVAL = 60 / NUM_FRAMES;
 
@@ -93,7 +95,7 @@ public class AnimatedMetronome extends JPanel implements Runnable {
     @Override
     public void run() {
         // long nextTick = (long) (System.nanoTime() + (1000000000.0F / (tempo / 3.0F)));
-        long nextTick = (long) (System.nanoTime() + tempoInterval);
+        long nextTick = System.nanoTime() + tempoInterval;
         while (started.get()) {
             try {
                 Thread.sleep(0, 1);

@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Vector;
 import javax.sound.midi.Instrument;
@@ -37,7 +36,9 @@ import javax.swing.table.TableColumn;
  */
 public class SynthesizerBox extends MidiDeviceBox implements TableModelListener{
 
-    private TreeMap<String, Instrument> namedInstrumentMap;
+	private static final long serialVersionUID = -7616825847487803515L;
+
+	private TreeMap<String, Instrument> namedInstrumentMap;
     private MyTableModel tableModel;
 
     public SynthesizerBox(Synthesizer synth) throws MidiUnavailableException{
@@ -129,7 +130,9 @@ public class SynthesizerBox extends MidiDeviceBox implements TableModelListener{
 
     class MyTableModel extends DefaultTableModel {
 
-        @Override
+		private static final long serialVersionUID = 6441828790015123152L;
+
+		@Override
         public boolean isCellEditable(int row, int column) {
             if(column == 1){
                 return true;

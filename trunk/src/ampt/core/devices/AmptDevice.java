@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
@@ -469,7 +468,7 @@ public abstract class AmptDevice implements AmptMidiDevice {
                 logMsg.append(": ");
                 byte[] msgBytes = msg.getMessage(); // length of array returned not guaranteed to match the actual message length
                 for (int i = 0; i < msg.getLength(); i++) {
-                    logMsg.append((int) (msgBytes[i] & 0xFF));
+                    logMsg.append(msgBytes[i] & 0xFF);
                     logMsg.append(' ');
                 }
                 logMsg.append('\n');

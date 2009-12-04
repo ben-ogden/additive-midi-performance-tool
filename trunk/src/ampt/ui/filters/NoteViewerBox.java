@@ -23,7 +23,9 @@ import javax.swing.border.TitledBorder;
  */
 public class NoteViewerBox extends AmptMidiDeviceBox {
 
-    /**
+	private static final long serialVersionUID = -4721848278936897607L;
+
+	/**
      * Use a sorted map which maps the channel number to the set of notes that
      * are on for that channel.
      */

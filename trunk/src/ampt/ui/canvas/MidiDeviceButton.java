@@ -12,7 +12,9 @@ import javax.swing.JButton;
  */
 public class MidiDeviceButton extends JButton {
 
-    private Info deviceInfo;
+	private static final long serialVersionUID = 4596058985580742449L;
+
+	private Info deviceInfo;
 
     public MidiDeviceButton(Info deviceInfo) {
         this.deviceInfo = deviceInfo;

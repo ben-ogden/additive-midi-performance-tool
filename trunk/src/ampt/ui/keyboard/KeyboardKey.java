@@ -89,7 +89,9 @@ public abstract class KeyboardKey extends JComponent implements MouseListener {
         ActionMap actionMap = this.getActionMap();
         actionMap.put("pressed", new AbstractAction() {
 
-            @Override
+			private static final long serialVersionUID = -1951129695473657146L;
+
+			@Override
             public void actionPerformed(ActionEvent arg0) {
                 if (!pressed) {
                     pressed = true;
@@ -101,7 +103,9 @@ public abstract class KeyboardKey extends JComponent implements MouseListener {
 
         actionMap.put("released", new AbstractAction() {
 
-            @Override
+			private static final long serialVersionUID = -1524625805326778953L;
+
+			@Override
             public void actionPerformed(ActionEvent e) {
                 pressed = false;
                 repaint();

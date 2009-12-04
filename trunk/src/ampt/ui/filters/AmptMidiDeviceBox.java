@@ -28,7 +28,9 @@ import javax.swing.border.EmptyBorder;
  */
 public class AmptMidiDeviceBox extends MidiDeviceBox implements TempoListener {
 
-    // A file or interactive log to which boxes can send debug or error messages.
+	private static final long serialVersionUID = 1524097003787010865L;
+
+	// A file or interactive log to which boxes can send debug or error messages.
     private PrintStream _logger;
 
     /**
