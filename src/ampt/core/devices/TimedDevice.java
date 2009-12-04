@@ -64,8 +64,8 @@ public abstract class TimedDevice extends AmptDevice {
      *
      * @param tempo the tempo
      */
-    public void setTempo(float _tempo) {
-        this._tempo = _tempo;
+    public void setTempo(float tempo) {
+        this._tempo = tempo;
     }
 
     /**

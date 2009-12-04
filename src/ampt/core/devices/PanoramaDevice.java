@@ -31,7 +31,7 @@ public class PanoramaDevice extends AmptDevice {
      * Set the panorama. Each call to setPan results in the transmission of
      * pan messages to all transmitters on this device.
      *
-     * @param pan, the panorama between 0 and 127
+     * @param pan the panorama between 0 and 127
      */
     public void setPan(int pan) {
         if(pan < 0) {
