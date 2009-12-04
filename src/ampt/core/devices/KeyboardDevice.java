@@ -104,7 +104,7 @@ public class KeyboardDevice extends AmptDevice {
 
             // scale the note value to appropriate octave
             // element 1 in message.getMessage is the same as msgNote.getData1() for a ShortMessage
-            int note = _octave * OCTAVE_INTERVAL + (int)(message.getMessage()[1] & 0xFF);
+            int note = _octave * OCTAVE_INTERVAL + (message.getMessage()[1] & 0xFF);
 
             // use updated note value and user-selected channel and velocities
             ShortMessage msgNote = new ShortMessage();

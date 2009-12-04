@@ -27,7 +27,9 @@ import javax.swing.text.StyleContext;
  */
 public class AmptConsolePane extends JTextPane implements TempoListener {
 
-    // default text color
+	private static final long serialVersionUID = 827314424200554556L;
+
+	// default text color
     private static final Color DEFAULT_COLOR = Color.DARK_GRAY;
     private static final Color TEMPO_COLOR = Color.RED;
 

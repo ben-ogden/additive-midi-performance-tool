@@ -22,7 +22,7 @@ public class AmptDeviceInfo extends Info {
         _clazz = clazz;
     }
 
-    public Class getDeviceClass() {
+    public Class<? extends AmptDevice> getDeviceClass() {
         return _clazz;
     }
 

@@ -22,7 +22,9 @@ import javax.swing.border.TitledBorder;
  */
 public class ArpFilterBox extends AmptMidiDeviceBox implements ActionListener {
 
-    private JComboBox chordTypeComboBox;
+	private static final long serialVersionUID = 4885328429826496506L;
+	
+	private JComboBox chordTypeComboBox;
     private JComboBox noteValueComboBox;
     private JComboBox arpTypeComboBox;
 

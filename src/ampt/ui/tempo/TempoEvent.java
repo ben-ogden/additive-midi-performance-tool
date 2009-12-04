@@ -9,13 +9,15 @@ import java.awt.AWTEvent;
  */
 public class TempoEvent extends AWTEvent {
 
+	private static final long serialVersionUID = -8184181067559058175L;
+
     /*
      * The event id's follow the AWTEvent and Event approach. All custom
      * event id's, must be greater than AWTEvent.RESERVED_ID_MAX (which is
      * currently 1999)
      */
-
-    /* Tempo events */
+	
+	/* Tempo events */
     private static final int TEMP0_EVENT = 4000;
 
     /* Tempo changed event id */

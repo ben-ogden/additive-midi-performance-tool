@@ -23,7 +23,9 @@ import javax.swing.JPanel;
  */
 public class MidiDeviceBox extends JPanel {
 
-    protected MidiDevice midiDevice;
+	private static final long serialVersionUID = 6398758322669967572L;
+
+	protected MidiDevice midiDevice;
 
     //TODO - maybe keep track of number of transmitters and receivers instead of
     //       if have any... also, this could change during runtime so perhaps

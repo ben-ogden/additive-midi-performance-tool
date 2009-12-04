@@ -60,7 +60,7 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
     public MidiDevice getDevice(Info info) {
 
         // get the class for this device and attempt to instantiate it
-        Class amptDeviceClass = ((AmptDeviceInfo)info).getDeviceClass();
+        Class<? extends AmptDevice> amptDeviceClass = ((AmptDeviceInfo)info).getDeviceClass();
 
         if(null == amptDeviceClass) {
             throw new IllegalArgumentException(

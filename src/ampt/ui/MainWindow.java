@@ -62,7 +62,9 @@ import javax.swing.ScrollPaneConstants;
  */
 public class MainWindow extends JFrame {
 
-    /*
+	private static final long serialVersionUID = -8513780403274592269L;
+
+	/*
      * To exclude a MidiDevice from the toolbar, add the device to the list
      * below.
      */
@@ -99,7 +101,6 @@ public class MainWindow extends JFrame {
      * I have modified this method to insert all of the devices obtained from
      * calling MidiSystem.getDeviceInfo() as a button in the toolbar.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ampt.ui.filters;
 
 import ampt.core.devices.PanoramaDevice;
@@ -19,17 +15,26 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
+ * PanoramaDeviceBox is the front end for the panorama filter.
  *
  * @author Ben
  */
 public class PanoramaDeviceBox extends AmptMidiDeviceBox implements ChangeListener {
 
-    private static final Color FILTER_BGCOLOR = Color.YELLOW;
+	private static final long serialVersionUID = 8307404198539430250L;
+
+	private static final Color FILTER_BGCOLOR = Color.YELLOW;
     private static final Color FILTER_FGCOLOR = Color.BLACK;
 
     private JSlider _panSlider;
 
 
+    /**
+     * Create a new PanoramaDeviceBox.
+     *
+     * @param device the PanoramaDevice backing this component
+     * @throws MidiUnavailableException if the device cannot be opened
+     */
     public PanoramaDeviceBox(PanoramaDevice device) throws MidiUnavailableException {
 
         super(device, null, FILTER_BGCOLOR, FILTER_FGCOLOR);
@@ -57,7 +62,7 @@ public class PanoramaDeviceBox extends AmptMidiDeviceBox implements ChangeListen
         _panSlider.setForeground(FILTER_FGCOLOR);
         _panSlider.addChangeListener(this);
 
-        Hashtable labelTable = new Hashtable();
+        Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put( new Integer( 0 ), new JLabel("L") );
         labelTable.put( new Integer( 64 ), new JLabel("C") );
         labelTable.put( new Integer( 127 ), new JLabel("R") );
@@ -80,6 +85,11 @@ public class PanoramaDeviceBox extends AmptMidiDeviceBox implements ChangeListen
         this.add(emptyPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Catch the change event from the slider.
+     *
+     * @param e the event
+     */
     @Override
     public void stateChanged(ChangeEvent e) {
         if(!_panSlider.getValueIsAdjusting()) {
