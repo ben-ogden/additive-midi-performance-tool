@@ -30,9 +30,9 @@ import javax.swing.JSeparator;
  */
 public class CanvasPanel extends javax.swing.JPanel {
 
-	private static final long serialVersionUID = 9123960314658721362L;
-	
-	Vector<MidiDeviceBox> midiDeviceBoxes;
+    private static final long serialVersionUID = 9123960314658721362L;
+
+    Vector<MidiDeviceBox> midiDeviceBoxes;
     Vector<MidiDeviceConnection> midiDeviceConnections;
 
 //    private JPopupMenu popupMenu;
@@ -100,10 +100,12 @@ public class CanvasPanel extends javax.swing.JPanel {
             final CanvasPanel thisPanel = this;
             MouseListener popupListener = new MouseAdapter() {
 
+                @Override
                 public void mousePressed(MouseEvent e) {
                     maybeShowPopup(e);
                 }
 
+                @Override
                 public void mouseReleased(MouseEvent e) {
                     maybeShowPopup(e);
                 }
