@@ -41,7 +41,7 @@ public class MidiDeviceBox extends JPanel {
     private static int PREFERRED_WIDTH = 71;
     
     // default colors for a box
-    protected static final Color DEFAULT_BG_COLOR = new Color(196, 217, 236);
+    protected static final Color DEFAULT_BG_COLOR = new Color(102, 192, 255);
     protected static final Color DEFAULT_FG_COLOR = Color.BLACK;
 
     /**
