@@ -41,7 +41,7 @@ public class MidiDeviceBox extends JPanel {
     private static int PREFERRED_WIDTH = 71;
     
     // default colors for a box
-    protected static final Color DEFAULT_BG_COLOR = Color.WHITE;
+    protected static final Color DEFAULT_BG_COLOR = new Color(196, 217, 236);
     protected static final Color DEFAULT_FG_COLOR = Color.BLACK;
 
     /**
@@ -158,9 +158,13 @@ public class MidiDeviceBox extends JPanel {
         }
 
         Color color = g.getColor();
-        g.setColor(DEFAULT_FG_COLOR);
 
-        // Draw the box
+        // Draw the box (bg)
+        g.setColor(DEFAULT_BG_COLOR);
+        g.fillRect(0, 0, 70, 70);
+
+        // Draw the box (fg)
+        g.setColor(DEFAULT_FG_COLOR);
         g.drawRect(0, 0, 70, 70);
 
         // draw an arrow pointing in if there is a receiver

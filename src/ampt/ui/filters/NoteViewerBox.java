@@ -23,9 +23,9 @@ import javax.swing.border.TitledBorder;
  */
 public class NoteViewerBox extends AmptMidiDeviceBox {
 
-	private static final long serialVersionUID = -4721848278936897607L;
+    private static final long serialVersionUID = -4721848278936897607L;
 
-	/**
+    /**
      * Use a sorted map which maps the channel number to the set of notes that
      * are on for that channel.
      */
@@ -80,7 +80,7 @@ public class NoteViewerBox extends AmptMidiDeviceBox {
 
     public NoteViewerBox(NoteViewerDevice device, PrintStream logger) throws MidiUnavailableException {
 
-        super(device, logger);
+        super(device, logger, Color.WHITE, Color.DARK_GRAY);
 
         device.addNoteViewerBox(this);
 
@@ -96,10 +96,8 @@ public class NoteViewerBox extends AmptMidiDeviceBox {
 
         this.setPreferredSize(new Dimension(100, 250));
         this.setBackground(Color.WHITE);
-        this.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Viewer", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP));
+        this.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY), "Viewer", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP));
         //this.setLayout(null);
-
-
 
         try {
             InputStream bassInStream = this.getClass().getClassLoader().getResourceAsStream("images/bassclef.jpg");
