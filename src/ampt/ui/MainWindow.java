@@ -26,9 +26,12 @@ import ampt.ui.filters.ArpeggiatorFilterBox;
 import ampt.ui.filters.EchoFilterBox;
 import ampt.ui.filters.PanoramaDeviceBox;
 import ampt.ui.filters.SynthesizerBox;
+import ampt.ui.help.AboutDialog;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -62,15 +65,18 @@ import javax.swing.ScrollPaneConstants;
  */
 public class MainWindow extends JFrame {
 
-	private static final long serialVersionUID = -8513780403274592269L;
+    private static final long serialVersionUID = -8513780403274592269L;
 
-	/*
+    /*
      * To exclude a MidiDevice from the toolbar, add the device to the list
      * below.
      */
     private List<String> excludedDevices = Arrays.asList("Microsoft MIDI Mapper",
             "Real Time Sequencer");
     
+    private AboutDialog aboutDialog;
+
+
     /*
      * This is used for listening for the user clicking on the canvas panel so
      * the user can place a filter after choosing the filter from the Toolbar.
@@ -121,10 +127,11 @@ public class MainWindow extends JFrame {
         amptMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         exitMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
         viewMenu = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        guideMenuItem = new javax.swing.JMenuItem();
+        helpSeparator = new javax.swing.JSeparator();
+        aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Additive MIDI Performance Tool");
@@ -228,11 +235,11 @@ public class MainWindow extends JFrame {
         filterPropertiesPanel.setLayout(filterPropertiesPanelLayout);
         filterPropertiesPanelLayout.setHorizontalGroup(
             filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 191, Short.MAX_VALUE)
+            .addGap(0, 195, Short.MAX_VALUE)
         );
         filterPropertiesPanelLayout.setVerticalGroup(
             filterPropertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
+            .addGap(0, 253, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
@@ -333,10 +340,6 @@ public class MainWindow extends JFrame {
 
         amptMenuBar.add(fileMenu);
 
-        editMenu.setMnemonic('e');
-        editMenu.setText("Edit");
-        amptMenuBar.add(editMenu);
-
         viewMenu.setMnemonic('v');
         viewMenu.setText("View");
 
@@ -354,17 +357,29 @@ public class MainWindow extends JFrame {
 
         amptMenuBar.add(viewMenu);
 
-        jMenu1.setText("Help");
+        helpMenu.setMnemonic('h');
+        helpMenu.setText("Help");
 
-        jMenuItem1.setText("User's Guide");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        guideMenuItem.setMnemonic('g');
+        guideMenuItem.setText("User's Guide");
+        guideMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 userGuideHandler(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        helpMenu.add(guideMenuItem);
+        helpMenu.add(helpSeparator);
 
-        amptMenuBar.add(jMenu1);
+        aboutMenuItem.setMnemonic('a');
+        aboutMenuItem.setText("About");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(aboutMenuItem);
+
+        amptMenuBar.add(helpMenu);
 
         setJMenuBar(amptMenuBar);
 
@@ -407,6 +422,37 @@ public class MainWindow extends JFrame {
         }
     }//GEN-LAST:event_userGuideHandler
 
+    /*
+     * Show the About dialog.
+     */
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+
+        if(null == aboutDialog) {
+            aboutDialog = new AboutDialog(this);
+        }
+
+        int x = this.getX() + this.getWidth() / 2 - aboutDialog.getWidth() / 2;
+        int y = this.getY() + this.getHeight() / 2 - aboutDialog.getHeight() / 2;
+
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension screenSize = tk.getScreenSize();
+
+        // make sure the dialog ends up on the screen if app center if off screen
+        if(x < 0) {
+            x = 0;
+        } else if (screenSize.getWidth() < (x + aboutDialog.getWidth())) {
+            x = (int) (screenSize.getWidth() - aboutDialog.getWidth());
+        }
+        if(y < 0) {
+            y = 0;
+        } else if (screenSize.getHeight() < (y + aboutDialog.getHeight())) {
+             y = (int) (screenSize.getHeight() - aboutDialog.getHeight());
+        }
+
+        aboutDialog.setLocation(x, y);
+        aboutDialog.setVisible(true);
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -427,8 +473,10 @@ public class MainWindow extends JFrame {
             if(lookAndFeelName.equals(info.getName())){
                 try{
                     UIManager.setLookAndFeel(info.getClassName());
+                    SwingUtilities.updateComponentTreeUI(aboutDialog);
                     SwingUtilities.updateComponentTreeUI(this);
                     this.pack();
+
                 } catch (Exception ex){
                     ex.printStackTrace();
                 }
@@ -554,18 +602,19 @@ public class MainWindow extends JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuBar amptMenuBar;
     private javax.swing.JPanel bottomPane;
     private javax.swing.JPanel canvasPanel;
     private javax.swing.JScrollPane canvasScrollPane;
     private ampt.ui.canvas.AmptConsolePane consolePane;
     private javax.swing.JScrollPane consoleScrollPane;
-    private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private ampt.ui.canvas.FilterPropertiesPanel filterPropertiesPanel;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem guideMenuItem;
+    private javax.swing.JMenu helpMenu;
+    private javax.swing.JSeparator helpSeparator;
     private ampt.ui.canvas.MetronomePanel metronomePanel;
     private javax.swing.JLabel midiConsoleLabel;
     private javax.swing.JPanel propertiesPanel;
