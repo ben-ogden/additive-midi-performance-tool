@@ -58,6 +58,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -419,6 +420,11 @@ public class MainWindow extends JFrame {
 
             @Override
             public void run() {
+                try {
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+                } catch (Exception ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 new MainWindow().setVisible(true);
             }
         });
@@ -433,13 +439,10 @@ public class MainWindow extends JFrame {
         for(LookAndFeelInfo info: UIManager.getInstalledLookAndFeels()){
             if(lookAndFeelName.equals(info.getName())){
                 try{
-                    UIManager.setLookAndFeel(info.getClassName());
-                    
+                    UIManager.setLookAndFeel(info.getClassName());                    
                     SwingUtilities.updateComponentTreeUI(this);
-
                     SwingUtilities.updateComponentTreeUI(aboutDialog);
                     aboutDialog.pack();
-
                     this.pack();
 
                 } catch (Exception ex){
