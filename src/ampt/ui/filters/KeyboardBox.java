@@ -76,35 +76,46 @@ public class KeyboardBox extends AmptMidiDeviceBox implements ChangeListener, Ac
         velocitySlider.addChangeListener(this);
 
         JLabel vLabel = new JLabel("Velocity", JLabel.LEFT);
-        vLabel.setFont(new Font("SanSerif", Font.BOLD, 12));
+        vLabel.setFont(new Font("SanSerif", Font.PLAIN, 12));
         southPanel.add(vLabel);
         southPanel.add(velocitySlider);
         southPanel.setBorder(BorderFactory.createEmptyBorder(1, 10, 1, 10));
         innerPanel.add(southPanel, BorderLayout.SOUTH);
 
         // Make an east panel to contain the channel and octave selecters
-        JPanel centerEastPanel = new JPanel();
+        JPanel centerEastPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         centerEastPanel.setBackground(Color.CYAN);
-        centerEastPanel.setLayout(new BoxLayout(centerEastPanel, BoxLayout.Y_AXIS));
+
         Integer[] channels = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         channelComboBox = new JComboBox(channels);
         channelComboBox.setBackground(Color.CYAN);
         channelComboBox.addActionListener(this);
         channelComboBox.setSelectedIndex(0);
-//        device.setChannel(channels[0]);
-        channelComboBox.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Chan."));
         channelComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
-        centerEastPanel.add(channelComboBox);
 
         Integer[] octaves = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         octaveComboBox = new JComboBox(octaves);
         octaveComboBox.setBackground(Color.CYAN);
         octaveComboBox.addActionListener(this);
         octaveComboBox.setSelectedIndex(5);
-//        device.setOctave(octaves[5]);
-        octaveComboBox.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Octave"));
         octaveComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
-        centerEastPanel.add(octaveComboBox);
+
+        JPanel intPanel = new JPanel(new GridLayout(4, 1));
+        intPanel.setBackground(Color.CYAN);
+
+        JLabel channelLabel = new JLabel("Channel", JLabel.LEFT);
+        channelLabel.setFont(new Font("SanSerif", Font.PLAIN, 12));
+
+        JLabel octaveLabel = new JLabel("Octave", JLabel.LEFT);
+        octaveLabel.setFont(new Font("SanSerif", Font.PLAIN, 12));
+
+        intPanel.add(channelLabel);
+        intPanel.add(channelComboBox);
+        intPanel.add(octaveLabel);
+        intPanel.add(octaveComboBox);
+
+        centerEastPanel.add(intPanel);
+        //centerEastPanel.add(octaveComboBox);
 
         innerPanel.add(centerEastPanel, BorderLayout.EAST);
 
