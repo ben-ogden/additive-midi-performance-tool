@@ -56,9 +56,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -514,7 +514,9 @@ public class MainWindow extends JFrame {
         });
         toolBarTree.setBorder(BorderFactory.createEtchedBorder());
 
-        toolbarPane.add(toolBarTree);
+        JScrollPane treeScrollPane = new JScrollPane(toolBarTree);
+
+        toolbarPane.add(treeScrollPane);
 
     }
 
