@@ -11,12 +11,12 @@ import ampt.core.devices.KeyboardDevice;
 import ampt.core.devices.NoteViewerDevice;
 import ampt.core.devices.ArpeggiatorFilterDevice;
 import ampt.core.devices.EchoFilterDevice;
+import ampt.core.devices.ExtendedKeyboardDevice;
 import ampt.core.devices.PanoramaDevice;
 import ampt.core.devices.TimedDevice;
 import ampt.ui.canvas.CanvasCorner;
 import ampt.ui.canvas.CanvasRuler;
 import ampt.ui.canvas.CanvasRuler.Orientation;
-import ampt.ui.canvas.MidiDeviceButton;
 import ampt.ui.filters.AmptMidiDeviceBox;
 import ampt.ui.filters.ChordFilterBox;
 import ampt.ui.filters.KeyboardBox;
@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,13 +49,19 @@ import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JOptionPane;
+import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  * This is the main window for the GUI.  It contains a split pane, in which the
@@ -75,7 +82,7 @@ public class MainWindow extends JFrame {
             "Real Time Sequencer");
     
     private AboutDialog aboutDialog = new AboutDialog(this);;
-
+    private JTree toolBarTree;
 
     /*
      * This is used for listening for the user clicking on the canvas panel so
@@ -152,35 +159,7 @@ public class MainWindow extends JFrame {
         toolbarPane.setOrientation(1);
         toolbarPane.setRollover(true);
 
-        Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();
-        for(Info deviceInfo: deviceInfos){
-
-            // don't list excluded devices
-            if(excludedDevices.contains(deviceInfo.getName())) {
-                continue;
-            }
-
-            MidiDeviceButton button = new MidiDeviceButton(deviceInfo);
-            if(deviceInfo.getName().equals(new KeyboardDevice().getDeviceInfo().getName())){
-                MidiDeviceButton extendedButton = new MidiDeviceButton(deviceInfo);
-                extendedButton.setText("Extended " + extendedButton.getText());
-                extendedButton.setToolTipText("Extened " + extendedButton.getToolTipText());
-                toolbarPane.add(extendedButton);
-                extendedButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent evt){
-                        buttonHandler(evt);
-                    }
-                });
-            }
-
-            toolbarPane.add(button);
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    buttonHandler(evt);
-                }
-            });
-
-        }
+        addButtonsToToolbar();
 
         canvasPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 0, 3, 0));
 
@@ -471,15 +450,86 @@ public class MainWindow extends JFrame {
         setExtendedState(windowState);
     }
 
-    /**
+    /*
+     * Add buttons to the toolbar
+     */
+    private void addButtonsToToolbar() {
+
+        Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();
+
+        List<Info> inList = new LinkedList<Info>();
+        List<Info> thruList = new LinkedList<Info>();
+        List<Info> outList = new LinkedList<Info>();
+
+        MidiDevice device;
+
+        for (Info deviceInfo : deviceInfos) {
+
+            // don't list excluded devices
+            if (excludedDevices.contains(deviceInfo.getName())) {
+                continue;
+            }
+
+            try {
+                device = MidiSystem.getMidiDevice(deviceInfo);
+            } catch (MidiUnavailableException ex) {
+                consolePane.append("Can access device. " + ex.getMessage() + "\n");
+                continue;
+            }
+            
+            int maxReceivers = device.getMaxReceivers();
+            int maxTransmitters = device.getMaxTransmitters();
+            if(maxReceivers != 0 && maxTransmitters == 0) {
+                outList.add(deviceInfo);
+            } else if(maxReceivers == 0 && maxTransmitters != 0) {
+                inList.add(deviceInfo);
+            } else {
+                // everything else except keyboard should be treated as filter
+                if(!(device instanceof KeyboardDevice)) {
+                    thruList.add(deviceInfo);
+                } else {
+                    inList.add(deviceInfo); // add keyboard to controller list
+                }
+            }
+        }
+
+        // create tree
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("AMPT");
+
+        rootNode.add(buildDeviceTree("Controllers (IN)", inList));
+        rootNode.add(buildDeviceTree("Filters (THRU)", thruList));
+        rootNode.add(buildDeviceTree("Devices (OUT)", outList));
+
+        toolBarTree = new JTree(rootNode);
+        toolBarTree.getSelectionModel().setSelectionMode
+            (TreeSelectionModel.SINGLE_TREE_SELECTION);
+        toolBarTree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                buttonHandler(e);
+            }
+        });
+        toolBarTree.setBorder(BorderFactory.createEtchedBorder());
+
+        toolbarPane.add(toolBarTree);
+
+    }
+
+    private DefaultMutableTreeNode buildDeviceTree(String label, List<Info> infoList) {
+
+        DefaultMutableTreeNode node = new DefaultMutableTreeNode(label, true);
+        for(Info info : infoList) {
+            node.add(new DefaultMutableTreeNode(info, false));
+        }
+        return node;
+    }
+
+    /*
      * A button handler for all of the buttons on the toolbar.  This method
      * registers a mouse adapter on the canvas so the box that represents a
      * MidiDevice or a filter can be placed on the canvas.
-     *
-     * @param evt
      */
-    private void buttonHandler(ActionEvent evt) {
-
+    private void buttonHandler(TreeSelectionEvent evt) {
 
         final Object source = evt.getSource();
         if (canvasButtonMouseAdapter != null) {
@@ -493,17 +543,23 @@ public class MainWindow extends JFrame {
                 
                 theActualCanvasPanel.removeMouseListener(this);
                 Point point = e.getPoint();
-                if (source instanceof MidiDeviceButton) {
+                if (source instanceof JTree) {
                     try {
 
-                        MidiDeviceButton deviceButton = (MidiDeviceButton) source;
-                        MidiDevice device = MidiSystem.getMidiDevice(deviceButton.getDeviceInfo());
+                        DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+                                toolBarTree.getLastSelectedPathComponent();
+                        if (node == null || !node.isLeaf()) {
+                            return;
+                        }
+                        
+                        Info nodeInfo = (Info)node.getUserObject();
+
+                        MidiDevice device = MidiSystem.getMidiDevice(nodeInfo);
 
                         MidiDeviceBox box = null;
 
                         if (device instanceof AmptMidiDevice) {
-                            box = addAmptMidiDeviceBox((AmptMidiDevice) device,
-                                    deviceButton);
+                            box = addAmptMidiDeviceBox((AmptMidiDevice) device);
                         } else if (device instanceof Synthesizer) {
                             box = new SynthesizerBox((Synthesizer) device);
                         } else {
@@ -527,11 +583,12 @@ public class MainWindow extends JFrame {
                 }
             }
         };
+        
         theActualCanvasPanel.addMouseListener(canvasButtonMouseAdapter);
     }
 
-    private MidiDeviceBox addAmptMidiDeviceBox(AmptMidiDevice device,
-            MidiDeviceButton deviceButton) throws MidiUnavailableException {
+    private MidiDeviceBox addAmptMidiDeviceBox(AmptMidiDevice device)
+            throws MidiUnavailableException {
 
         AmptMidiDeviceBox box = null;
 
@@ -540,7 +597,8 @@ public class MainWindow extends JFrame {
         if (device instanceof KeyboardDevice) {
             KeyboardDevice keyboard = (KeyboardDevice) device;
             keyboard.setLogger(consolePane.getPrintStream(Color.CYAN));
-            if (deviceButton.getText().matches(".*[eE]xtended.*")) {
+            //if (deviceButton.getText().matches(".*[eE]xtended.*")) {
+            if (device instanceof ExtendedKeyboardDevice) {
                 box = new KeyboardBox(keyboard, true);
             } else {
                 box = new KeyboardBox(keyboard, false);
@@ -553,15 +611,7 @@ public class MainWindow extends JFrame {
             NoteViewerDevice noteViewerDevice = (NoteViewerDevice) device;
             noteViewerDevice.setLogger(consolePane.getPrintStream(Color.RED));
             box = new NoteViewerBox(noteViewerDevice, consolePane.getPrintStream());
-        }
-
-        /*else if (device instanceof ArpFilterDevice) {
-            ArpFilterDevice arpFilterDevice = (ArpFilterDevice) device;
-            arpFilterDevice.setLogger(consolePane.getPrintStream(Color.GREEN));
-            box = new ArpFilterBox(arpFilterDevice);
-        }*/
-
-        else if (device instanceof ArpeggiatorFilterDevice) {
+        } else if (device instanceof ArpeggiatorFilterDevice) {
             ArpeggiatorFilterDevice arpeggiatorDevice = (ArpeggiatorFilterDevice) device;
             arpeggiatorDevice.setLogger(consolePane.getPrintStream(Color.ORANGE));
             arpeggiatorDevice.setMidiDebugEnabled(true);

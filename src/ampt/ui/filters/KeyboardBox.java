@@ -24,9 +24,10 @@ import javax.swing.event.ChangeListener;
  */
 public class KeyboardBox extends AmptMidiDeviceBox implements ChangeListener, ActionListener {
 
-	private static final long serialVersionUID = -4364177791056312767L;
+
+    private static final long serialVersionUID = -4364177791056312767L;
 	
-	private static final int VELOCITY_MIN = 0;
+    private static final int VELOCITY_MIN = 0;
     private static final int VELOCITY_MAX = 127;
     private static final int STARTING_VELOCITY = 64;
 
@@ -48,7 +49,7 @@ public class KeyboardBox extends AmptMidiDeviceBox implements ChangeListener, Ac
         this.setPreferredSize(null);
         overridePaintComponent = false;
 
-        this.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Software Keyboard", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP));
+        this.setBorder(new TitledBorder(new LineBorder(Color.BLACK), device.getDeviceInfo().getName(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP));
 
         JPanel innerPanel = new JPanel(new BorderLayout());
 

@@ -177,7 +177,7 @@
                 <Property name="rollover" type="boolean" value="true"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();&#xa;for(Info deviceInfo: deviceInfos){&#xa;    &#xa;    // don&apos;t list excluded devices&#xa;    if(excludedDevices.contains(deviceInfo.getName())) {&#xa;        continue;&#xa;    }&#xa;&#xa;    MidiDeviceButton button = new MidiDeviceButton(deviceInfo);&#xa;    if(deviceInfo.getName().equals(new KeyboardDevice().getDeviceInfo().getName())){&#xa;        MidiDeviceButton extendedButton = new MidiDeviceButton(deviceInfo);&#xa;        extendedButton.setText(&quot;Extended &quot; + extendedButton.getText());&#xa;        extendedButton.setToolTipText(&quot;Extened &quot; + extendedButton.getToolTipText());&#xa;        toolbarPane.add(extendedButton);&#xa;        extendedButton.addActionListener(new ActionListener() {&#xa;            public void actionPerformed(ActionEvent evt){&#xa;                buttonHandler(evt);&#xa;            }&#xa;        });&#xa;    }&#xa;&#xa;    toolbarPane.add(button);&#xa;        button.addActionListener(new ActionListener() {&#xa;            public void actionPerformed(ActionEvent evt) {&#xa;                buttonHandler(evt);&#xa;            }&#xa;        });&#xa;&#xa;}"/>
+                <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="addButtonsToToolbar();"/>
               </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
