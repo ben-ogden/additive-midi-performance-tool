@@ -24,9 +24,13 @@ public class KeyboardDevice extends AmptDevice {
         this(1, 93, 5);
     }
 
-    public KeyboardDevice(int channel, int velocity, int octave){
+    public KeyboardDevice(int channel, int velocity, int octave) {
+        this(channel, velocity, octave, DEVICE_NAME, DEVICE_DESCRIPTION);
+    }
 
-        super(DEVICE_NAME, DEVICE_DESCRIPTION);
+    public KeyboardDevice(int channel, int velocity, int octave, String name, String description){
+
+        super(name, description);
 
         _channel = channel;
         _velocity = velocity;
