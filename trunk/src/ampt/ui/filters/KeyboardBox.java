@@ -4,17 +4,23 @@ import ampt.core.devices.KeyboardDevice;
 import ampt.ui.keyboard.KeyboardPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicSplitPaneUI.BasicVerticalLayoutManager;
 
 /**
  * This class extends MidiDeviceBox in order to have the keyboard and its
@@ -62,14 +68,18 @@ public class KeyboardBox extends AmptMidiDeviceBox implements ChangeListener, Ac
         innerPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Make a south panel to contain the velocity slider
-        JPanel southPanel = new JPanel();
+        JPanel southPanel = new JPanel(new GridLayout(2, 1));
         southPanel.setBackground(Color.CYAN);
         velocitySlider = new JSlider(VELOCITY_MIN, VELOCITY_MAX, STARTING_VELOCITY);
         velocitySlider.setBackground(Color.CYAN);
         device.setVelocity(STARTING_VELOCITY);
         velocitySlider.addChangeListener(this);
-        velocitySlider.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Velocity"));
+
+        JLabel vLabel = new JLabel("Velocity", JLabel.LEFT);
+        vLabel.setFont(new Font("SanSerif", Font.BOLD, 12));
+        southPanel.add(vLabel);
         southPanel.add(velocitySlider);
+        southPanel.setBorder(BorderFactory.createEmptyBorder(1, 10, 1, 10));
         innerPanel.add(southPanel, BorderLayout.SOUTH);
 
         // Make an east panel to contain the channel and octave selecters
