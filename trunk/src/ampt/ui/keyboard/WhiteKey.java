@@ -145,13 +145,13 @@ public class WhiteKey extends KeyboardKey {
 
         Font font = g.getFont();
 
-        g.setFont(new Font(Font.DIALOG, Font.PLAIN, 8));
+        g.setFont(new Font(Font.DIALOG, Font.PLAIN, 9));
 
         FontMetrics fontMetrics = g.getFontMetrics();
 
         int xPos = KEY_WIDTH;
         xPos -= fontMetrics.charWidth(keyBinding);
-        xPos /= 2;
+        xPos = xPos / 2 + 1;
 
         g.drawString(Character.toString(keyBinding), xPos, 3 * KEY_HEIGHT / 4);
 
