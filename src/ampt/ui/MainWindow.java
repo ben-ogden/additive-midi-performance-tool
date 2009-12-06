@@ -121,11 +121,10 @@ public class MainWindow extends JFrame {
         canvasPanel = new javax.swing.JPanel();
         canvasScrollPane = new javax.swing.JScrollPane();
         theActualCanvasPanel = new ampt.ui.canvas.CanvasPanel();
-        propertiesPanel = new javax.swing.JPanel();
-        metronomePanel = new ampt.ui.canvas.MetronomePanel();
-        tempoPanel = new ampt.ui.canvas.TempoPanel();
         treeScrollPane = new javax.swing.JScrollPane();
         midiDeviceTree = new javax.swing.JTree();
+        tempoPanel = new ampt.ui.canvas.TempoPanel();
+        metronomePanel = new ampt.ui.canvas.MetronomePanel();
         bottomPane = new javax.swing.JPanel();
         midiConsoleLabel = new javax.swing.JLabel();
         consoleScrollPane = new javax.swing.JScrollPane();
@@ -186,39 +185,19 @@ public class MainWindow extends JFrame {
         canvasPanel.setLayout(canvasPanelLayout);
         canvasPanelLayout.setHorizontalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
         );
         canvasPanelLayout.setVerticalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
         );
 
-        metronomePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Metronome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
-        metronomePanel.setMinimumSize(new java.awt.Dimension(0, 0));
-        metronomePanel.setPreferredSize(new java.awt.Dimension(200, 80));
-
-        javax.swing.GroupLayout propertiesPanelLayout = new javax.swing.GroupLayout(propertiesPanel);
-        propertiesPanel.setLayout(propertiesPanelLayout);
-        propertiesPanelLayout.setHorizontalGroup(
-            propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, propertiesPanelLayout.createSequentialGroup()
-                .addGroup(propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tempoPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                    .addComponent(metronomePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        propertiesPanelLayout.setVerticalGroup(
-            propertiesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(propertiesPanelLayout.createSequentialGroup()
-                .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(297, Short.MAX_VALUE))
-        );
+        treeScrollPane.setPreferredSize(new java.awt.Dimension(200, 300));
 
         midiDeviceTree.setModel(buildMidiDeviceTreeModel());
         midiDeviceTree.setToolTipText("Select a device then click on the canvas area to add.");
         midiDeviceTree.setFocusable(false);
+        midiDeviceTree.setPreferredSize(new java.awt.Dimension(200, 300));
         midiDeviceTree.setRequestFocusEnabled(false);
         midiDeviceTree.setRootVisible(false);
         midiDeviceTree.setRowHeight(18);
@@ -238,29 +217,36 @@ public class MainWindow extends JFrame {
         midiDeviceTree.setInputMap(JTree.WHEN_FOCUSED, null);
         midiDeviceTree.setInputMap(JTree.WHEN_IN_FOCUSED_WINDOW, null);
 
+        metronomePanel.setMinimumSize(new java.awt.Dimension(0, 0));
+
         javax.swing.GroupLayout topPaneLayout = new javax.swing.GroupLayout(topPane);
         topPane.setLayout(topPaneLayout);
         topPaneLayout.setHorizontalGroup(
             topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topPaneLayout.createSequentialGroup()
-                .addComponent(treeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(treeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(propertiesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         topPaneLayout.setVerticalGroup(
             topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(propertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(topPaneLayout.createSequentialGroup()
+                .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE))
             .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
         );
 
         splitPane.setTopComponent(topPane);
 
         bottomPane.setPreferredSize(new java.awt.Dimension(800, 150));
 
-        midiConsoleLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        midiConsoleLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
         midiConsoleLabel.setText("MIDI Console");
         midiConsoleLabel.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
 
@@ -269,8 +255,8 @@ public class MainWindow extends JFrame {
         consoleScrollPane.setViewportBorder(javax.swing.BorderFactory.createEtchedBorder());
         consoleScrollPane.setFocusable(false);
 
-        consolePane.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4));
-        consolePane.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        consolePane.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 4, 4, 4));
+        consolePane.setFont(new java.awt.Font("Monospaced", 0, 12));
         consolePane.setForeground(new java.awt.Color(51, 51, 51));
         consolePane.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
         consolePane.setMargin(new java.awt.Insets(10, 10, 10, 10));
@@ -280,19 +266,18 @@ public class MainWindow extends JFrame {
         bottomPane.setLayout(bottomPaneLayout);
         bottomPaneLayout.setHorizontalGroup(
             bottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
             .addGroup(bottomPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(midiConsoleLabel)
                 .addContainerGap(715, Short.MAX_VALUE))
+            .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
         );
         bottomPaneLayout.setVerticalGroup(
             bottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bottomPaneLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(midiConsoleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
+                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
         );
 
         splitPane.setBottomComponent(bottomPane);
@@ -652,7 +637,6 @@ public class MainWindow extends JFrame {
     private ampt.ui.canvas.MetronomePanel metronomePanel;
     private javax.swing.JLabel midiConsoleLabel;
     private javax.swing.JTree midiDeviceTree;
-    private javax.swing.JPanel propertiesPanel;
     private javax.swing.JSplitPane splitPane;
     private ampt.ui.canvas.TempoPanel tempoPanel;
     private ampt.ui.canvas.CanvasPanel theActualCanvasPanel;

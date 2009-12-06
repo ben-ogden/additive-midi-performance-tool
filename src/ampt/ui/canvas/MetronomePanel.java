@@ -32,45 +32,46 @@ public class MetronomePanel extends javax.swing.JPanel implements TempoListener 
 
         setPreferredSize(new java.awt.Dimension(200, 50));
 
-        animatedMetronome1.setMaximumSize(new java.awt.Dimension(28, 90));
+        animatedMetronome1.setMaximumSize(new java.awt.Dimension(20, 50));
+        animatedMetronome1.setPreferredSize(new java.awt.Dimension(100, 30));
 
-        toggleMetronomeBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        toggleMetronomeBtn.setText("Start");
+        javax.swing.GroupLayout animatedMetronome1Layout = new javax.swing.GroupLayout(animatedMetronome1);
+        animatedMetronome1.setLayout(animatedMetronome1Layout);
+        animatedMetronome1Layout.setHorizontalGroup(
+            animatedMetronome1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        animatedMetronome1Layout.setVerticalGroup(
+            animatedMetronome1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 29, Short.MAX_VALUE)
+        );
+
+        toggleMetronomeBtn.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        toggleMetronomeBtn.setText("On");
         toggleMetronomeBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 toggleMetronomeBtnActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout animatedMetronome1Layout = new javax.swing.GroupLayout(animatedMetronome1);
-        animatedMetronome1.setLayout(animatedMetronome1Layout);
-        animatedMetronome1Layout.setHorizontalGroup(
-            animatedMetronome1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, animatedMetronome1Layout.createSequentialGroup()
-                .addContainerGap(82, Short.MAX_VALUE)
-                .addComponent(toggleMetronomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
-        );
-        animatedMetronome1Layout.setVerticalGroup(
-            animatedMetronome1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(animatedMetronome1Layout.createSequentialGroup()
-                .addComponent(toggleMetronomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
-                .addComponent(animatedMetronome1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(toggleMetronomeBtn)
+                .addGap(18, 18, 18)
+                .addComponent(animatedMetronome1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(animatedMetronome1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(animatedMetronome1, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                    .addComponent(toggleMetronomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -78,10 +79,10 @@ public class MetronomePanel extends javax.swing.JPanel implements TempoListener 
     private void toggleMetronomeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleMetronomeBtnActionPerformed
         if (!toggleMetronomeBtn.isSelected()) {
             animatedMetronome1.stop();
-            toggleMetronomeBtn.setText("Start");
+            toggleMetronomeBtn.setText("On");
         } else {
             animatedMetronome1.start();
-            toggleMetronomeBtn.setText("Stop");
+            toggleMetronomeBtn.setText("Off");
         }
     }//GEN-LAST:event_toggleMetronomeBtnActionPerformed
 

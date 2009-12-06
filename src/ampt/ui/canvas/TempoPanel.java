@@ -104,9 +104,9 @@ public class TempoPanel extends javax.swing.JPanel {
 
         tempoSpinner = new javax.swing.JSpinner();
         tempoLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tempo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
-        setPreferredSize(new java.awt.Dimension(200, 75));
+        setPreferredSize(new java.awt.Dimension(200, 40));
 
         tempoSpinner.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tempoSpinner.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(100.0f), Float.valueOf(6.0f), Float.valueOf(300.0f), Float.valueOf(0.1f)));
@@ -122,22 +122,28 @@ public class TempoPanel extends javax.swing.JPanel {
         tempoLabel.setText("BPM");
         tempoLabel.setToolTipText("Beats Per Minute");
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setText("Tempo");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addComponent(tempoSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(tempoLabel)
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
                     .addComponent(tempoSpinner)
                     .addComponent(tempoLabel))
                 .addContainerGap())
@@ -158,6 +164,7 @@ public class TempoPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tempoSpinnerStateChanged
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel tempoLabel;
     private javax.swing.JSpinner tempoSpinner;
     // End of variables declaration//GEN-END:variables
