@@ -30,7 +30,7 @@ public class MetronomePanel extends javax.swing.JPanel implements TempoListener 
         animatedMetronome1 = new ampt.ui.canvas.AnimatedMetronome();
         toggleMetronomeBtn = new javax.swing.JToggleButton();
 
-        setPreferredSize(new java.awt.Dimension(200, 50));
+        setPreferredSize(new java.awt.Dimension(200, 30));
 
         animatedMetronome1.setMaximumSize(new java.awt.Dimension(20, 50));
         animatedMetronome1.setPreferredSize(new java.awt.Dimension(100, 30));
@@ -43,7 +43,7 @@ public class MetronomePanel extends javax.swing.JPanel implements TempoListener 
         );
         animatedMetronome1Layout.setVerticalGroup(
             animatedMetronome1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 29, Short.MAX_VALUE)
+            .addGap(0, 30, Short.MAX_VALUE)
         );
 
         toggleMetronomeBtn.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -68,11 +68,10 @@ public class MetronomePanel extends javax.swing.JPanel implements TempoListener 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(animatedMetronome1, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-                    .addComponent(toggleMetronomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(animatedMetronome1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(toggleMetronomeBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
