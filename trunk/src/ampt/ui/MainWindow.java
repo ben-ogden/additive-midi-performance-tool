@@ -49,20 +49,19 @@ import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 
 /**
  * This is the main window for the GUI.  It contains a split pane, in which the
@@ -83,7 +82,6 @@ public class MainWindow extends JFrame {
             "Real Time Sequencer");
     
     private AboutDialog aboutDialog = new AboutDialog(this);;
-    private JTree toolBarTree;
 
     /*
      * This is used for listening for the user clicking on the canvas panel so
@@ -120,13 +118,14 @@ public class MainWindow extends JFrame {
 
         splitPane = new javax.swing.JSplitPane();
         topPane = new javax.swing.JPanel();
-        toolbarPane = new ampt.ui.canvas.CanvasToolbar();
         canvasPanel = new javax.swing.JPanel();
         canvasScrollPane = new javax.swing.JScrollPane();
         theActualCanvasPanel = new ampt.ui.canvas.CanvasPanel();
         propertiesPanel = new javax.swing.JPanel();
         metronomePanel = new ampt.ui.canvas.MetronomePanel();
         tempoPanel = new ampt.ui.canvas.TempoPanel();
+        treeScrollPane = new javax.swing.JScrollPane();
+        midiDeviceTree = new javax.swing.JTree();
         bottomPane = new javax.swing.JPanel();
         midiConsoleLabel = new javax.swing.JLabel();
         consoleScrollPane = new javax.swing.JScrollPane();
@@ -154,15 +153,6 @@ public class MainWindow extends JFrame {
 
         topPane.setMinimumSize(new java.awt.Dimension(200, 200));
         topPane.setPreferredSize(new java.awt.Dimension(800, 450));
-
-        toolbarPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Canvas Toolbar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
-        toolbarPane.setFloatable(false);
-        toolbarPane.setOrientation(1);
-        toolbarPane.setRollover(true);
-
-        addButtonsToToolbar();
-
-        canvasPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 0, 3, 0));
 
         canvasScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         canvasScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -196,11 +186,11 @@ public class MainWindow extends JFrame {
         canvasPanel.setLayout(canvasPanelLayout);
         canvasPanelLayout.setHorizontalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
         );
         canvasPanelLayout.setVerticalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
         );
 
         metronomePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Metronome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
@@ -223,15 +213,26 @@ public class MainWindow extends JFrame {
                 .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(287, Short.MAX_VALUE))
+                .addContainerGap(289, Short.MAX_VALUE))
         );
+
+        midiDeviceTree.setModel(buildMidiDeviceTreeModel());
+        treeScrollPane.setViewportView(midiDeviceTree);
+        midiDeviceTree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                buttonHandler(e);
+            }
+        });
+
+        midiDeviceTree.setRootVisible(false);
 
         javax.swing.GroupLayout topPaneLayout = new javax.swing.GroupLayout(topPane);
         topPane.setLayout(topPaneLayout);
         topPaneLayout.setHorizontalGroup(
             topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topPaneLayout.createSequentialGroup()
-                .addComponent(toolbarPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(treeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -239,9 +240,9 @@ public class MainWindow extends JFrame {
         );
         topPaneLayout.setVerticalGroup(
             topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolbarPane, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
             .addComponent(propertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
         );
 
         splitPane.setTopComponent(topPane);
@@ -456,7 +457,7 @@ public class MainWindow extends JFrame {
     /*
      * Add buttons to the toolbar
      */
-    private void addButtonsToToolbar() {
+    private TreeModel buildMidiDeviceTreeModel() {
 
         Info[] deviceInfos = MidiSystem.getMidiDeviceInfo();
 
@@ -503,22 +504,10 @@ public class MainWindow extends JFrame {
         rootNode.add(buildDeviceTree("Filters (THRU)", thruList));
         rootNode.add(buildDeviceTree("Devices (OUT)", outList));
 
-        toolBarTree = new JTree(rootNode);
-        toolBarTree.getSelectionModel().setSelectionMode
-            (TreeSelectionModel.SINGLE_TREE_SELECTION);
-        toolBarTree.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                buttonHandler(e);
-            }
-        });
-        toolBarTree.setBorder(BorderFactory.createEtchedBorder());
-
-        JScrollPane treeScrollPane = new JScrollPane(toolBarTree);
-
-        toolbarPane.add(treeScrollPane);
-
+        return new DefaultTreeModel(rootNode);
     }
+
+
 
     private DefaultMutableTreeNode buildDeviceTree(String label, List<Info> infoList) {
 
@@ -552,7 +541,7 @@ public class MainWindow extends JFrame {
                     try {
 
                         DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-                                toolBarTree.getLastSelectedPathComponent();
+                                midiDeviceTree.getLastSelectedPathComponent();
                         if (node == null || !node.isLeaf()) {
                             return;
                         }
@@ -658,12 +647,13 @@ public class MainWindow extends JFrame {
     private javax.swing.JSeparator helpSeparator;
     private ampt.ui.canvas.MetronomePanel metronomePanel;
     private javax.swing.JLabel midiConsoleLabel;
+    private javax.swing.JTree midiDeviceTree;
     private javax.swing.JPanel propertiesPanel;
     private javax.swing.JSplitPane splitPane;
     private ampt.ui.canvas.TempoPanel tempoPanel;
     private ampt.ui.canvas.CanvasPanel theActualCanvasPanel;
-    private ampt.ui.canvas.CanvasToolbar toolbarPane;
     private javax.swing.JPanel topPane;
+    private javax.swing.JScrollPane treeScrollPane;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }
