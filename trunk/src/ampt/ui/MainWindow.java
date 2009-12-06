@@ -116,16 +116,19 @@ public class MainWindow extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        canvasPanel = new javax.swing.JPanel();
         viewMenu = new javax.swing.JMenu();
         splitPane = new javax.swing.JSplitPane();
         topPane = new javax.swing.JPanel();
-        canvasPanel = new javax.swing.JPanel();
-        canvasScrollPane = new javax.swing.JScrollPane();
-        theActualCanvasPanel = new ampt.ui.canvas.CanvasPanel();
+        topSplitPane = new javax.swing.JSplitPane();
+        topLeftPanel = new javax.swing.JPanel();
         treeScrollPane = new javax.swing.JScrollPane();
         midiDeviceTree = new javax.swing.JTree();
         tempoPanel = new ampt.ui.canvas.TempoPanel();
         metronomePanel = new ampt.ui.canvas.MetronomePanel();
+        topRightPanel = new javax.swing.JPanel();
+        canvasScrollPane = new javax.swing.JScrollPane();
+        theActualCanvasPanel = new ampt.ui.canvas.CanvasPanel();
         bottomPane = new javax.swing.JPanel();
         midiConsoleLabel = new javax.swing.JLabel();
         consoleScrollPane = new javax.swing.JScrollPane();
@@ -137,6 +140,15 @@ public class MainWindow extends JFrame {
         guideMenuItem = new javax.swing.JMenuItem();
         helpSeparator = new javax.swing.JSeparator();
         aboutMenuItem = new javax.swing.JMenuItem();
+
+        javax.swing.GroupLayout canvasPanelLayout = new javax.swing.GroupLayout(canvasPanel);
+        canvasPanel.setLayout(canvasPanelLayout);
+        canvasPanelLayout.setHorizontalGroup(
+            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        );
+        canvasPanelLayout.setVerticalGroup(
+            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        );
 
         viewMenu.setMnemonic('v');
         viewMenu.setText("View");
@@ -158,7 +170,6 @@ public class MainWindow extends JFrame {
 
         splitPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         splitPane.setDividerLocation(450);
-        splitPane.setDividerSize(8);
         splitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         splitPane.setResizeWeight(0.5);
         splitPane.setToolTipText("");
@@ -168,44 +179,10 @@ public class MainWindow extends JFrame {
         topPane.setMinimumSize(new java.awt.Dimension(200, 200));
         topPane.setPreferredSize(new java.awt.Dimension(800, 450));
 
-        canvasScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        canvasScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        canvasScrollPane.setAutoscrolls(true);
-        canvasScrollPane.setPreferredSize(new java.awt.Dimension(2002, 2002));
-        canvasScrollPane.setColumnHeaderView(new CanvasRuler(Orientation.Horizontal));
-        canvasScrollPane.setRowHeaderView(new CanvasRuler(Orientation.Vertical));
-        canvasScrollPane.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, new CanvasCorner());
-        canvasScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new CanvasCorner());
-        canvasScrollPane.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, new CanvasCorner());
+        topSplitPane.setDividerLocation(200);
+        topSplitPane.setOneTouchExpandable(true);
 
-        theActualCanvasPanel.setBackground(new java.awt.Color(255, 255, 255));
-        theActualCanvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        theActualCanvasPanel.setMaximumSize(new java.awt.Dimension(3200, 3200));
-        theActualCanvasPanel.setMinimumSize(new java.awt.Dimension(3200, 3200));
-
-        javax.swing.GroupLayout theActualCanvasPanelLayout = new javax.swing.GroupLayout(theActualCanvasPanel);
-        theActualCanvasPanel.setLayout(theActualCanvasPanelLayout);
-        theActualCanvasPanelLayout.setHorizontalGroup(
-            theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3196, Short.MAX_VALUE)
-        );
-        theActualCanvasPanelLayout.setVerticalGroup(
-            theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3196, Short.MAX_VALUE)
-        );
-
-        canvasScrollPane.setViewportView(theActualCanvasPanel);
-
-        javax.swing.GroupLayout canvasPanelLayout = new javax.swing.GroupLayout(canvasPanel);
-        canvasPanel.setLayout(canvasPanelLayout);
-        canvasPanelLayout.setHorizontalGroup(
-            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
-        );
-        canvasPanelLayout.setVerticalGroup(
-            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-        );
+        topLeftPanel.setPreferredSize(new java.awt.Dimension(200, 446));
 
         treeScrollPane.setPreferredSize(new java.awt.Dimension(200, 300));
 
@@ -234,27 +211,77 @@ public class MainWindow extends JFrame {
 
         metronomePanel.setMinimumSize(new java.awt.Dimension(0, 0));
 
-        javax.swing.GroupLayout topPaneLayout = new javax.swing.GroupLayout(topPane);
-        topPane.setLayout(topPaneLayout);
-        topPaneLayout.setHorizontalGroup(
-            topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topPaneLayout.createSequentialGroup()
-                .addGroup(topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(treeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        javax.swing.GroupLayout topLeftPanelLayout = new javax.swing.GroupLayout(topLeftPanel);
+        topLeftPanel.setLayout(topLeftPanelLayout);
+        topLeftPanelLayout.setHorizontalGroup(
+            topLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+            .addComponent(metronomePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+            .addComponent(tempoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
         );
-        topPaneLayout.setVerticalGroup(
-            topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topPaneLayout.createSequentialGroup()
+        topLeftPanelLayout.setVerticalGroup(
+            topLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topLeftPanelLayout.createSequentialGroup()
                 .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE))
-            .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
+        );
+
+        topSplitPane.setLeftComponent(topLeftPanel);
+
+        canvasScrollPane.setBorder(null);
+        canvasScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        canvasScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        canvasScrollPane.setAutoscrolls(true);
+        canvasScrollPane.setPreferredSize(new java.awt.Dimension(2002, 2002));
+        canvasScrollPane.setColumnHeaderView(new CanvasRuler(Orientation.Horizontal));
+        canvasScrollPane.setRowHeaderView(new CanvasRuler(Orientation.Vertical));
+        canvasScrollPane.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, new CanvasCorner());
+        canvasScrollPane.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, new CanvasCorner());
+        canvasScrollPane.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, new CanvasCorner());
+
+        theActualCanvasPanel.setBackground(new java.awt.Color(255, 255, 255));
+        theActualCanvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        theActualCanvasPanel.setMaximumSize(new java.awt.Dimension(3200, 3200));
+        theActualCanvasPanel.setMinimumSize(new java.awt.Dimension(3200, 3200));
+
+        javax.swing.GroupLayout theActualCanvasPanelLayout = new javax.swing.GroupLayout(theActualCanvasPanel);
+        theActualCanvasPanel.setLayout(theActualCanvasPanelLayout);
+        theActualCanvasPanelLayout.setHorizontalGroup(
+            theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3196, Short.MAX_VALUE)
+        );
+        theActualCanvasPanelLayout.setVerticalGroup(
+            theActualCanvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3196, Short.MAX_VALUE)
+        );
+
+        canvasScrollPane.setViewportView(theActualCanvasPanel);
+
+        javax.swing.GroupLayout topRightPanelLayout = new javax.swing.GroupLayout(topRightPanel);
+        topRightPanel.setLayout(topRightPanelLayout);
+        topRightPanelLayout.setHorizontalGroup(
+            topRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
+        );
+        topRightPanelLayout.setVerticalGroup(
+            topRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+        );
+
+        topSplitPane.setRightComponent(topRightPanel);
+
+        javax.swing.GroupLayout topPaneLayout = new javax.swing.GroupLayout(topPane);
+        topPane.setLayout(topPaneLayout);
+        topPaneLayout.setHorizontalGroup(
+            topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(topSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
+        );
+        topPaneLayout.setVerticalGroup(
+            topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(topSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
         );
 
         splitPane.setTopComponent(topPane);
@@ -292,7 +319,7 @@ public class MainWindow extends JFrame {
             .addGroup(bottomPaneLayout.createSequentialGroup()
                 .addComponent(midiConsoleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE))
         );
 
         splitPane.setBottomComponent(bottomPane);
@@ -638,7 +665,10 @@ public class MainWindow extends JFrame {
     private javax.swing.JSplitPane splitPane;
     private ampt.ui.canvas.TempoPanel tempoPanel;
     private ampt.ui.canvas.CanvasPanel theActualCanvasPanel;
+    private javax.swing.JPanel topLeftPanel;
     private javax.swing.JPanel topPane;
+    private javax.swing.JPanel topRightPanel;
+    private javax.swing.JSplitPane topSplitPane;
     private javax.swing.JScrollPane treeScrollPane;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
