@@ -621,7 +621,7 @@ public class MainWindow extends JFrame {
             box = new NoteViewerBox(noteViewerDevice, consolePane.getPrintStream());
         } else if (device instanceof ArpeggiatorFilterDevice) {
             ArpeggiatorFilterDevice arpeggiatorDevice = (ArpeggiatorFilterDevice) device;
-            arpeggiatorDevice.setLogger(consolePane.getPrintStream(Color.ORANGE));
+            arpeggiatorDevice.setLogger(consolePane.getPrintStream(Color.GREEN));
             arpeggiatorDevice.setMidiDebugEnabled(true);
             box = new ArpeggiatorFilterBox(arpeggiatorDevice);
         } else if (device instanceof EchoFilterDevice) {
