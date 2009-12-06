@@ -11,7 +11,7 @@ import javax.sound.midi.ShortMessage;
  */
 public class PanoramaDevice extends AmptDevice {
 
-    private static final String DEVICE_NAME = "Banana Panorama";
+    private static final String DEVICE_NAME = "Panorama Banana";
     private static final String DEVICE_DESCRIPTION = "Modifies the pan setting on attached devices.";
 
     // the pan setting to apply min 0, max 127
