@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
