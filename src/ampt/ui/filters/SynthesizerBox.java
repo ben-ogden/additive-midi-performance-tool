@@ -36,9 +36,9 @@ import javax.swing.table.TableColumn;
  */
 public class SynthesizerBox extends MidiDeviceBox implements TableModelListener{
 
-	private static final long serialVersionUID = -7616825847487803515L;
+    private static final long serialVersionUID = -7616825847487803515L;
 
-	private TreeMap<String, Instrument> namedInstrumentMap;
+    private TreeMap<String, Instrument> namedInstrumentMap;
     private MyTableModel tableModel;
 
     public SynthesizerBox(Synthesizer synth) throws MidiUnavailableException{
@@ -65,6 +65,7 @@ public class SynthesizerBox extends MidiDeviceBox implements TableModelListener{
         centerPanel.setBackground(Color.RED);
         tableModel = new MyTableModel();
         JTable instrumentTable = new JTable(tableModel);
+
         Vector<Integer> channelsVector = new Vector<Integer>();
         Vector<String> instrumentVector = new Vector<String>();
         MidiChannel[] channels = synth.getChannels();

@@ -6,12 +6,16 @@ import ampt.midi.chord.ChordType;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -22,9 +26,9 @@ import javax.swing.border.TitledBorder;
  */
 public class ChordFilterBox extends AmptMidiDeviceBox implements ActionListener{
 
-	private static final long serialVersionUID = -2784740246353685410L;
+    private static final long serialVersionUID = -2784740246353685410L;
 	
-	private JComboBox chordTypesComboBox;
+    private JComboBox chordTypesComboBox;
     private JComboBox chordInversionsComboBox;
 
     public ChordFilterBox(ChordFilterDevice device) throws MidiUnavailableException{
@@ -42,8 +46,15 @@ public class ChordFilterBox extends AmptMidiDeviceBox implements ActionListener{
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.BELOW_TOP, null, Color.WHITE));
 
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setLayout(new GridLayout(4, 1));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(2, 12, 2, 12));
         centerPanel.setBackground(Color.BLUE);
+
+        JLabel typeLabel = new JLabel("Chord Type", JLabel.LEFT);
+        typeLabel.setFont(new Font("SanSerif", Font.PLAIN, 12));
+        typeLabel.setForeground(Color.WHITE);
+        typeLabel.setHorizontalAlignment(JLabel.LEADING);
+        centerPanel.add(typeLabel);
 
         Vector<ChordType> chordTypes = new Vector<ChordType>();
         chordTypes.add(ChordType.MAJOR);
@@ -54,11 +65,16 @@ public class ChordFilterBox extends AmptMidiDeviceBox implements ActionListener{
         chordTypesComboBox.setSelectedItem(ChordType.MAJOR);
         device.setChordType(ChordType.MAJOR);
         chordTypesComboBox.addActionListener(this);
-        chordTypesComboBox.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Chord Type", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
         chordTypesComboBox.setBackground(Color.BLUE);
         chordTypesComboBox.setForeground(Color.WHITE);
         chordTypesComboBox.setKeySelectionManager(new EmptyKeySelectionManager());
         centerPanel.add(chordTypesComboBox);
+
+        JLabel invLabel = new JLabel("Chord Inversion", JLabel.LEFT);
+        invLabel.setFont(new Font("SanSerif", Font.PLAIN, 12));
+        invLabel.setForeground(Color.WHITE);
+        invLabel.setHorizontalAlignment(JLabel.LEFT);
+        centerPanel.add(invLabel);
 
         Vector<ChordInversion> chordInversions = new Vector<ChordInversion>();
         chordInversions.add(ChordInversion.ROOT_POSITION);
@@ -68,7 +84,6 @@ public class ChordFilterBox extends AmptMidiDeviceBox implements ActionListener{
         chordInversionsComboBox.setSelectedItem(ChordInversion.ROOT_POSITION);
         device.setChordInversion(ChordInversion.ROOT_POSITION);
         chordInversionsComboBox.addActionListener(this);
-        chordInversionsComboBox.setBorder(new TitledBorder(new LineBorder(Color.WHITE), "Chord Inversion", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.WHITE));
         chordInversionsComboBox.setBackground(Color.BLUE);
         chordInversionsComboBox.setForeground(Color.WHITE);
         chordInversionsComboBox.setKeySelectionManager(new EmptyKeySelectionManager());

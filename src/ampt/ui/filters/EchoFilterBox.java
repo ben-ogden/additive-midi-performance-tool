@@ -6,6 +6,7 @@ import ampt.midi.note.NoteValue;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,9 +98,10 @@ public class EchoFilterBox extends AmptMidiDeviceBox implements ActionListener,
         durationSlider = createDurationSlider();
         JPanel durationPanel = new JPanel();
         durationPanel.setBackground(FILTER_BGCOLOR);
-        durationPanel.setBorder(new TitledBorder(new LineBorder(FILTER_FGCOLOR),
+        durationPanel.setBorder(new TitledBorder(BorderFactory.createEmptyBorder(),
                 "Duration", TitledBorder.DEFAULT_JUSTIFICATION,
-                TitledBorder.DEFAULT_POSITION, null, FILTER_FGCOLOR));
+                TitledBorder.DEFAULT_POSITION, new Font("SanSerif", Font.PLAIN, 12),
+                FILTER_FGCOLOR));
 
         durationPanel.add(durationSlider);
         centerPanel.add(durationPanel);
@@ -125,9 +127,10 @@ public class EchoFilterBox extends AmptMidiDeviceBox implements ActionListener,
         JPanel intPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         intPanel.setBackground(FILTER_BGCOLOR);
         intPanel.add(intervalComboBox);
-        intPanel.setBorder(new TitledBorder(new LineBorder(FILTER_FGCOLOR),
+        intPanel.setBorder(new TitledBorder(BorderFactory.createEmptyBorder(),
                 "Interval", TitledBorder.DEFAULT_JUSTIFICATION,
-                TitledBorder.DEFAULT_POSITION, null, FILTER_FGCOLOR));
+                TitledBorder.DEFAULT_POSITION, new Font("SanSerif", Font.PLAIN, 12),
+                FILTER_FGCOLOR));
 
         innerCenterPanel.add(intPanel);
 
@@ -183,12 +186,16 @@ public class EchoFilterBox extends AmptMidiDeviceBox implements ActionListener,
 
         panel.setBackground(FILTER_BGCOLOR);
         panel.setForeground(FILTER_FGCOLOR);
-        panel.setBorder(new TitledBorder(new LineBorder(FILTER_FGCOLOR),
+        panel.setBorder(new TitledBorder(BorderFactory.createEmptyBorder(),
                 "Decay", TitledBorder.DEFAULT_JUSTIFICATION,
-                TitledBorder.DEFAULT_POSITION, null, FILTER_FGCOLOR));
+                TitledBorder.DEFAULT_POSITION, new Font("SanSerif", Font.PLAIN, 12),
+                FILTER_FGCOLOR));
+
 
         decayLabel.setIcon(linearIcon);
+        //decayLabel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         decayLabel.setHorizontalAlignment(JLabel.CENTER);
+
         panel.add(decayLabel);
 
         panel.add(noneButton);
