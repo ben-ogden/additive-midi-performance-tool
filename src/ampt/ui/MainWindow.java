@@ -116,6 +116,7 @@ public class MainWindow extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        viewMenu = new javax.swing.JMenu();
         splitPane = new javax.swing.JSplitPane();
         topPane = new javax.swing.JPanel();
         canvasPanel = new javax.swing.JPanel();
@@ -132,11 +133,25 @@ public class MainWindow extends JFrame {
         amptMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         exitMenuItem = new javax.swing.JMenuItem();
-        viewMenu = new javax.swing.JMenu();
         helpMenu = new javax.swing.JMenu();
         guideMenuItem = new javax.swing.JMenuItem();
         helpSeparator = new javax.swing.JSeparator();
         aboutMenuItem = new javax.swing.JMenuItem();
+
+        viewMenu.setMnemonic('v');
+        viewMenu.setText("View");
+
+        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            JMenuItem item = new JMenuItem(info.getName());
+
+            item.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    viewMenuHandler(evt);
+                }
+            });
+
+            viewMenu.add(item);
+        }
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Additive MIDI Performance Tool");
@@ -297,23 +312,6 @@ public class MainWindow extends JFrame {
         fileMenu.add(exitMenuItem);
 
         amptMenuBar.add(fileMenu);
-
-        viewMenu.setMnemonic('v');
-        viewMenu.setText("View");
-
-        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-            JMenuItem item = new JMenuItem(info.getName());
-
-            item.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    viewMenuHandler(evt);
-                }
-            });
-
-            viewMenu.add(item);
-        }
-
-        amptMenuBar.add(viewMenu);
 
         helpMenu.setMnemonic('h');
         helpMenu.setText("Help");
