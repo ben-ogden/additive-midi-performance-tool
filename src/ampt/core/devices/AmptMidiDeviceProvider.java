@@ -31,13 +31,12 @@ public class AmptMidiDeviceProvider extends MidiDeviceProvider{
          */
         // deviceList.add(new ArpFilterDevice().getDeviceInfo());
         deviceList.add(new ArpeggiatorFilterDevice().getDeviceInfo());
-        deviceList.add(new PanoramaDevice().getDeviceInfo());
         deviceList.add(new ChordFilterDevice().getDeviceInfo());
         deviceList.add(new EchoFilterDevice().getDeviceInfo());
         deviceList.add(new ExtendedKeyboardDevice().getDeviceInfo());
         deviceList.add(new KeyboardDevice().getDeviceInfo());
         deviceList.add(new NoteViewerDevice().getDeviceInfo());
-        
+        deviceList.add(new PanoramaDevice().getDeviceInfo());
     }
 
     /**
