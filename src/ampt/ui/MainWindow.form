@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.7" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="amptMenuBar">
       <Properties>
@@ -146,7 +146,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="toolbarPane" min="-2" pref="179" max="-2" attributes="0"/>
+                      <Component id="treeScrollPane" min="-2" pref="200" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="canvasPanel" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -156,50 +156,24 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="toolbarPane" alignment="0" pref="448" max="32767" attributes="0"/>
                   <Component id="propertiesPanel" alignment="0" max="32767" attributes="0"/>
                   <Component id="canvasPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="treeScrollPane" alignment="0" pref="450" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Container class="ampt.ui.canvas.CanvasToolbar" name="toolbarPane">
-              <Properties>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Canvas Toolbar">
-                      <Font PropertyName="font" name="Tahoma" size="12" style="0"/>
-                    </TitledBorder>
-                  </Border>
-                </Property>
-                <Property name="floatable" type="boolean" value="false"/>
-                <Property name="orientation" type="int" value="1"/>
-                <Property name="rollover" type="boolean" value="true"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="addButtonsToToolbar();"/>
-              </AuxValues>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
-            </Container>
             <Container class="javax.swing.JPanel" name="canvasPanel">
-              <Properties>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                    <EmptyBorder bottom="3" left="0" right="0" top="8"/>
-                  </Border>
-                </Property>
-              </Properties>
 
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="canvasScrollPane" alignment="1" pref="368" max="32767" attributes="0"/>
+                      <Component id="canvasScrollPane" alignment="1" pref="371" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="canvasScrollPane" alignment="1" pref="437" max="32767" attributes="0"/>
+                      <Component id="canvasScrollPane" alignment="1" pref="450" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -274,7 +248,7 @@
                           <Component id="tempoPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="metronomePanel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="287" max="32767" attributes="0"/>
+                          <EmptySpace pref="289" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -298,6 +272,25 @@
                   </Properties>
                 </Component>
                 <Component class="ampt.ui.canvas.TempoPanel" name="tempoPanel">
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JScrollPane" name="treeScrollPane">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTree" name="midiDeviceTree">
+                  <Properties>
+                    <Property name="model" type="javax.swing.tree.TreeModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="buildMidiDeviceTreeModel()" type="code"/>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="midiDeviceTree.addTreeSelectionListener(new TreeSelectionListener() {&#xa;    @Override&#xa;    public void valueChanged(TreeSelectionEvent e) {&#xa;        buttonHandler(e);&#xa;    }&#xa;});&#xa;&#xa;midiDeviceTree.setRootVisible(false);&#xa;"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
