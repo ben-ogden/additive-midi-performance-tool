@@ -2,6 +2,19 @@
 
 <Form version="1.7" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
+    <Container class="javax.swing.JMenu" name="viewMenu">
+      <Properties>
+        <Property name="mnemonic" type="int" value="118"/>
+        <Property name="text" type="java.lang.String" value="View"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {&#xa;    JMenuItem item = new JMenuItem(info.getName());&#xa;&#xa;    item.addActionListener(new ActionListener() {&#xa;        public void actionPerformed(ActionEvent evt) {&#xa;            viewMenuHandler(evt);&#xa;        }&#xa;    });&#xa;&#xa;    viewMenu.add(item);&#xa;}"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+    </Container>
     <Menu class="javax.swing.JMenuBar" name="amptMenuBar">
       <Properties>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -25,15 +38,6 @@
               </Events>
             </MenuItem>
           </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="viewMenu">
-          <Properties>
-            <Property name="mnemonic" type="int" value="118"/>
-            <Property name="text" type="java.lang.String" value="View"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {&#xa;    JMenuItem item = new JMenuItem(info.getName());&#xa;&#xa;    item.addActionListener(new ActionListener() {&#xa;        public void actionPerformed(ActionEvent evt) {&#xa;            viewMenuHandler(evt);&#xa;        }&#xa;    });&#xa;&#xa;    viewMenu.add(item);&#xa;}"/>
-          </AuxValues>
         </Menu>
         <Menu class="javax.swing.JMenu" name="helpMenu">
           <Properties>
