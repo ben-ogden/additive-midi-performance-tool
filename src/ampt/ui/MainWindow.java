@@ -144,7 +144,7 @@ public class MainWindow extends JFrame {
 
         splitPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         splitPane.setDividerLocation(450);
-        splitPane.setDividerSize(12);
+        splitPane.setDividerSize(8);
         splitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         splitPane.setResizeWeight(0.5);
         splitPane.setToolTipText("");
@@ -186,11 +186,11 @@ public class MainWindow extends JFrame {
         canvasPanel.setLayout(canvasPanelLayout);
         canvasPanelLayout.setHorizontalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
         );
         canvasPanelLayout.setVerticalGroup(
             canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+            .addComponent(canvasScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
         );
 
         metronomePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Metronome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
@@ -213,10 +213,15 @@ public class MainWindow extends JFrame {
                 .addComponent(tempoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(metronomePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(289, Short.MAX_VALUE))
+                .addContainerGap(297, Short.MAX_VALUE))
         );
 
         midiDeviceTree.setModel(buildMidiDeviceTreeModel());
+        midiDeviceTree.setToolTipText("Select a device then click on the canvas area to add.");
+        midiDeviceTree.setFocusable(false);
+        midiDeviceTree.setRequestFocusEnabled(false);
+        midiDeviceTree.setRootVisible(false);
+        midiDeviceTree.setRowHeight(18);
         treeScrollPane.setViewportView(midiDeviceTree);
         midiDeviceTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
@@ -226,6 +231,12 @@ public class MainWindow extends JFrame {
         });
 
         midiDeviceTree.setRootVisible(false);
+
+        // disable keyboard input to prevent conflicts with ampt devices
+        midiDeviceTree.getInputMap().setParent(null);
+        midiDeviceTree.setInputMap(JTree.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);
+        midiDeviceTree.setInputMap(JTree.WHEN_FOCUSED, null);
+        midiDeviceTree.setInputMap(JTree.WHEN_IN_FOCUSED_WINDOW, null);
 
         javax.swing.GroupLayout topPaneLayout = new javax.swing.GroupLayout(topPane);
         topPane.setLayout(topPaneLayout);
@@ -242,14 +253,14 @@ public class MainWindow extends JFrame {
             topPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(propertiesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+            .addComponent(treeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
         );
 
         splitPane.setTopComponent(topPane);
 
         bottomPane.setPreferredSize(new java.awt.Dimension(800, 150));
 
-        midiConsoleLabel.setFont(new java.awt.Font("Tahoma", 0, 12));
+        midiConsoleLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         midiConsoleLabel.setText("MIDI Console");
         midiConsoleLabel.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
 
@@ -258,8 +269,8 @@ public class MainWindow extends JFrame {
         consoleScrollPane.setViewportBorder(javax.swing.BorderFactory.createEtchedBorder());
         consoleScrollPane.setFocusable(false);
 
-        consolePane.setBorder(null);
-        consolePane.setFont(new java.awt.Font("Monospaced", 0, 12));
+        consolePane.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        consolePane.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         consolePane.setForeground(new java.awt.Color(51, 51, 51));
         consolePane.setToolTipText("The AMPT MIDI Console displays MIDI events and other messages from AMPT filters.");
         consolePane.setMargin(new java.awt.Insets(10, 10, 10, 10));
@@ -269,12 +280,11 @@ public class MainWindow extends JFrame {
         bottomPane.setLayout(bottomPaneLayout);
         bottomPaneLayout.setHorizontalGroup(
             bottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
             .addGroup(bottomPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(bottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
-                    .addComponent(midiConsoleLabel))
-                .addContainerGap())
+                .addComponent(midiConsoleLabel)
+                .addContainerGap(715, Short.MAX_VALUE))
         );
         bottomPaneLayout.setVerticalGroup(
             bottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,8 +292,7 @@ public class MainWindow extends JFrame {
                 .addContainerGap()
                 .addComponent(midiConsoleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(consoleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
         );
 
         splitPane.setBottomComponent(bottomPane);
@@ -351,17 +360,11 @@ public class MainWindow extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(splitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(splitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
         );
 
         pack();
@@ -512,6 +515,7 @@ public class MainWindow extends JFrame {
     private DefaultMutableTreeNode buildDeviceTree(String label, List<Info> infoList) {
 
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(label, true);
+
         for(Info info : infoList) {
             node.add(new DefaultMutableTreeNode(info, false));
         }
