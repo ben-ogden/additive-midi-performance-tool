@@ -230,8 +230,11 @@
                             <Property name="rootVisible" type="boolean" value="false"/>
                             <Property name="rowHeight" type="int" value="18"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="midiDeviceTreeMouseReleased"/>
+                          </Events>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="midiDeviceTree.addTreeSelectionListener(new TreeSelectionListener() {&#xa;    @Override&#xa;    public void valueChanged(TreeSelectionEvent e) {&#xa;        buttonHandler(e);&#xa;    }&#xa;});&#xa;&#xa;midiDeviceTree.setRootVisible(false);&#xa;&#xa;// disable keyboard input to prevent conflicts with ampt devices&#xa;midiDeviceTree.getInputMap().setParent(null);&#xa;midiDeviceTree.setInputMap(JTree.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);&#xa;midiDeviceTree.setInputMap(JTree.WHEN_FOCUSED, null);&#xa;midiDeviceTree.setInputMap(JTree.WHEN_IN_FOCUSED_WINDOW, null);&#xa;&#xa;&#xa;"/>
+                            <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="midiDeviceTree.setRootVisible(false);&#xa;&#xa;// disable keyboard input to prevent conflicts with ampt devices&#xa;midiDeviceTree.getInputMap().setParent(null);&#xa;midiDeviceTree.setInputMap(JTree.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);&#xa;midiDeviceTree.setInputMap(JTree.WHEN_FOCUSED, null);&#xa;midiDeviceTree.setInputMap(JTree.WHEN_IN_FOCUSED_WINDOW, null);&#xa;&#xa;&#xa;"/>
                           </AuxValues>
                         </Component>
                       </SubComponents>
