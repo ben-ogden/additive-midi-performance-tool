@@ -193,14 +193,12 @@ public class MainWindow extends JFrame {
         midiDeviceTree.setRequestFocusEnabled(false);
         midiDeviceTree.setRootVisible(false);
         midiDeviceTree.setRowHeight(18);
-        treeScrollPane.setViewportView(midiDeviceTree);
-        midiDeviceTree.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                buttonHandler(e);
+        midiDeviceTree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                midiDeviceTreeMouseReleased(evt);
             }
         });
-
+        treeScrollPane.setViewportView(midiDeviceTree);
         midiDeviceTree.setRootVisible(false);
 
         // disable keyboard input to prevent conflicts with ampt devices
@@ -426,6 +424,10 @@ public class MainWindow extends JFrame {
         aboutDialog.setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
+    private void midiDeviceTreeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_midiDeviceTreeMouseReleased
+        buttonHandler(evt);
+    }//GEN-LAST:event_midiDeviceTreeMouseReleased
+
     /**
      * @param args the command line arguments
      */
@@ -537,7 +539,7 @@ public class MainWindow extends JFrame {
      * registers a mouse adapter on the canvas so the box that represents a
      * MidiDevice or a filter can be placed on the canvas.
      */
-    private void buttonHandler(TreeSelectionEvent evt) {
+    private void buttonHandler(MouseEvent evt) {
 
         final Object source = evt.getSource();
         if (canvasButtonMouseAdapter != null) {
