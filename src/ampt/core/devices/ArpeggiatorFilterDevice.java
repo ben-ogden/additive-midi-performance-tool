@@ -20,7 +20,7 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
 
     
 
-    private final HashMap<String, Boolean> _arpeggios = new HashMap<String, Boolean>();
+    private HashMap<String, Boolean> _arpeggios;
 
 
     private int _motion = Arpeggio.ASCEND_DESCEND;
@@ -34,25 +34,20 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
 
     @Override
     public void initDevice() {
-        _arpeggios.clear();
-
         synchronized(this) {
+            _arpeggios = new HashMap<String, Boolean>();
             _arp = Arpeggio.newArpeggio(_motion, _chordType, _noteValue);
         }
     }
 
-    public void setMotion(int motion) {
-        synchronized(this) {
+    public synchronized void setMotion(int motion) {
             _motion = motion;
             _arp = Arpeggio.newArpeggio(_motion, _chordType, _noteValue);
-        }
     }
 
-    public void setNoteValue(NoteValue noteValue) {
-        synchronized(this) {
+    public synchronized void setNoteValue(NoteValue noteValue) {
             _noteValue = noteValue;
             _arp = Arpeggio.newArpeggio(_motion, _chordType, _noteValue);
-        }
     }
 
     public void setChordType(int chordType) {
@@ -219,11 +214,12 @@ public class ArpeggiatorFilterDevice extends TimedDevice {
                     nextNote = nextNote + (long) (_noteFactor / _tempo);
                 }
 
-               try {
+                //give other threads a chance to run
+                try {
                    Thread.sleep(0, 1);
-               } catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                    e.printStackTrace();
-               }
+                }
             }
 
             //turn off the last note
