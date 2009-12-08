@@ -13,7 +13,3 @@ AMPT Team
 Ben Ogden
 Chris Redding
 Rob Szewczyk
-
-Credits
--------
-AMPT uses some components from jMusic under the GNU General Public License (GPL)
